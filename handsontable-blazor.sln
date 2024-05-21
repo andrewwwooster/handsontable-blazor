@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{937EC97F-1CE8-4C33-8C48-6CAFA306EFAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handsontable.BlazorWasm", "samples\BlazorWasm\Handsontable.BlazorWasm.csproj", "{127E48B2-86E8-490A-8497-A1DABD05CB7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{127E48B2-86E8-490A-8497-A1DABD05CB7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127E48B2-86E8-490A-8497-A1DABD05CB7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127E48B2-86E8-490A-8497-A1DABD05CB7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127E48B2-86E8-490A-8497-A1DABD05CB7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{127E48B2-86E8-490A-8497-A1DABD05CB7B} = {937EC97F-1CE8-4C33-8C48-6CAFA306EFAF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AAE588A5-3CBD-4B29-B008-0BD537D5F768}
+	EndGlobalSection
+EndGlobal
