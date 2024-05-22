@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using Handsontable.Blazor
+@inject ExampleJsInterop ExampleJsInterop
 
 <PageTitle>Home</PageTitle>
 
@@ -6,5 +8,13 @@
 
 Welcome to your new app.
 
-@using Handsontable.BlazorWasm
-<Component1 />
+<Handsontable />
+
+<button @onclick="CallExampleJsInterop">Call example JavaScript interop</button>
+
+@code {
+    private async Task CallExampleJsInterop()
+    {
+        await ExampleJsInterop.Prompt("Hello from Blazor");
+    }
+}

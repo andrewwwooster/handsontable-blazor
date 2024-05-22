@@ -12,7 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="handsontable" Version="14.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot/lib/" />
+    <Folder Include="wwwroot/lib/handsontable/" />
   </ItemGroup>
 
 </Project>
