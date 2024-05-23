@@ -23,9 +23,4 @@
             );
         }
     }
-
-    private async Task AddRow()
-    {
-        await HandsontableJsInterop.Alter(HandsontableJsInterop.AlterActionEnum.insert_row_above, 0);
-    }
 }
