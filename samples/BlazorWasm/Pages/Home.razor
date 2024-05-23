@@ -1,6 +1,4 @@
 ﻿@page "/"
-@using Handsontable.Blazor
-@inject ExampleJsInterop ExampleJsInterop
 
 <PageTitle>Home</PageTitle>
 
@@ -8,13 +6,25 @@
 
 Welcome to your new app.
 
-<Handsontable />
+<button @onclick="AddRow">Add Row</button>
 
-<button @onclick="CallExampleJsInterop">Call example JavaScript interop</button>
+<Handsontable.Blazor.Handsontable Id="hot" Data="@_data" @ref="_handsontable" />
 
-@code {
-    private async Task CallExampleJsInterop()
+@code
+{
+    Handsontable.Blazor.Handsontable? _handsontable;
+
+    object[][] _data =
     {
-        await ExampleJsInterop.Prompt("Hello from Blazor");
+        new object[] { "A1", "B1", "C1" },
+        new object[] { "A2", "B2", "C2" },
+        new object[] { "A3", "B3", "C3" }
+    };
+
+    private async Task AddRow()
+    {
+        await _handsontable!.HandsontableJsInterop.Alter(
+            Handsontable.Blazor.HandsontableJsInterop.AlterActionEnum.insert_row_above, 0);
     }
 }
+
