@@ -7,11 +7,13 @@
 <p>@_onChangeValue</p>
 <button @onclick="AddRow">Add Row</button>
 
-<Handsontable.Blazor.Handsontable 
-        Id="hot" 
-        Data="@_data" 
-        OnAfterChange="@OnAfterChange"
-        @ref="_handsontable" />
+<div style="border: 1px solid black;">
+    <Handsontable.Blazor.Handsontable 
+            Id="hot" 
+            ConfigurationOptions="@_configurationOptions" 
+            OnAfterChange="@OnAfterChange"
+            @ref="_handsontable" />
+</div>
 
 @code
 {
@@ -19,12 +21,25 @@
 
     private string _onChangeValue = string.Empty;
 
-    object[][] _data =
+    Handsontable.Blazor.ConfigurationOptions _configurationOptions = new Handsontable.Blazor.ConfigurationOptions
     {
-        new object[] { "A1", "B1", "C1" },
-        new object[] { "A2", "B2", "C2" },
-        new object[] { "A3", "B3", "C3" }
+        Data =  {
+            new Dictionary<string, object> { 
+                { "A", 11 }, { "B", "12!" }, { "b", "13" } 
+            },
+            new Dictionary<string, object> { 
+                { "A", 21 }, { "B", "22!" }, { "b", "23" } 
+            },
+            new Dictionary<string, object> { 
+                { "A", 31 }, { "B", "32!" }, { "b", "33" } 
+            }
+        },
+        ColHeaders = new string[] { "A", "B", "C" },
+        RowHeaders = true,
+        Height = 300,
+        Width = 300,
     };
+   
 
     private async Task AddRow()
     {
@@ -39,4 +54,3 @@
         await Task.CompletedTask;
     }
 }
-

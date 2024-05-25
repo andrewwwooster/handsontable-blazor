@@ -9,7 +9,7 @@
     [Parameter]
     public string? Id { get; set; }
     [Parameter]
-    public IList<IList<object>>? Data { get; set; }
+    public ConfigurationOptions? ConfigurationOptions { get; set; }
     [Parameter]
     public Func<HandsontableJsInterop.AfterChangeArgs, Task>? OnAfterChange { get; set; }
 
@@ -21,7 +21,7 @@
         {
             HandsontableJsInterop = new HandsontableJsInterop(JSRuntime);
             await HandsontableJsInterop.NewHandsontable(
-                Id!, Data
+                Id!, ConfigurationOptions
             );
             if (OnAfterChange != null) await HandsontableJsInterop.AddHookAfterChange(OnAfterChange);
         }

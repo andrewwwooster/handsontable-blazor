@@ -23,14 +23,14 @@ public class HandsontableJsInterop : IAsyncDisposable
             "import", "./_content/Handsontable.Blazor/handsontableJsInterop.js").AsTask());
     }
 
-    public async Task NewHandsontable (string elemId, IList<IList<object>>? data) 
+    public async Task NewHandsontable (string elemId, ConfigurationOptions? configurationOptions) 
     {
         _elemId = elemId;
         try
         {
             var module = await _moduleTask.Value;
             await module.InvokeAsync<string>(
-                "newHandsontable", elemId, data, DotNetObjectReference.Create(this));
+                "newHandsontable", elemId, configurationOptions, DotNetObjectReference.Create(this));
         }
         catch (JSException ex)
         {

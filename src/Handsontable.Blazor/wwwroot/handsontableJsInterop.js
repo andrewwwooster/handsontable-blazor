@@ -1,7 +1,7 @@
 // This is a JavaScript module that is loaded on demand. It can export any number of
 // functions, and may import other JavaScript modules if required.
 
-import '/_content/Handsontable.Blazor/lib/handsontable/handsontable.js';
+import '/_content/Handsontable.Blazor/lib/handsontable/handsontable.full.js';
 
 
 var handsontableJsDict = {}
@@ -38,20 +38,10 @@ class HandsontableJs {
   _hot;                        // Handsontable
   _dotNetHelper;               // DotNetObjectReference<HandsontableJsInterop>
 
-  constructor(elemId, data, dotNetHelper) {
+  constructor(elemId, configurationOptions, dotNetHelper) {
     let containerElem = document.getElementById(elemId)
     this._dotNetHelper = dotNetHelper;
-    this._hot = new Handsontable( 
-      containerElem, 
-      {
-        licenseKey: "non-commercial-and-evaluation",
-        data: data,
-        rowHeaders: true,
-        colHeaders: true, 
-        height: 'auto',
-        autoWrapRow: true,
-        autoWrapCol: true
-    } );
+    this._hot = new Handsontable( containerElem, configurationOptions )
   }
 
   enableHook(hookName) {
