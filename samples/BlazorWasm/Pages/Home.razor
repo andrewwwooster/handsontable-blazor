@@ -4,15 +4,20 @@
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
-
+<p>@_onChangeValue</p>
 <button @onclick="AddRow">Add Row</button>
 
-<Handsontable.Blazor.Handsontable Id="hot" Data="@_data" @ref="_handsontable" />
+<Handsontable.Blazor.Handsontable 
+        Id="hot" 
+        Data="@_data" 
+        OnAfterChange="@OnAfterChange"
+        @ref="_handsontable" />
 
 @code
 {
     Handsontable.Blazor.Handsontable? _handsontable;
+
+    private string _onChangeValue = string.Empty;
 
     object[][] _data =
     {
@@ -23,8 +28,15 @@ Welcome to your new app.
 
     private async Task AddRow()
     {
-        await _handsontable!.HandsontableJsInterop.Alter(
+        await _handsontable!.HandsontableJsInterop!.Alter(
             Handsontable.Blazor.HandsontableJsInterop.AlterActionEnum.insert_row_above, 0);
+    }
+
+    private async Task OnAfterChange(Handsontable.Blazor.HandsontableJsInterop.AfterChangeArgs args)
+    {
+        _onChangeValue = $"OnAfterChange: {args.Data[0][0]} {args.Data[0][1]} {args.Data[0][2]} {args.Data[0][3]} {args.Source}";
+        StateHasChanged();
+        await Task.CompletedTask;
     }
 }
 

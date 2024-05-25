@@ -10,8 +10,10 @@
     public string? Id { get; set; }
     [Parameter]
     public IList<IList<object>>? Data { get; set; }
+    [Parameter]
+    public Func<HandsontableJsInterop.AfterChangeArgs, Task>? OnAfterChange { get; set; }
 
-    public HandsontableJsInterop HandsontableJsInterop { get; private set; }
+    public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -21,6 +23,8 @@
             await HandsontableJsInterop.NewHandsontable(
                 Id!, Data
             );
+            if (OnAfterChange != null) await HandsontableJsInterop.AddHookAfterChange(OnAfterChange);
         }
     }
 }
+

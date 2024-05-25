@@ -14,14 +14,18 @@ var handsontableJsDict = {}
  * {HandsontableOptions} hotOptions.
  * {DotNetObjectReference<HandsontableWidget>} dotNetHelper - For DotNet callbacks.
  */
-export function newHandsontable(elemId, data) {
-    let handsontableJs = new HandsontableJs(elemId, data);
+export function newHandsontable(elemId, data, dotNetHelper) {
+    let handsontableJs = new HandsontableJs(elemId, data, dotNetHelper);
     handsontableJsDict[elemId] = handsontableJs;
     return elemId;
 }
 
 export function invokeMethod(elemId, method, ...args) {
   return handsontableJsDict[elemId]._hot[method](...args);
+}
+
+export function enableHook(elemId, hookName) {
+  handsontableJsDict[elemId].enableHook(hookName);
 }
 
 export function disposeHansontable(elemId) {
@@ -31,13 +35,16 @@ export function disposeHansontable(elemId) {
 
 
 class HandsontableJs {
-  _hot;                       // Handsontable
+  _hot;                        // Handsontable
+  _dotNetHelper;               // DotNetObjectReference<HandsontableJsInterop>
 
-  constructor(elemId, data) {
-    var containerElem = document.getElementById(elemId)
+  constructor(elemId, data, dotNetHelper) {
+    let containerElem = document.getElementById(elemId)
+    this._dotNetHelper = dotNetHelper;
     this._hot = new Handsontable( 
       containerElem, 
       {
+        licenseKey: "non-commercial-and-evaluation",
         data: data,
         rowHeaders: true,
         colHeaders: true, 
@@ -45,5 +52,14 @@ class HandsontableJs {
         autoWrapRow: true,
         autoWrapCol: true
     } );
+  }
+
+  enableHook(hookName) {
+    this._hot.addHook(hookName, async (...callbackArgs) => this.hookCallback(hookName, ...callbackArgs));
+  }
+
+  hookCallback(hookName, ...callbackArgs) {
+    let callbackName = "OnAfterChangeCallback";
+    this._dotNetHelper.invokeMethodAsync(callbackName, ...callbackArgs);
   }
 }
