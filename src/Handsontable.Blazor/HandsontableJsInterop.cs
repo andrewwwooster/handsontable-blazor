@@ -1,5 +1,8 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using static Handsontable.Blazor.HandsontableHooks;
+using static Handsontable.Blazor.HandsontableRenderer;
 
 namespace Handsontable.Blazor;
 
@@ -13,23 +16,26 @@ namespace Handsontable.Blazor;
 public class HandsontableJsInterop : IAsyncDisposable
 {
     private readonly IJSRuntime _jsRuntime;
-    private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
-    private string? _elemId;
+    private readonly Lazy<Task<IJSObjectReference>> _handsontableModuleTask;
+    private readonly Lazy<Task<IJSObjectReference>> _jqueryModuleTask;
+    private IJSObjectReference _handsontableJsReference = null!;
 
     public HandsontableJsInterop(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
-        _moduleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
+        _handsontableModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/Handsontable.Blazor/handsontableJsInterop.js").AsTask());
+        _jqueryModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
+            "import", "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js").AsTask());
+            
     }
 
     public async Task NewHandsontable (string elemId, ConfigurationOptions? configurationOptions) 
     {
-        _elemId = elemId;
         try
         {
-            var module = await _moduleTask.Value;
-            await module.InvokeAsync<string>(
+            var module = await _handsontableModuleTask.Value;
+            _handsontableJsReference = await module.InvokeAsync<IJSObjectReference>(
                 "newHandsontable", elemId, configurationOptions, DotNetObjectReference.Create(this));
         }
         catch (JSException ex)
@@ -38,6 +44,21 @@ public class HandsontableJsInterop : IAsyncDisposable
             throw;
         }
 
+    }
+
+    public async Task NewJQuery (string elemId, ConfigurationOptions? configurationOptions) 
+    {
+        try
+        {
+            var module = await _handsontableModuleTask.Value;
+            _handsontableJsReference = await module.InvokeAsync<IJSObjectReference>(
+                "newHandsontable", elemId, configurationOptions, DotNetObjectReference.Create(this));
+        }
+        catch (JSException ex)
+        {
+            var msg = ex.Message;
+            throw;
+        }
     }
 
     public enum AlterActionEnum {
@@ -51,58 +72,63 @@ public class HandsontableJsInterop : IAsyncDisposable
 
     public async Task Alter(AlterActionEnum alterAction, int visualIndex)
     {
-        var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("invokeMethod", _elemId, "alter", alterAction.ToString(), visualIndex);
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "alter", alterAction.ToString(), visualIndex);
+    }
+
+    public async Task RegisterRenderer(string rendererName, RendererCallback rendererCallback)
+    {
+        var module = await _handsontableModuleTask.Value;
+        var dotNetHelper = DotNetObjectReference.Create(this);
+        _rendererDict.Add(rendererName, rendererCallback);
+        await module.InvokeVoidAsync("registerRenderer", rendererName, dotNetHelper);
     }
 
     public async ValueTask DisposeAsync()
     {
-        if (_moduleTask.IsValueCreated)
+        if (_handsontableModuleTask.IsValueCreated)
         {
-            var module = await _moduleTask.Value;
+            var module = await _handsontableModuleTask.Value;
             await module.DisposeAsync();
         }
     }
+    IList<AfterChangeHook>    _afterChangeHookList = new List<AfterChangeHook>();
+    IDictionary<string,RendererCallback>     _rendererDict = new Dictionary<string,RendererCallback>();
 
-    IList<Func<AfterChangeArgs, Task>>    _afterChangeList = new List<Func<AfterChangeArgs, Task>>();
-
-
-    public async Task AddHookAfterChange(Func<AfterChangeArgs, Task> afterChange)
+    public async Task AddHookAfterChange(AfterChangeHook afterChangeHook)
     {
-        var module = await _moduleTask.Value;
-        await module.InvokeVoidAsync("enableHook", _elemId, "afterChange");
-        _afterChangeList.Add(afterChange);
+        await _handsontableJsReference.InvokeVoidAsync("enableHook", "afterChange");
+        _afterChangeHookList.Add(afterChangeHook);
     }
 
     [JSInvokable]
     public async Task OnAfterChangeCallback(IList<IList<object>> cellUpdates, string source)
     {
-        foreach (var afterChange in _afterChangeList)
+        foreach (var afterChangeHook in _afterChangeHookList)
         {
             var args = new AfterChangeArgs { Data = cellUpdates, Source = source };
-            await afterChange(args);
+            await afterChangeHook(args);
         }
     }
 
-    public class Change<T> where T : IConvertible
+    [JSInvokable]
+    public async Task OnRendererCallback(
+        string rendererName, 
+        IJSObjectReference hotInstance, 
+        IJSObjectReference td, 
+        int row, int col, 
+        string prop, object value,
+        IDictionary<string,object> cellProperties )
     {
-        public Change(IList<object> args)
-        {
-            Row = (int) args[0];
-            Prop = (string) args[1];
-            OldVal = (T) Convert.ChangeType(args[2], typeof(T));
-            NewVal = (T) Convert.ChangeType(args[3], typeof(T));
-        }
-
-        public int Row { get; }
-        public string Prop { get; }
-        public T? OldVal { get; }
-        public T? NewVal { get; }
-    }
-
-
-    public class AfterChangeArgs {
-        public required IList<IList<object>> Data { get; set; }
-        public required string Source { get; set; }
+        var args = new RendererArgs{
+            HotInstance = hotInstance,
+            Td = td,
+            Row = row,
+            Column = col,
+            Prop = prop,
+            Value = value,
+            CellProperties = cellProperties!
+        };
+        var renderer = _rendererDict[rendererName];
+        await renderer(args);
     }
 }

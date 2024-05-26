@@ -11,7 +11,7 @@
     [Parameter]
     public ConfigurationOptions? ConfigurationOptions { get; set; }
     [Parameter]
-    public Func<HandsontableJsInterop.AfterChangeArgs, Task>? OnAfterChange { get; set; }
+    public HandsontableHooks.AfterChangeHook? OnAfterChange { get; set; }
 
     public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
 
@@ -20,11 +20,18 @@
         if (firstRender && HandsontableJsInterop == null )
         {
             HandsontableJsInterop = new HandsontableJsInterop(JSRuntime);
+            await HandsontableJsInterop.RegisterRenderer("customRenderer", RendererCallback);
             await HandsontableJsInterop.NewHandsontable(
                 Id!, ConfigurationOptions
             );
             if (OnAfterChange != null) await HandsontableJsInterop.AddHookAfterChange(OnAfterChange);
         }
+    }
+
+    public async Task RendererCallback(HandsontableRenderer.RendererArgs args)
+    {
+        var jqTd = new JQueryJsInterop(args.Td);
+        await jqTd.Attr("style", "background-color: #ffcc00; color: #000000; font-weight: bold;");
     }
 }
 

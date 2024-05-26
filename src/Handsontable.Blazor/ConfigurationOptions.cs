@@ -60,6 +60,7 @@ public class ConfigurationOptions
     {
         public string? Data { get; set; }
         public bool ReadOnly { get; set; }
+        public string? Renderer { get; set; }
     }
 
     public class HtComment
@@ -80,7 +81,6 @@ public class ConfigurationOptions
             this.Col = col;
         }
     }
-
     public bool AutoRowSize { get; set; }
     public bool AutoWralCol { get; set; }
     public bool AutoWrapRow { get; set; }
@@ -102,6 +102,7 @@ public class ConfigurationOptions
     public bool MultiColumnSorting { get; set; }
     public bool ManualRowMove { get; set; }
     public IList<List<NestedHeader>>? NestedHeaders { get; set; }
+    public string? Renderer { get; set; }
     public bool SortIndicator { get; set; } = true;
     public bool Filters { get; set; } = true;
 
