@@ -18,9 +18,13 @@ export function newHandsontable(elemId, configurationOptions, dotNetHelper) {
 }
 
 export function registerRenderer(rendererName, dotNetHelper) {
-  let renderer =  new CustomRenderer(rendererName, dotNetHelper)
+  let renderer =  new CustomRenderer(rendererName, dotNetHelper);
+
+  // Bind renderer to callback so that it is available as 'this' in the callback.
   let rendererCallback = renderer.rendererCallback.bind(renderer);
-  Handsontable.renderers.registerRenderer(rendererName, rendererCallback);
+  
+  Handsontable.renderers.registerRenderer(
+    rendererName, async (...callbackArgs) => rendererCallback(...callbackArgs));
 }
 
 
@@ -39,7 +43,8 @@ class HandsontableJs {
   }
   
   enableHook(hookName) {
-    this._hot.addHook(hookName, async (...callbackArgs) => this.hookCallback(hookName, ...callbackArgs));
+    this._hot.addHook(
+      hookName, async (...callbackArgs) => this.hookCallback(hookName, ...callbackArgs));
   }
 
   hookCallback(hookName, ...callbackArgs) {
