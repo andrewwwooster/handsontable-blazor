@@ -1,13 +1,14 @@
+using HandsontableBlazor.Interop;
 using Microsoft.JSInterop;
 
-namespace Handsontable.Blazor;
+namespace HandsontableBlazor;
 
-public class HandsontableRenderer {
+public class Renderer {
     public delegate Task RendererCallback(RendererArgs args);
 
     public class RendererArgs {
         public required IJSObjectReference HotInstance { get; set; }
-        public required IJSObjectReference Td { get; set; }
+        public required JQueryJsInterop Td { get; set; }
         public required int Row { get; set; }
         public required int Column { get; set; }
         public required string Prop { get; set; }

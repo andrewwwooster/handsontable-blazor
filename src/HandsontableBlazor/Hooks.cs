@@ -1,6 +1,6 @@
-namespace Handsontable.Blazor;
+namespace HandsontableBlazor;
 
-public class HandsontableHooks {
+public class Hooks {
 
     public delegate Task AfterChangeHook(AfterChangeArgs args);
 

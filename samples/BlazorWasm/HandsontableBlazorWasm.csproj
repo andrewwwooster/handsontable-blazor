@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Handsontable.Blazor\Handsontable.Blazor.csproj" />
+    <ProjectReference Include="..\..\src\HandsontableBlazor\HandsontableBlazor.csproj" />
   </ItemGroup>
 
 </Project>

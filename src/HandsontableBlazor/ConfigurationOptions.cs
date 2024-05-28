@@ -1,4 +1,4 @@
-namespace Handsontable.Blazor;
+namespace HandsontableBlazor;
 
 /// <summary>
 /// Corresponds to JSON settings passed to a client as Handsontable options

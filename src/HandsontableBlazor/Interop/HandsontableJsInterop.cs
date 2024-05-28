@@ -1,10 +1,10 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using static Handsontable.Blazor.HandsontableHooks;
-using static Handsontable.Blazor.HandsontableRenderer;
+using static HandsontableBlazor.Hooks;
+using static HandsontableBlazor.Renderer;
 
-namespace Handsontable.Blazor;
+namespace HandsontableBlazor.Interop;
 
 // This class provides an example of how JavaScript functionality can be wrapped
 // in a .NET class for easy consumption. The associated JavaScript module is
@@ -20,11 +20,15 @@ public class HandsontableJsInterop : IAsyncDisposable
     private readonly Lazy<Task<IJSObjectReference>> _jqueryModuleTask;
     private IJSObjectReference _handsontableJsReference = null!;
 
+    IList<AfterChangeHook>    _afterChangeHookList = new List<AfterChangeHook>();
+    static IDictionary<string,RendererCallback>     _rendererDict = new Dictionary<string,RendererCallback>();
+
+
     public HandsontableJsInterop(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
         _handsontableModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./_content/Handsontable.Blazor/handsontableJsInterop.js").AsTask());
+            "import", "./_content/HandsontableBlazor/handsontableJsInterop.js").AsTask());
         _jqueryModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js").AsTask());
             
@@ -91,8 +95,6 @@ public class HandsontableJsInterop : IAsyncDisposable
             await module.DisposeAsync();
         }
     }
-    IList<AfterChangeHook>    _afterChangeHookList = new List<AfterChangeHook>();
-    IDictionary<string,RendererCallback>     _rendererDict = new Dictionary<string,RendererCallback>();
 
     public async Task AddHookAfterChange(AfterChangeHook afterChangeHook)
     {
@@ -121,7 +123,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         var args = new RendererArgs{
             HotInstance = hotInstance,
-            Td = td,
+            Td = new JQueryJsInterop(td),
             Row = row,
             Column = col,
             Prop = prop,

@@ -5,11 +5,11 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{937EC97F-1CE8-4C33-8C48-6CAFA306EFAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Handsontable.BlazorWasm", "samples\BlazorWasm\Handsontable.BlazorWasm.csproj", "{127E48B2-86E8-490A-8497-A1DABD05CB7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandsontableBlazorWasm", "samples\BlazorWasm\HandsontableBlazorWasm.csproj", "{127E48B2-86E8-490A-8497-A1DABD05CB7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D5C797D4-EE99-429E-AF10-87A9D21C5C21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Handsontable.Blazor", "src\Handsontable.Blazor\Handsontable.Blazor.csproj", "{C8944BB8-2733-4028-822A-4D476FF1DD65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandsontableBlazor", "src\HandsontableBlazor\HandsontableBlazor.csproj", "{C8944BB8-2733-4028-822A-4D476FF1DD65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

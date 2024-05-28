@@ -1,5 +1,7 @@
 ﻿@page "/"
-@using static Handsontable.Blazor.HandsontableHooks
+@using HandsontableBlazor
+@using HandsontableBlazor.Interop
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Home</PageTitle>
 
@@ -8,7 +10,7 @@
 <button @onclick="AddRow">Add Row</button>
 
 <div style="border: 1px solid black;">
-    <Handsontable.Blazor.Handsontable 
+    <Handsontable 
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
             OnAfterChange="@OnAfterChange"
@@ -19,11 +21,11 @@
 
 @code
 {
-    Handsontable.Blazor.Handsontable? _handsontable;
+    Handsontable? _handsontable;
 
     private string _onChangeValue = string.Empty;
 
-    Handsontable.Blazor.ConfigurationOptions _configurationOptions = new Handsontable.Blazor.ConfigurationOptions
+    HandsontableBlazor.ConfigurationOptions _configurationOptions = new HandsontableBlazor.ConfigurationOptions
     {
         Data =  {
             new Dictionary<string, object> { 
@@ -47,10 +49,10 @@
     private async Task AddRow()
     {
         await _handsontable!.HandsontableJsInterop!.Alter(
-            Handsontable.Blazor.HandsontableJsInterop.AlterActionEnum.insert_row_above, 0);
+            HandsontableBlazor.Interop.HandsontableJsInterop.AlterActionEnum.insert_row_above, 0);
     }
 
-    private async Task OnAfterChange(AfterChangeArgs args)
+    private async Task OnAfterChange(Hooks.AfterChangeArgs args)
     {
         _onChangeValue = $"OnAfterChange: {args.Data[0][0]} {args.Data[0][1]} {args.Data[0][2]} {args.Data[0][3]} {args.Source}";
         StateHasChanged();              // Required because event was initiated by JS.

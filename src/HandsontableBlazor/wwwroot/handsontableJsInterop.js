@@ -1,7 +1,7 @@
 // This is a JavaScript module that is loaded on demand. It can export any number of
 // functions, and may import other JavaScript modules if required.
 
-import '/_content/Handsontable.Blazor/lib/handsontable/handsontable.full.js';
+import '/_content/HandsontableBlazor/lib/handsontable/handsontable.full.js';
 import "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.js";
 
 

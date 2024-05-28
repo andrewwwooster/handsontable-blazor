@@ -1,6 +1,6 @@
 using Microsoft.JSInterop;
 
-namespace Handsontable.Blazor;
+namespace HandsontableBlazor.Interop;
 
 /// <summary>
 /// Creates a JQuery based interface on an HTML element.

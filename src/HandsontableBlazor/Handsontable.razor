@@ -1,4 +1,7 @@
-﻿@using Microsoft.JSInterop
+﻿@namespace HandsontableBlazor
+@using Microsoft.JSInterop
+@using HandsontableBlazor
+@using HandsontableBlazor.Interop
 @inject IJSRuntime JSRuntime
 
 <div id="hot">
@@ -11,7 +14,7 @@
     [Parameter]
     public ConfigurationOptions? ConfigurationOptions { get; set; }
     [Parameter]
-    public HandsontableHooks.AfterChangeHook? OnAfterChange { get; set; }
+    public Hooks.AfterChangeHook? OnAfterChange { get; set; }
 
     public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
 
@@ -28,10 +31,9 @@
         }
     }
 
-    public async Task RendererCallback(HandsontableRenderer.RendererArgs args)
+    public async Task RendererCallback(Renderer.RendererArgs args)
     {
-        var jqTd = new JQueryJsInterop(args.Td);
-        await jqTd.Attr("style", "background-color: #ffcc00; color: #000000; font-weight: bold;");
+        await args.Td.Attr("style", "background-color: #ffcc00; color: #000000; font-weight: bold;");
     }
 }
 
