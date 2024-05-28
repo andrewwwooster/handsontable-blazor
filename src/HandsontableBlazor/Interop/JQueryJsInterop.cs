@@ -30,6 +30,7 @@ public class JQueryJsInterop
         await _jqueryObjectReference.InvokeVoidAsync("attr", property, value);
     }
 
+
     public async Task<string> Css(string property)
     {
         return await _jqueryObjectReference.InvokeAsync<string>("css", property);
@@ -38,5 +39,27 @@ public class JQueryJsInterop
     public async Task Css(string property, string value)
     {
         await _jqueryObjectReference.InvokeVoidAsync("css", property, value);
+    }
+
+
+    public async Task<string> Html()
+    {
+        return await _jqueryObjectReference.InvokeAsync<string>("html");
+    }
+
+    public async Task Html(string value)
+    {
+        await _jqueryObjectReference.InvokeVoidAsync("html", value);
+    }
+
+
+    public async Task<string> Text()
+    {
+        return await _jqueryObjectReference.InvokeAsync<string>("text");
+    }
+
+    public async Task Text(string value)
+    {
+        await _jqueryObjectReference.InvokeVoidAsync("text", value);
     }
 }
