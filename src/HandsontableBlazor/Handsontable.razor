@@ -20,7 +20,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && HandsontableJsInterop == null )
+        if (firstRender && HandsontableJsInterop == null && ConfigurationOptions != null)
         {
             HandsontableJsInterop = new HandsontableJsInterop(JSRuntime);
             await HandsontableJsInterop.RegisterRenderer("customRenderer", RendererCallback);

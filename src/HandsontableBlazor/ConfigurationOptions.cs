@@ -1,3 +1,8 @@
+using System.Text.Json.Serialization;
+using Microsoft.JSInterop;
+using static HandsontableBlazor.Interop.HandsontableJsInterop;
+using static HandsontableBlazor.Renderer;
+
 namespace HandsontableBlazor;
 
 /// <summary>
@@ -102,7 +107,23 @@ public class ConfigurationOptions
     public bool MultiColumnSorting { get; set; }
     public bool ManualRowMove { get; set; }
     public IList<List<NestedHeader>>? NestedHeaders { get; set; }
-    public string? Renderer { get; set; }
+    public string? RendererName { get; set; }
+    [JsonIgnore]
+    public RendererCallback? RendererCallback { get; set; }
+    public DotNetObjectReference<RendererCallbackProxy>? RendererCallbackDotNetObjectReference
+    { 
+        get
+        {
+            if (RendererCallback != null)
+            {
+                var proxy = new RendererCallbackProxy(RendererCallback!);
+                var objectReference = DotNetObjectReference.Create(proxy);
+                return objectReference;
+            }
+            return null;
+        }
+    }
+
     public bool SortIndicator { get; set; } = true;
     public bool Filters { get; set; } = true;
 

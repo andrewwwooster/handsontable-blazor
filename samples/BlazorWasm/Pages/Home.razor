@@ -25,26 +25,30 @@
 
     private string _onChangeValue = string.Empty;
 
-    HandsontableBlazor.ConfigurationOptions _configurationOptions = new HandsontableBlazor.ConfigurationOptions
-    {
-        Data =  {
-            new Dictionary<string, object> { 
-                { "A", 11 }, { "B", "12!" }, { "b", "13" } 
-            },
-            new Dictionary<string, object> { 
-                { "A", 21 }, { "B", "22!" }, { "b", "23" } 
-            },
-            new Dictionary<string, object> { 
-                { "A", 31 }, { "B", "32!" }, { "b", "33" } 
-            }
-        },
-        ColHeaders = new string[] { "A", "B", "C" },
-        Renderer = "customRenderer",
-        RowHeaders = true,
-        Height = 300,
-        Width = 300
-    };
+    private HandsontableBlazor.ConfigurationOptions? _configurationOptions = null;
    
+    protected override void OnInitialized ()
+    {
+         _configurationOptions = new HandsontableBlazor.ConfigurationOptions 
+         {
+            Data =  {
+                new Dictionary<string, object> { 
+                    { "A", 11 }, { "B", "12!" }, { "b", "13" } 
+                },
+                new Dictionary<string, object> { 
+                    { "A", 21 }, { "B", "22!" }, { "b", "23" } 
+                },
+                new Dictionary<string, object> { 
+                    { "A", 31 }, { "B", "32!" }, { "b", "33" } 
+                }
+            },
+            ColHeaders = new string[] { "A", "B", "C" },
+            RendererCallback = OnRender,
+            RowHeaders = true,
+            Height = 300,
+            Width = 300
+        };
+    }
 
     private async Task AddRow()
     {
@@ -57,5 +61,10 @@
         _onChangeValue = $"OnAfterChange: {args.Data[0][0]} {args.Data[0][1]} {args.Data[0][2]} {args.Data[0][3]} {args.Source}";
         StateHasChanged();              // Required because event was initiated by JS.
         await Task.CompletedTask;
+    }
+
+    private async Task OnRender(Renderer.RendererArgs args)
+    {
+        await args.Td.Attr("style", "background-color: yellow; color: #000000;");
     }
 }

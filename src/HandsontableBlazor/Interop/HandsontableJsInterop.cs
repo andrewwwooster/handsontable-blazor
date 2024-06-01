@@ -17,7 +17,6 @@ public class HandsontableJsInterop : IAsyncDisposable
 {
     private readonly IJSRuntime _jsRuntime;
     private readonly Lazy<Task<IJSObjectReference>> _handsontableModuleTask;
-    private readonly Lazy<Task<IJSObjectReference>> _jqueryModuleTask;
     private IJSObjectReference _handsontableJsReference = null!;
 
     IList<AfterChangeHook>    _afterChangeHookList = new List<AfterChangeHook>();
@@ -29,9 +28,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         _jsRuntime = jsRuntime;
         _handsontableModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./_content/HandsontableBlazor/handsontableJsInterop.js").AsTask());
-        _jqueryModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js").AsTask());
-            
     }
 
     public async Task NewHandsontable (string elemId, ConfigurationOptions? configurationOptions) 
@@ -39,8 +35,9 @@ public class HandsontableJsInterop : IAsyncDisposable
         try
         {
             var module = await _handsontableModuleTask.Value;
+            var thisObjectReference = DotNetObjectReference.Create(this);
             _handsontableJsReference = await module.InvokeAsync<IJSObjectReference>(
-                "newHandsontable", elemId, configurationOptions, DotNetObjectReference.Create(this));
+                "newHandsontable", elemId, configurationOptions, thisObjectReference);
         }
         catch (JSException ex)
         {
@@ -91,6 +88,8 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         if (_handsontableModuleTask.IsValueCreated)
         {
+            // @TODO Displose of _handsontableJsReference IJSObjectReference?
+
             var module = await _handsontableModuleTask.Value;
             await module.DisposeAsync();
         }
@@ -132,5 +131,45 @@ public class HandsontableJsInterop : IAsyncDisposable
         };
         var renderer = _rendererDict[rendererName];
         await renderer(args);
+    }
+
+    /// <summary>
+    /// @ToDo Move to top level namespace?
+    /// Options:
+    ///     1) Pass this RendererProxy to the JavaScript as DotNetReference
+    ///         Dot net still needs to know signature.
+    ///     2) Avoid dotNet classes in JavaScript space:
+    ///         - Register renderer in table here.
+    ///         - Lookup renderer before executing
+    ///     
+    /// </summary>
+    public class RendererCallbackProxy
+    {
+        private RendererCallback _callback;
+
+        public RendererCallbackProxy (RendererCallback callback)
+        {
+            _callback = callback;
+        }
+
+        [JSInvokable]
+        public async Task OnRendererCallback(
+            IJSObjectReference hotInstance, 
+            IJSObjectReference td, 
+            int row, int col, 
+            string prop, object value,
+            IDictionary<string,object> cellProperties )
+        {
+            var args = new RendererArgs{
+                HotInstance = hotInstance,
+                Td = new JQueryJsInterop(td),
+                Row = row,
+                Column = col,
+                Prop = prop,
+                Value = value,
+                CellProperties = cellProperties!
+            };
+            await _callback(args);
+        }
     }
 }

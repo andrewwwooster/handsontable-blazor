@@ -35,6 +35,14 @@ class HandsontableJs {
   constructor(elemId, configurationOptions, dotNetHelper) {
     let containerElem = document.getElementById(elemId)
     this._dotNetHelper = dotNetHelper;
+
+    if (configurationOptions.rendererCallbackDotNetObjectReference != null)
+    {
+      let customRenderer = new CustomRenderer(null, configurationOptions.rendererCallbackDotNetObjectReference);
+      let callback = customRenderer.rendererCallback.bind(customRenderer);
+      configurationOptions.renderer = callback;
+    }
+
     this._hot = new Handsontable( containerElem, configurationOptions )
   }
 
@@ -47,9 +55,9 @@ class HandsontableJs {
       hookName, async (...callbackArgs) => this.hookCallback(hookName, ...callbackArgs));
   }
 
-  hookCallback(hookName, ...callbackArgs) {
+  async hookCallback(hookName, ...callbackArgs) {
     let callbackName = "OnAfterChangeCallback";
-    this._dotNetHelper.invokeMethodAsync(callbackName, ...callbackArgs);
+    await this._dotNetHelper.invokeMethodAsync(callbackName, ...callbackArgs);
   }
 
 }
@@ -73,7 +81,6 @@ class CustomRenderer {
       
     await this._dotNetHelper.invokeMethodAsync(
       "OnRendererCallback", 
-      this._rendererName,
       hotInstanceRef,
       tdRef,
       row,
