@@ -98,7 +98,25 @@ public class ConfigurationOptions
     public bool ColumnSorting { get; set; } = false;
     public object ColHeaders { get; set; } = false;  // Can be boolean or array of strings
     public IList<double?> ColWidths { get; set; } = new List<double?>();
-    public IList<Dictionary<string, object>> Data { get; set; } = new List<Dictionary<string, object>>();
+    public object Data {
+         get
+         {
+            if (DataArrayOfArrays != null)
+            {
+                return DataArrayOfArrays;
+            }
+            if (DataArrayOfObjects != null)
+            {
+                return DataArrayOfObjects;
+            }
+            return  new List<Dictionary<string, object>>();
+         }
+    }
+
+    [JsonIgnore]
+    public IList<IList<object>> DataArrayOfArrays { get; set; } = new List<IList<object>>()!;
+    [JsonIgnore]
+    public IList<IDictionary<string, object>> DataArrayOfObjects { get; set; } = new List<IDictionary<string, object>>();
     public IList<double?> RowHeights { get; set; } = new List<double?>();
     public int? Width { get; set; }
     public int? Height { get; set; }

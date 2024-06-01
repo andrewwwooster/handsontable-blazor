@@ -1,37 +1,65 @@
 ﻿@page "/"
+@using System.Text.Json
 @using HandsontableBlazor
 @using HandsontableBlazor.Interop
 @inject IJSRuntime JSRuntime
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Handsontable</PageTitle>
 
-<h1>Hello, world!!!!</h1>
+<div>
+    <InputSelect @bind-Value="@_alterAction">
+        <option>insert_row_above</option>
+        <option>insert_row_below</option>
+        <option>remove_row</option>
+        <option>insert_col_start</option>
+        <option>insert_col_end</option>
+        <option>remove_col</option>
+    </InputSelect>
 
-<button @onclick="AddRow">Add Row</button>
+    Visual Index:
+    <InputNumber @bind-Value="_alterVisualIndex"/>
+
+    Amount:
+    <InputNumber @bind-Value="_alterAmount"/>
+
+    <button @onclick="OnAlterClick">Alter</button>
+</div>
+<div>
+    <button @onclick="OnGetCellMetaClick">GetCellMeta</button>
+</div>
 
 <div style="border: 1px solid black;">
     <Handsontable 
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
-            OnAfterChange="@OnAfterChange"
+            OnAfterChange="@OnAfterChangeCallback"
             @ref="_handsontable" />
 </div>
-
-<p>@_onChangeValue</p>
+<pre style="height: 200px;">
+    @_eventLog
+</pre>
 
 @code
 {
     Handsontable? _handsontable;
 
-    private string _onChangeValue = string.Empty;
-
     private HandsontableBlazor.ConfigurationOptions? _configurationOptions = null;
+    private HandsontableJsInterop.AlterActionEnum _alterAction = HandsontableJsInterop.AlterActionEnum.insert_row_above;
+    private int _alterVisualIndex = 0;
+    private int _alterAmount = 1;
+    private string _eventLog = "";
    
     protected override void OnInitialized ()
     {
          _configurationOptions = new HandsontableBlazor.ConfigurationOptions 
          {
-            Data =  {
+            DataArrayOfArrays =  [
+                [ 1, "12!", "13" ],
+                [ 21, "22!", "23" ],
+                [ 31, "32!", "33" ]
+            ],
+            /*
+            DataArrayOfObjects =  {
                 new Dictionary<string, object> { 
                     { "A", 11 }, { "B", "12!" }, { "b", "13" } 
                 },
@@ -42,28 +70,43 @@
                     { "A", 31 }, { "B", "32!" }, { "b", "33" } 
                 }
             },
+            */
             ColHeaders = new string[] { "A", "B", "C" },
-            RendererCallback = OnRender,
+            RendererCallback = OnRenderCallback,
             RowHeaders = true,
-            Height = 300,
+            Height = 200,
             Width = 300
         };
     }
 
-    private async Task AddRow()
+    private async Task OnAlterClick()
     {
         await _handsontable!.HandsontableJsInterop!.Alter(
-            HandsontableBlazor.Interop.HandsontableJsInterop.AlterActionEnum.insert_row_above, 0);
+            _alterAction, _alterVisualIndex, _alterAmount, "source", false);
     }
 
-    private async Task OnAfterChange(Hooks.AfterChangeArgs args)
+    private async Task OnGetCellMetaClick()
     {
-        _onChangeValue = $"OnAfterChange: {args.Data[0][0]} {args.Data[0][1]} {args.Data[0][2]} {args.Data[0][3]} {args.Source}";
+        var properties = await _handsontable.HandsontableJsInterop!.GetCellMeta(0, 0);
+        var propertiesJson = JsonSerializer.Serialize(properties);
+        _eventLog = "getCellMeta(): " + propertiesJson + "\n"
+            + _eventLog;
         StateHasChanged();              // Required because event was initiated by JS.
         await Task.CompletedTask;
     }
 
-    private async Task OnRender(Renderer.RendererArgs args)
+    private async Task OnAfterChangeCallback(Hooks.AfterChangeArgs args)
+    {
+        for (int i = 0; i < args.Data.Count; i++)
+        {
+            _eventLog = $"OnAfterChange: {args.Data[i][0]} {args.Data[i][1]} {args.Data[i][2]} {args.Data[i][3]} {args.Source}\n"
+                + _eventLog;
+        }
+        StateHasChanged();              // Required because event was initiated by JS.
+        await Task.CompletedTask;
+    }
+
+    private async Task OnRenderCallback(Renderer.RendererArgs args)
     {
         await args.Td.Attr("style", "background-color: yellow; color: #000000;");
     }
