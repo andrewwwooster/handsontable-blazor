@@ -25,7 +25,7 @@
     <button @onclick="OnAlterClick">Alter</button>
 </div>
 <div>
-    <button @onclick="OnGetCellMetaClick">GetCellMeta</button>
+    <div style="width: 10em; border: 1px solid darkgray;" @onmouseenter="OnGetCellMetaClick" >GetCellMeta</div>
 </div>
 
 <div style="border: 1px solid black;">
@@ -42,8 +42,7 @@
 
 @code
 {
-    Handsontable? _handsontable;
-
+    Handsontable _handsontable = null!;
     private HandsontableBlazor.ConfigurationOptions? _configurationOptions = null;
     private HandsontableJsInterop.AlterActionEnum _alterAction = HandsontableJsInterop.AlterActionEnum.insert_row_above;
     private int _alterVisualIndex = 0;
@@ -82,16 +81,16 @@
 
     private async Task OnAlterClick()
     {
-        await _handsontable!.HandsontableJsInterop!.Alter(
+        await _handsontable.HandsontableJsInterop!.Alter(
             _alterAction, _alterVisualIndex, _alterAmount, "source", false);
     }
 
     private async Task OnGetCellMetaClick()
     {
-        var ranges = await _handsontable!.HandsontableJsInterop!.GetSelectedRange();
+        var ranges = await _handsontable.HandsontableJsInterop!.GetSelectedRange();
         if (ranges != null)
         {
-            var properties = await _handsontable!.HandsontableJsInterop!.GetCellMeta(ranges[0].X1, ranges[0].Y1);
+            var properties = await _handsontable.HandsontableJsInterop!.GetCellMeta(ranges[0].X1, ranges[0].Y1);
             var propertiesJson = JsonSerializer.Serialize(properties);
             _eventLog = "getCellMeta(): " + propertiesJson + "\n"
                 + _eventLog;
