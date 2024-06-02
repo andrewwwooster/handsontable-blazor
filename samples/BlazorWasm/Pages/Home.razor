@@ -32,8 +32,8 @@
     <Handsontable 
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
-            OnAfterChange="@OnAfterChangeCallback"
-            OnAfterSelection="@OnAfterSelectionCallback"
+            OnAfterChange="@OnCallback"
+            OnAfterSelection="@OnCallback"
             @ref="_handsontable" />
 </div>
 <pre style="height: 200px;">
@@ -99,24 +99,13 @@
         }
     }
 
-    private async Task OnAfterChangeCallback(Hooks.AfterChangeArgs args)
+    private async Task OnCallback(Hooks.BaseHookArgs args)
     {
-        AppendToEventLog("AfterChange", args);
-        await Task.CompletedTask;
-    }
-
-    private async Task OnAfterSelectionCallback(object args)
-    {
-        AppendToEventLog("AfterSelection", args);
-        await Task.CompletedTask;
-    }
-
-    private void AppendToEventLog(string hookName, object args)
-    {
-        var json = JsonSerializer.Serialize(args);
-        _eventLog = $"{hookName}: {json}\n"
+        var json = JsonSerializer.Serialize((object) args);
+        _eventLog = $"{json}\n"
             + _eventLog;
         StateHasChanged(); 
+        await Task.CompletedTask;
     }
 
     private async Task OnRenderCallback(Renderer.RendererArgs args)

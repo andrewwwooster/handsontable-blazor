@@ -179,7 +179,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task AddHook<HookArgsT>(string hookName, Delegate hook)
         where HookArgsT : BaseHookArgs
     {
-        var proxyObjectRef = DotNetObjectReference.Create(new HookProxy<HookArgsT>(hook));
+        var proxyObjectRef = DotNetObjectReference.Create(new HookProxy<HookArgsT>(hookName, hook));
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookName, proxyObjectRef);
     }
 
@@ -209,20 +209,22 @@ public class HandsontableJsInterop : IAsyncDisposable
     public class HookProxy<ArgT> 
         where ArgT : class
     {
-        private readonly Delegate _hook;
+        public string HookName {get; private set;}
         private readonly Type _argType;
+        private readonly Delegate _hook;
 
-        public HookProxy (Delegate hook)
+        public HookProxy (string hookName, Delegate hook)
         {
             _argType = typeof(ArgT);
+            HookName = hookName;
             _hook = hook;
         }
 
         [JSInvokable]
         public async Task HookCallback(JsonDocument jdoc)
         {
-            var arg = Activator.CreateInstance(_argType, jdoc);
-            var task = _hook.DynamicInvoke(arg) as Task;
+            var args = (BaseHookArgs) Activator.CreateInstance(_argType, [HookName, jdoc])!;
+            var task = _hook.DynamicInvoke(args) as Task;
             task!.GetAwaiter().GetResult();
             await Task.CompletedTask;
         }

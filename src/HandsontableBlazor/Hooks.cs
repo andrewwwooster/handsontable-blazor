@@ -4,7 +4,9 @@ namespace HandsontableBlazor;
 
 public class Hooks {
 
-    public class BaseHookArgs {};
+    public class BaseHookArgs {
+        public required string HookName { get; set; }
+    };
 
     public delegate Task AfterChangeHook(AfterChangeArgs args);
 
@@ -13,8 +15,9 @@ public class Hooks {
         public required object[][] Data { get; set; }
         public required string Source { get; set; }
 
-        public AfterChangeArgs(JsonDocument jdoc) 
+        public AfterChangeArgs(string hookName, JsonDocument jdoc) 
         {
+            HookName = hookName;
             Data = jdoc.RootElement[0].Deserialize<object[][]>()!;
             Source = jdoc.RootElement[1].Deserialize<string>()!;
         }
@@ -40,7 +43,8 @@ public class Hooks {
 
     public class AfterSelectionArgs : BaseHookArgs
     {
-        public AfterSelectionArgs(JsonDocument jdoc) {
+        public AfterSelectionArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
             Row = jdoc.RootElement[0].Deserialize<int>();
             Column = jdoc.RootElement[1].Deserialize<int>();
             Row2 = jdoc.RootElement[2].Deserialize<int>();
