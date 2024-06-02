@@ -127,7 +127,7 @@ public class ConfigurationOptions
     public IList<List<NestedHeader>>? NestedHeaders { get; set; }
     public string? RendererName { get; set; }
     [JsonIgnore]
-    public RendererCallback? RendererCallback { get; set; }
+    public Func<RendererArgs, Task>? RendererCallback { get; set; }
     public DotNetObjectReference<RendererCallbackProxy>? RendererCallbackDotNetObjectReference
     { 
         get

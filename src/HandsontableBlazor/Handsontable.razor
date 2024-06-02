@@ -14,9 +14,9 @@
     [Parameter]
     public ConfigurationOptions? ConfigurationOptions { get; set; }
     [Parameter]
-    public Hooks.AfterChangeHook? OnAfterChange { get; set; }
+    public Func<Hooks.AfterChangeArgs,Task>? OnAfterChange { get; set; }
     [Parameter]
-    public Hooks.AfterSelectionHook? OnAfterSelection { get; set; }
+    public Func<Hooks.AfterSelectionArgs,Task>? OnAfterSelection { get; set; }
 
     public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
 

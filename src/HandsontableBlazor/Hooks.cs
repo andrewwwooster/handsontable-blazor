@@ -1,14 +1,14 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HandsontableBlazor;
 
 public class Hooks {
 
     public class BaseHookArgs {
+        [JsonPropertyOrder(-1)]
         public required string HookName { get; set; }
     };
-
-    public delegate Task AfterChangeHook(AfterChangeArgs args);
 
     public class AfterChangeArgs : BaseHookArgs
     {
@@ -38,8 +38,6 @@ public class Hooks {
         }
     }
 
-
-    public delegate Task AfterSelectionHook(AfterSelectionArgs args);
 
     public class AfterSelectionArgs : BaseHookArgs
     {

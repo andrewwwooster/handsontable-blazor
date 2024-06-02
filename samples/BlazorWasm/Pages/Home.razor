@@ -32,8 +32,8 @@
     <Handsontable 
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
-            OnAfterChange="@OnCallback"
-            OnAfterSelection="@OnCallback"
+            OnAfterChange="@OnHookCallback"
+            OnAfterSelection="@OnHookCallback"
             @ref="_handsontable" />
 </div>
 <pre style="height: 200px;">
@@ -99,7 +99,7 @@
         }
     }
 
-    private async Task OnCallback(Hooks.BaseHookArgs args)
+    private async Task OnHookCallback(Hooks.BaseHookArgs args)
     {
         var json = JsonSerializer.Serialize((object) args);
         _eventLog = $"{json}\n"

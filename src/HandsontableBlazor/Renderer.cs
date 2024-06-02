@@ -4,7 +4,6 @@ using Microsoft.JSInterop;
 namespace HandsontableBlazor;
 
 public class Renderer {
-    public delegate Task RendererCallback(RendererArgs args);
 
     public class RendererArgs {
         public required IJSObjectReference HotInstance { get; set; }

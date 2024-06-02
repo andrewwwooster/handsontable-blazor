@@ -20,7 +20,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     private readonly Lazy<Task<IJSObjectReference>> _handsontableModuleTask;
     private IJSObjectReference _handsontableJsReference = null!;
 
-    static IDictionary<string,RendererCallback>     _rendererDict = new Dictionary<string,RendererCallback>();
+    static IDictionary<string,Func<RendererArgs, Task>>     _rendererDict = new Dictionary<string,Func<RendererArgs, Task>>();
 
 
     public HandsontableJsInterop(IJSRuntime jsRuntime)
@@ -146,7 +146,7 @@ public class HandsontableJsInterop : IAsyncDisposable
             alterAction.ToString(), visualIndex, amount, source, keepEmptyRows);
     }
 
-    public async Task RegisterRenderer(string rendererName, RendererCallback rendererCallback)
+    public async Task RegisterRenderer(string rendererName, Func<RendererArgs, Task> rendererCallback)
     {
         var module = await _handsontableModuleTask.Value;
         var dotNetHelper = DotNetObjectReference.Create(this);
@@ -166,17 +166,17 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
  
-    public async Task AddHookAfterChange(AfterChangeHook hook)
+    public async Task AddHookAfterChange(Func<AfterChangeArgs, Task> hook)
     {
         await AddHook<AfterChangeArgs>("afterChange", hook);
     }
 
-    public async Task AddHookAfterSelection(AfterSelectionHook hook)
+    public async Task AddHookAfterSelection(Func<AfterSelectionArgs, Task> hook)
     {
         await AddHook<AfterSelectionArgs>("afterSelection", hook);
     }
 
-    public async Task AddHook<HookArgsT>(string hookName, Delegate hook)
+    public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
         where HookArgsT : BaseHookArgs
     {
         var proxyObjectRef = DotNetObjectReference.Create(new HookProxy<HookArgsT>(hookName, hook));
@@ -206,16 +206,16 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
 
-    public class HookProxy<ArgT> 
-        where ArgT : class
+    public class HookProxy<HookArgsT> 
+        where HookArgsT : BaseHookArgs
     {
         public string HookName {get; private set;}
         private readonly Type _argType;
-        private readonly Delegate _hook;
+        private readonly Func<HookArgsT, Task> _hook;
 
-        public HookProxy (string hookName, Delegate hook)
+        public HookProxy (string hookName, Func<HookArgsT, Task> hook)
         {
-            _argType = typeof(ArgT);
+            _argType = typeof(HookArgsT);
             HookName = hookName;
             _hook = hook;
         }
@@ -244,9 +244,9 @@ public class HandsontableJsInterop : IAsyncDisposable
     /// </summary>
     public class RendererCallbackProxy
     {
-        private RendererCallback _callback;
+        private Func<RendererArgs, Task> _callback;
 
-        public RendererCallbackProxy (RendererCallback callback)
+        public RendererCallbackProxy (Func<RendererArgs, Task> callback)
         {
             _callback = callback;
         }
