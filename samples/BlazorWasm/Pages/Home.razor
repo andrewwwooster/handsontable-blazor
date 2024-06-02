@@ -33,6 +33,7 @@
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
             OnAfterChange="@OnAfterChangeCallback"
+            OnAfterSelection="@OnAfterSelectionCallback"
             @ref="_handsontable" />
 </div>
 <pre style="height: 200px;">
@@ -87,23 +88,35 @@
 
     private async Task OnGetCellMetaClick()
     {
-        var properties = await _handsontable.HandsontableJsInterop!.GetCellMeta(0, 0);
-        var propertiesJson = JsonSerializer.Serialize(properties);
-        _eventLog = "getCellMeta(): " + propertiesJson + "\n"
-            + _eventLog;
-        StateHasChanged();              // Required because event was initiated by JS.
-        await Task.CompletedTask;
+        var ranges = await _handsontable!.HandsontableJsInterop!.GetSelectedRange();
+        if (ranges != null)
+        {
+            var properties = await _handsontable!.HandsontableJsInterop!.GetCellMeta(ranges[0].X1, ranges[0].Y1);
+            var propertiesJson = JsonSerializer.Serialize(properties);
+            _eventLog = "getCellMeta(): " + propertiesJson + "\n"
+                + _eventLog;
+            StateHasChanged();              // Required because event was initiated by JS.
+        }
     }
 
     private async Task OnAfterChangeCallback(Hooks.AfterChangeArgs args)
     {
-        for (int i = 0; i < args.Data.Count; i++)
-        {
-            _eventLog = $"OnAfterChange: {args.Data[i][0]} {args.Data[i][1]} {args.Data[i][2]} {args.Data[i][3]} {args.Source}\n"
-                + _eventLog;
-        }
-        StateHasChanged();              // Required because event was initiated by JS.
+        AppendToEventLog("AfterChange", args);
         await Task.CompletedTask;
+    }
+
+    private async Task OnAfterSelectionCallback(object args)
+    {
+        AppendToEventLog("AfterSelection", args);
+        await Task.CompletedTask;
+    }
+
+    private void AppendToEventLog(string hookName, object args)
+    {
+        var json = JsonSerializer.Serialize(args);
+        _eventLog = $"{hookName}: {json}\n"
+            + _eventLog;
+        StateHasChanged(); 
     }
 
     private async Task OnRenderCallback(Renderer.RendererArgs args)

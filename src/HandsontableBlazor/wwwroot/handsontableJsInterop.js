@@ -50,21 +50,20 @@ class HandsontableJs {
     return this._hot[method](...args);
   }
   
-  enableHook(hookName) {
+  /**
+   * @param {string} hookName 
+   * @param {DotNetObjectReference<*HookProxy>} hookProxy
+   */
+  addHook(hookName, hookProxy) {
     this._hot.addHook(
-      hookName, async (...callbackArgs) => this.hookCallback(hookName, ...callbackArgs));
+      hookName, async (...callbackArgs) => hookProxy.invokeMethodAsync("HookCallback", callbackArgs));
   }
-
-  async hookCallback(hookName, ...callbackArgs) {
-    let callbackName = "OnAfterChangeCallback";
-    await this._dotNetHelper.invokeMethodAsync(callbackName, ...callbackArgs);
-  }
-
 }
+
 
 class CustomRenderer {
   _rendererName;                // string
-  _dotNetHelper;                // DotNetObjectReference<HandsontableJsInterop>
+  _dotNetHelper;                // DotNetObjectReference<RendererCallbackProxy>
 
   constructor(rendererName, dotNetHelper) {
     this._rendererName = rendererName;

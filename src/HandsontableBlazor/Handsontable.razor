@@ -15,6 +15,8 @@
     public ConfigurationOptions? ConfigurationOptions { get; set; }
     [Parameter]
     public Hooks.AfterChangeHook? OnAfterChange { get; set; }
+    [Parameter]
+    public Hooks.AfterSelectionHook? OnAfterSelection { get; set; }
 
     public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
 
@@ -28,6 +30,7 @@
                 Id!, ConfigurationOptions
             );
             if (OnAfterChange != null) await HandsontableJsInterop.AddHookAfterChange(OnAfterChange);
+            if (OnAfterSelection != null) await HandsontableJsInterop.AddHookAfterSelection(OnAfterSelection);
         }
     }
 

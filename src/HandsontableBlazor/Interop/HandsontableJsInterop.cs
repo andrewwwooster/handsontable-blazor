@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using static HandsontableBlazor.Hooks;
@@ -19,7 +20,6 @@ public class HandsontableJsInterop : IAsyncDisposable
     private readonly Lazy<Task<IJSObjectReference>> _handsontableModuleTask;
     private IJSObjectReference _handsontableJsReference = null!;
 
-    IList<AfterChangeHook>    _afterChangeHookList = new List<AfterChangeHook>();
     static IDictionary<string,RendererCallback>     _rendererDict = new Dictionary<string,RendererCallback>();
 
 
@@ -74,6 +74,28 @@ public class HandsontableJsInterop : IAsyncDisposable
         var cellProperties = await _handsontableJsReference.InvokeAsync<Dictionary<string,object>>(
             "invokeMethod", "getCellMeta", visualRow, visualColumn);
         return cellProperties;
+    }
+
+    public async Task<IList<CellRange>?> GetSelectedRange()
+    {
+        var selecteds =  await _handsontableJsReference.InvokeAsync<IList<IList<int>>>("invokeMethod", "getSelected");
+        if (selecteds == null) return null;
+
+        var cellRanges = new List<CellRange>();
+        foreach (var selected in selecteds)
+        {
+            cellRanges.Add(new CellRange(selected[0], selected[1], selected[2], selected[3]));
+        }
+        return cellRanges;
+    }
+
+
+    public async Task<CellRange?> GetSelectedRangeLast()
+    {
+        var selected =  await _handsontableJsReference.InvokeAsync<IList<int>>("invokeMethod", "getSelectedLast");
+        if (selected == null) return null;
+        var cellRange = new CellRange(selected[0], selected[1], selected[2], selected[3]);
+        return cellRange;
     }
 
     /**
@@ -143,22 +165,24 @@ public class HandsontableJsInterop : IAsyncDisposable
         }
     }
 
-    public async Task AddHookAfterChange(AfterChangeHook afterChangeHook)
+ 
+    public async Task AddHookAfterChange(AfterChangeHook hook)
     {
-        await _handsontableJsReference.InvokeVoidAsync("enableHook", "afterChange");
-        _afterChangeHookList.Add(afterChangeHook);
+        await AddHook<AfterChangeArgs>("afterChange", hook);
     }
 
-    [JSInvokable]
-    public async Task OnAfterChangeCallback(IList<IList<object>> cellUpdates, string source)
+    public async Task AddHookAfterSelection(AfterSelectionHook hook)
     {
-        foreach (var afterChangeHook in _afterChangeHookList)
-        {
-            var args = new AfterChangeArgs { Data = cellUpdates, Source = source };
-            await afterChangeHook(args);
-        }
+        await AddHook<AfterSelectionArgs>("afterSelection", hook);
     }
- 
+
+    public async Task AddHook<HookArgsT>(string hookName, Delegate hook)
+        where HookArgsT : BaseHookArgs
+    {
+        var proxyObjectRef = DotNetObjectReference.Create(new HookProxy<HookArgsT>(hook));
+        await _handsontableJsReference.InvokeVoidAsync("addHook", hookName, proxyObjectRef);
+    }
+
     [JSInvokable]
     public async Task OnRendererCallback(
         string rendererName, 
@@ -180,6 +204,31 @@ public class HandsontableJsInterop : IAsyncDisposable
         var renderer = _rendererDict[rendererName];
         await renderer(args);
     }
+
+
+    public class HookProxy<ArgT> 
+        where ArgT : class
+    {
+        private readonly Delegate _hook;
+        private readonly Type _argType;
+
+        public HookProxy (Delegate hook)
+        {
+            _argType = typeof(ArgT);
+            _hook = hook;
+        }
+
+        [JSInvokable]
+        public async Task HookCallback(JsonDocument jdoc)
+        {
+            var arg = Activator.CreateInstance(_argType, jdoc);
+            var task = _hook.DynamicInvoke(arg) as Task;
+            task!.GetAwaiter().GetResult();
+            await Task.CompletedTask;
+        }
+    }
+
+    
 
     /// <summary>
     /// @ToDo Move to top level namespace?

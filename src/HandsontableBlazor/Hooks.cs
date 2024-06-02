@@ -1,12 +1,23 @@
+using System.Text.Json;
+
 namespace HandsontableBlazor;
 
 public class Hooks {
 
+    public class BaseHookArgs {};
+
     public delegate Task AfterChangeHook(AfterChangeArgs args);
 
-    public class AfterChangeArgs {
-        public required IList<IList<object>> Data { get; set; }
+    public class AfterChangeArgs : BaseHookArgs
+    {
+        public required object[][] Data { get; set; }
         public required string Source { get; set; }
+
+        public AfterChangeArgs(JsonDocument jdoc) 
+        {
+            Data = jdoc.RootElement[0].Deserialize<object[][]>()!;
+            Source = jdoc.RootElement[1].Deserialize<string>()!;
+        }
 
         public IEnumerable<DataChange> GetDataChanges() 
         {
@@ -22,5 +33,28 @@ public class Hooks {
             public object? OldVal => _args[2];
             public object? NewVal => _args[3];
         }
+    }
+
+
+    public delegate Task AfterSelectionHook(AfterSelectionArgs args);
+
+    public class AfterSelectionArgs : BaseHookArgs
+    {
+        public AfterSelectionArgs(JsonDocument jdoc) {
+            Row = jdoc.RootElement[0].Deserialize<int>();
+            Column = jdoc.RootElement[1].Deserialize<int>();
+            Row2 = jdoc.RootElement[2].Deserialize<int>();
+            Column2 = jdoc.RootElement[3].Deserialize<int>();
+            PreventScrolling = jdoc.RootElement[4].Deserialize<IDictionary<string, object>>()!;
+            SelectionLayerLevel = jdoc.RootElement[5].Deserialize<int>();
+        }
+
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public int Row2 { get; set; }
+        public int Column2 { get; set; }
+        public required IDictionary<string, object> PreventScrolling { get; set; }
+        public int SelectionLayerLevel { get; set; }
+        
     }
 }
