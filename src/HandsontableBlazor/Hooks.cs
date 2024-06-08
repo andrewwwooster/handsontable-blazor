@@ -59,4 +59,22 @@ public class Hooks {
         public int SelectionLayerLevel { get; set; }
         
     }
+
+    public class AfterSelectionEndArgs : BaseHookArgs
+    {
+        public AfterSelectionEndArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Row = jdoc.RootElement[0].Deserialize<int>();
+            Column = jdoc.RootElement[1].Deserialize<int>();
+            Row2 = jdoc.RootElement[2].Deserialize<int>();
+            Column2 = jdoc.RootElement[3].Deserialize<int>();
+            SelectionLayerLevel = jdoc.RootElement[4].Deserialize<int>();
+        }
+
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public int Row2 { get; set; }
+        public int Column2 { get; set; }
+        public int SelectionLayerLevel { get; set; }        
+    }
 }

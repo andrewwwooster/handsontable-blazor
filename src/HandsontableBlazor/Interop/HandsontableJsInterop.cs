@@ -62,11 +62,72 @@ public class HandsontableJsInterop : IAsyncDisposable
         }
     }
 
+    public enum AlterActionEnum {
+        insert_row_above,
+        insert_row_below,
+        remove_row,
+        insert_col_start,
+        insert_col_end,
+        remove_col
+    };
+
+    public async Task Alter(
+        AlterActionEnum alterAction, 
+        int visualIndex, 
+        int amount = 1, string? source = null, bool keepEmptyRows = false)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "alter", 
+            alterAction.ToString(), visualIndex, amount, source, keepEmptyRows);
+    }
+
     public async Task<JQueryJsInterop> GetCell (int visualRow, int visualColumn, bool topmost = false)
     {
         var htmlTableCellElement = await _handsontableJsReference.InvokeAsync<IJSObjectReference>(
             "invokeMethod", "getCell", visualRow, visualColumn, topmost);
         return new JQueryJsInterop(htmlTableCellElement);
+    }
+
+    public async Task SetCellMeta (int visualRow, int visualColumn, string key, string? value)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setCellMeta", visualRow, visualColumn, key, value);
+    }
+
+    public async Task SetCellMetaObject (int visualRow, int visualColumn, IDictionary<string,object?> prop)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setCellMetaObject", visualRow, visualColumn, prop);
+    }
+
+    public async Task SetDataAtCell (int visualRow, int visualColumn, string? value, string? source)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setDataAtCell", visualRow, visualColumn, value, source);
+    }
+
+
+    /**
+    * Set data at cell.
+    * @param {Array} changes An array of arrays in form of [row, col, value]. 
+    *                Where row is visual row index {int}, col {int} is the visual column index, 
+    *                and value {string} is a new value.
+    */
+    public async Task SetDataAtCell (IList<IList<object?>> changes, string? source)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setDataAtCell", changes, null, null, source);
+    }
+
+    /**
+    * Set data at cell.
+    * @param {Array} changes An array of arrays in form of [row, col, value]. 
+    *                Where row is visual row index {int}, prop {string} is the column property, 
+    *                and value {string} is a new value.
+    */
+    public async Task SetDataAtRowProp (IList<IList<object?>> changes, string? source)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setDataAtRowProp", changes, null, null, source);
     }
 
     public async Task<IDictionary<string,object>> GetCellMeta (int visualRow, int visualColumn)
@@ -98,6 +159,46 @@ public class HandsontableJsInterop : IAsyncDisposable
         return cellRange;
     }
 
+    public async Task<int> CountCols()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("countCols");
+    }
+
+    public async Task<int> CountColHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("countColHeaders");
+    }
+
+    public async Task<int> CountRows()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("countRows");
+    }
+
+    public async Task<int> CountRowHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("countRowHeaders");
+    }
+
+    public async Task<int> GetRowHeight(int visualRow)
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("getRowHeight", visualRow);
+    }
+
+    public async Task<int> GetColWidth(int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("getColWidth", visualColumn);
+    }
+
+    public async Task<bool> HasRowHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("hasRowHeaders");
+    }
+
+    public async Task<bool> HasColHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("hasColHeaders");
+    }
+
     /**
     * Property to column.
     * @returns Visual column index.
@@ -127,25 +228,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toVisualRow", physicalRow);
     }
 
-
-    public enum AlterActionEnum {
-        insert_row_above,
-        insert_row_below,
-        remove_row,
-        insert_col_start,
-        insert_col_end,
-        remove_col
-    };
-
-    public async Task Alter(
-        AlterActionEnum alterAction, 
-        int visualIndex, 
-        int amount = 1, string? source = null, bool keepEmptyRows = false)
-    {
-        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "alter", 
-            alterAction.ToString(), visualIndex, amount, source, keepEmptyRows);
-    }
-
     public async Task RegisterRenderer(string rendererName, Func<RendererArgs, Task> rendererCallback)
     {
         var module = await _handsontableModuleTask.Value;
@@ -168,12 +250,17 @@ public class HandsontableJsInterop : IAsyncDisposable
  
     public async Task AddHookAfterChange(Func<AfterChangeArgs, Task> hook)
     {
-        await AddHook<AfterChangeArgs>("afterChange", hook);
+        await AddHook("afterChange", hook);
     }
 
     public async Task AddHookAfterSelection(Func<AfterSelectionArgs, Task> hook)
     {
-        await AddHook<AfterSelectionArgs>("afterSelection", hook);
+        await AddHook("afterSelection", hook);
+    }
+
+    public async Task AddHookAfterSelectionEnd(Func<AfterSelectionEndArgs, Task> hook)
+    {
+        await AddHook("afterSelectionEnd", hook);
     }
 
     public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)

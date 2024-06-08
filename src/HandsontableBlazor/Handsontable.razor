@@ -17,6 +17,8 @@
     public Func<Hooks.AfterChangeArgs,Task>? OnAfterChange { get; set; }
     [Parameter]
     public Func<Hooks.AfterSelectionArgs,Task>? OnAfterSelection { get; set; }
+    [Parameter]
+    public Func<Hooks.AfterSelectionEndArgs,Task>? OnAfterSelectionEnd { get; set; }
 
     public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
 
@@ -31,6 +33,7 @@
             );
             if (OnAfterChange != null) await HandsontableJsInterop.AddHookAfterChange(OnAfterChange);
             if (OnAfterSelection != null) await HandsontableJsInterop.AddHookAfterSelection(OnAfterSelection);
+            if (OnAfterSelectionEnd != null) await HandsontableJsInterop.AddHookAfterSelectionEnd(OnAfterSelectionEnd);
         }
     }
 
