@@ -87,7 +87,7 @@ public class HandsontableJsInterop : IAsyncDisposable
         return new JQueryJsInterop(htmlTableCellElement);
     }
 
-    public async Task SetCellMeta (int visualRow, int visualColumn, string key, string? value)
+    public async Task SetCellMeta (int visualRow, int visualColumn, string key, object? value)
     {
         await _handsontableJsReference.InvokeVoidAsync(
             "invokeMethod", "setCellMeta", visualRow, visualColumn, key, value);

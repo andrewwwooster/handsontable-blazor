@@ -72,6 +72,11 @@
                 }
             },
             */
+            Cell = [
+                new ConfigurationOptions.HtCell(0,0) { ReadOnly = true },
+                new ConfigurationOptions.HtCell(1,0) { ReadOnly = true },
+                new ConfigurationOptions.HtCell(2,0) { ReadOnly = true },
+            ],
             ColHeaders = new string[] { "A", "B", "C" },
             RendererCallback = OnRenderCallback,
             RowHeaders = true,
@@ -111,5 +116,6 @@
     private async Task OnRenderCallback(Renderer.RendererArgs args)
     {
         await args.Td.Attr("style", "background-color: yellow; color: #000000;");
+        await args.Td.Text(args.Value.ToString() ?? "");
     }
 }

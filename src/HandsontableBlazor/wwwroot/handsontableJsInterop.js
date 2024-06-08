@@ -73,7 +73,7 @@ class CustomRenderer {
   async rendererCallback(hotInstance, td, row, column, prop, value, cellProperties) {
     // Optionally include `BaseRenderer` which is responsible for
     // adding/removing CSS classes to/from the table cells.
-    Handsontable.renderers.TextRenderer.apply(this, arguments);
+    Handsontable.renderers.BaseRenderer.apply(this, arguments);
 
     let hotInstanceRef = DotNet.createJSObjectReference(hotInstance)
     let tdRef = DotNet.createJSObjectReference(jQuery(td))

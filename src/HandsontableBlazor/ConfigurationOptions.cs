@@ -48,7 +48,6 @@ public class ConfigurationOptions
         public string? ClassName { get; set; }
         public IList<string>? Source { get; set; }
         public bool WordWrap { get; set; }
-        public string? Renderer { get; set; }
 
         public object Clone()
         {
