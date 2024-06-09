@@ -6,48 +6,107 @@
 
 <PageTitle>Handsontable</PageTitle>
 
-<div>
-    <InputSelect @bind-Value="@_alterAction">
-        <option>insert_row_above</option>
-        <option>insert_row_below</option>
-        <option>remove_row</option>
-        <option>insert_col_start</option>
-        <option>insert_col_end</option>
-        <option>remove_col</option>
-    </InputSelect>
+<InputSelect @bind-Value="_actionMethod">
+    <option>Alter</option>
+    <option>GetCellMeta</option>
+    <option>SetCellData</option>
+    <option>SetCellMeta</option>
+</InputSelect>
 
-    Visual Index:
-    <InputNumber @bind-Value="_alterVisualIndex"/>
+@if (_actionMethod == "Alter")
+{
+    <div>
+        <InputSelect @bind-Value="_alterAction">
+            <option>insert_row_above</option>
+            <option>insert_row_below</option>
+            <option>remove_row</option>
+            <option>insert_col_start</option>
+            <option>insert_col_end</option>
+            <option>remove_col</option>
+        </InputSelect>
 
-    Amount:
-    <InputNumber @bind-Value="_alterAmount"/>
+        Visual Index: <InputNumber @bind-Value="_actionRow"/>
+        Amount: <InputNumber @bind-Value="_actionColumn"/>
 
-    <button @onclick="OnAlterClick">Alter</button>
-</div>
-<div>
-    <div style="width: 10em; border: 1px solid darkgray;" @onmouseenter="OnGetCellMetaClick" >GetCellMeta</div>
-</div>
+        <button 
+            @onclick='() => _handsontable.HandsontableJsInterop!.Alter(_alterAction, _actionRow, _actionColumn)'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetCellMeta")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick="@(async () => {
+                var data = await _handsontable.HandsontableJsInterop!.GetCellMeta(_actionRow, _actionColumn);
+                AppendToEventLog("GetCellMeta", data);
+            })">
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "SetCellData")
+{
+    <div>
+        Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        Value: <InputText @bind-Value="_actionValue"/>
+        <button @onclick="() => _handsontable.HandsontableJsInterop!.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
+    </div>
+}
+else if (_actionMethod == "SetCellMeta")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        Key: <InputText @bind-Value="_actionKey"/>
+        Value: <InputText @bind-Value="_actionValue"/>
+        <button @onclick="() => _handsontable.HandsontableJsInterop!.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
+    </div>
+}
+
+<label>
+    <input type="checkbox" value="@_onAfterChangeToggle" @onchange='(e) => OnToggleHook<Hooks.AfterChangeArgs>("afterChange", e)'/>
+    OnAfterChange
+</label>
+<label>
+    <input type="checkbox" value="@_onAfterSelectionToggle" @onchange='(e) => OnToggleHook<Hooks.AfterSelectionArgs>("afterSelection", e)'/>
+    OnAfterSelection
+</label>
+<label>
+    <input type="checkbox" value="@_onAfterSelectionEndToggle" @onchange='(e) => OnToggleHook<Hooks.AfterSelectionEndArgs>("afterSelectionEnd", e)'/>
+    OnAfterSelectionEnd
+</label>
+
 
 <div style="border: 1px solid black;">
     <Handsontable 
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
-            OnAfterChange="@OnHookCallback"
-            OnAfterSelection="@OnHookCallback"
-            OnAfterSelectionEnd="@OnHookCallback"
             @ref="_handsontable" />
 </div>
-<pre style="height: 200px;">
-    @_eventLog
-</pre>
+
+<InputTextArea @bind-Value="_eventLog" style="height: 20em; width: 60em; white-space: pre; overflow: auto;" scrollTop="1000em" readonly="true"/>
 
 @code
 {
     Handsontable _handsontable = null!;
     private HandsontableBlazor.ConfigurationOptions? _configurationOptions = null;
+
+    private string _actionMethod = "SetCellData";
+    private int _actionRow = 0;
+    private int _actionColumn = 0;
+    private string _actionKey = "";
+    private string _actionValue = "";
     private HandsontableJsInterop.AlterActionEnum _alterAction = HandsontableJsInterop.AlterActionEnum.insert_row_above;
-    private int _alterVisualIndex = 0;
-    private int _alterAmount = 1;
+
+    private bool _onAfterChangeToggle = true;
+    private bool _onAfterSelectionToggle = true;
+    private bool _onAfterSelectionEndToggle = true;
+
     private string _eventLog = "";
    
     protected override void OnInitialized ()
@@ -73,9 +132,8 @@
             },
             */
             Cell = [
-                new ConfigurationOptions.HtCell(0,0) { ReadOnly = true },
-                new ConfigurationOptions.HtCell(1,0) { ReadOnly = true },
-                new ConfigurationOptions.HtCell(2,0) { ReadOnly = true },
+                new ConfigurationOptions.HtCell(1,2) { ReadOnly = true },
+                new ConfigurationOptions.HtCell(2,2) { ReadOnly = true },
             ],
             ColHeaders = new string[] { "A", "B", "C" },
             RendererCallback = OnRenderCallback,
@@ -85,25 +143,14 @@
         };
     }
 
-    private async Task OnAlterClick()
+    private void AppendToEventLog(string name, object properties)
     {
-        await _handsontable.HandsontableJsInterop!.Alter(
-            _alterAction, _alterVisualIndex, _alterAmount, "source", false);
+        var propertiesJson = JsonSerializer.Serialize(properties);
+        _eventLog = name + ": " + propertiesJson + "\n"
+            + _eventLog;
+        StateHasChanged();              // Required because event was initiated by JS.
     }
-
-    private async Task OnGetCellMetaClick()
-    {
-        var ranges = await _handsontable.HandsontableJsInterop!.GetSelectedRange();
-        if (ranges != null)
-        {
-            var properties = await _handsontable.HandsontableJsInterop!.GetCellMeta(ranges[0].X1, ranges[0].Y1);
-            var propertiesJson = JsonSerializer.Serialize(properties);
-            _eventLog = "getCellMeta(): " + propertiesJson + "\n"
-                + _eventLog;
-            StateHasChanged();              // Required because event was initiated by JS.
-        }
-    }
-
+    
     private async Task OnHookCallback(Hooks.BaseHookArgs args)
     {
         var json = JsonSerializer.Serialize((object) args);
@@ -117,5 +164,14 @@
     {
         await args.Td.Attr("style", "background-color: yellow; color: #000000;");
         await args.Td.Text(args.Value.ToString() ?? "");
+    }
+
+    private async Task OnToggleHook<HookArgsT>(string hookName, ChangeEventArgs args)
+        where HookArgsT : Hooks.BaseHookArgs
+    {
+        if ((bool) args.Value!)
+        {
+            await _handsontable.HandsontableJsInterop!.AddHook<HookArgsT>(hookName, OnHookCallback);
+        }
     }
 }

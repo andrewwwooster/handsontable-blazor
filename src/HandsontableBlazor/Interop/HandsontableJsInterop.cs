@@ -76,8 +76,9 @@ public class HandsontableJsInterop : IAsyncDisposable
         int visualIndex, 
         int amount = 1, string? source = null, bool keepEmptyRows = false)
     {
+        var alterActionStr = alterAction.ToString();
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "alter", 
-            alterAction.ToString(), visualIndex, amount, source, keepEmptyRows);
+            alterActionStr, visualIndex, amount, source, keepEmptyRows);
     }
 
     public async Task<JQueryJsInterop> GetCell (int visualRow, int visualColumn, bool topmost = false)
@@ -99,7 +100,7 @@ public class HandsontableJsInterop : IAsyncDisposable
             "invokeMethod", "setCellMetaObject", visualRow, visualColumn, prop);
     }
 
-    public async Task SetDataAtCell (int visualRow, int visualColumn, string? value, string? source)
+    public async Task SetDataAtCell (int visualRow, int visualColumn, string? value, string? source = null)
     {
         await _handsontableJsReference.InvokeVoidAsync(
             "invokeMethod", "setDataAtCell", visualRow, visualColumn, value, source);
@@ -112,7 +113,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     *                Where row is visual row index {int}, col {int} is the visual column index, 
     *                and value {string} is a new value.
     */
-    public async Task SetDataAtCell (IList<IList<object?>> changes, string? source)
+    public async Task SetDataAtCell (IList<IList<object?>> changes, string? source = null)
     {
         await _handsontableJsReference.InvokeVoidAsync(
             "invokeMethod", "setDataAtCell", changes, null, null, source);
@@ -124,7 +125,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     *                Where row is visual row index {int}, prop {string} is the column property, 
     *                and value {string} is a new value.
     */
-    public async Task SetDataAtRowProp (IList<IList<object?>> changes, string? source)
+    public async Task SetDataAtRowProp (IList<IList<object?>> changes, string? source = null)
     {
         await _handsontableJsReference.InvokeVoidAsync(
             "invokeMethod", "setDataAtRowProp", changes, null, null, source);
