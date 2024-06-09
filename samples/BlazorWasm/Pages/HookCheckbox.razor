@@ -1,0 +1,48 @@
+﻿@using System.Text.Json
+@using HandsontableBlazor
+@using HandsontableBlazor.Interop
+@inject IJSRuntime JSRuntime
+@typeparam HookArgsT where HookArgsT : Hooks.BaseHookArgs
+
+
+<label>
+    <input type="checkbox" value="@Value" @onchange='(e) => OnChangeToggle(e)'/>
+    @Label
+</label>
+
+@code
+{
+    [Parameter]
+    [EditorRequired]
+    public required Pages.Home Parent { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public required string Label { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public required string HookName { get; set; }
+    [Parameter]
+    [EditorRequired]
+    public required Func<HookArgsT, Task> HookCallback { get; set; }
+
+    [Parameter]
+    public bool Value { get; set; }
+
+    private async Task OnChangeToggle(ChangeEventArgs args)
+    {
+        Value = (bool) args.Value!;
+        await UpdateHook();
+    }
+
+    private async Task UpdateHook()
+    {
+        if (Value)
+        {
+            await Parent.Handsontable.HandsontableJsInterop!.AddHook<HookArgsT>(HookName, HookCallback);
+        }
+        else if (HookCallback != null)
+        {
+            // await Handsontable.HandsontableJsInterop!.RemoveHook(HookName, HookCallback);
+        }
+    }
+}

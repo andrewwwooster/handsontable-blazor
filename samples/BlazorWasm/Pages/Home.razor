@@ -29,7 +29,7 @@
         Amount: <InputNumber @bind-Value="_actionColumn"/>
 
         <button 
-            @onclick='() => _handsontable.HandsontableJsInterop!.Alter(_alterAction, _actionRow, _actionColumn)'>
+            @onclick='() => Handsontable.HandsontableJsInterop!.Alter(_alterAction, _actionRow, _actionColumn)'>
             Apply
         </button>
     </div>
@@ -41,7 +41,7 @@ else if (_actionMethod == "GetCellMeta")
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick="@(async () => {
-                var data = await _handsontable.HandsontableJsInterop!.GetCellMeta(_actionRow, _actionColumn);
+                var data = await Handsontable.HandsontableJsInterop!.GetCellMeta(_actionRow, _actionColumn);
                 AppendToEventLog("GetCellMeta", data);
             })">
             Apply
@@ -54,7 +54,7 @@ else if (_actionMethod == "SetCellData")
         Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         Value: <InputText @bind-Value="_actionValue"/>
-        <button @onclick="() => _handsontable.HandsontableJsInterop!.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
+        <button @onclick="() => Handsontable.HandsontableJsInterop!.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
     </div>
 }
 else if (_actionMethod == "SetCellMeta")
@@ -64,36 +64,28 @@ else if (_actionMethod == "SetCellMeta")
         Col: <InputNumber @bind-Value="_actionColumn"/>
         Key: <InputText @bind-Value="_actionKey"/>
         Value: <InputText @bind-Value="_actionValue"/>
-        <button @onclick="() => _handsontable.HandsontableJsInterop!.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
+        <button @onclick="() => Handsontable.HandsontableJsInterop!.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
     </div>
 }
 
-<label>
-    <input type="checkbox" value="@_onAfterChangeToggle" @onchange='(e) => OnToggleHook<Hooks.AfterChangeArgs>("afterChange", e)'/>
-    OnAfterChange
-</label>
-<label>
-    <input type="checkbox" value="@_onAfterSelectionToggle" @onchange='(e) => OnToggleHook<Hooks.AfterSelectionArgs>("afterSelection", e)'/>
-    OnAfterSelection
-</label>
-<label>
-    <input type="checkbox" value="@_onAfterSelectionEndToggle" @onchange='(e) => OnToggleHook<Hooks.AfterSelectionEndArgs>("afterSelectionEnd", e)'/>
-    OnAfterSelectionEnd
-</label>
+<HookCheckbox Label="OnAfterChange" HookName="afterChange" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
 
 
 <div style="border: 1px solid black;">
     <Handsontable 
             Id="hot" 
             ConfigurationOptions="@_configurationOptions" 
-            @ref="_handsontable" />
+            @ref="Handsontable"/>
 </div>
 
 <InputTextArea @bind-Value="_eventLog" style="height: 20em; width: 60em; white-space: pre; overflow: auto;" scrollTop="1000em" readonly="true"/>
 
 @code
 {
-    Handsontable _handsontable = null!;
+    public Handsontable Handsontable { get; private set; } = null!;
+
     private HandsontableBlazor.ConfigurationOptions? _configurationOptions = null;
 
     private string _actionMethod = "SetCellData";
@@ -103,7 +95,6 @@ else if (_actionMethod == "SetCellMeta")
     private string _actionValue = "";
     private HandsontableJsInterop.AlterActionEnum _alterAction = HandsontableJsInterop.AlterActionEnum.insert_row_above;
 
-    private bool _onAfterChangeToggle = true;
     private bool _onAfterSelectionToggle = true;
     private bool _onAfterSelectionEndToggle = true;
 
@@ -171,7 +162,7 @@ else if (_actionMethod == "SetCellMeta")
     {
         if ((bool) args.Value!)
         {
-            await _handsontable.HandsontableJsInterop!.AddHook<HookArgsT>(hookName, OnHookCallback);
+            await Handsontable.HandsontableJsInterop!.AddHook<HookArgsT>(hookName, OnHookCallback);
         }
     }
 }
