@@ -31,6 +31,7 @@ export function registerRenderer(rendererName, dotNetHelper) {
 class HandsontableJs {
   _hot;                        // Handsontable
   _dotNetHelper;               // DotNetObjectReference<HandsontableJsInterop>
+  _hookCallbackDict = new Map();  // {string id, hookCallback}
 
   constructor(elemId, configurationOptions, dotNetHelper) {
     let containerElem = document.getElementById(elemId)
@@ -52,11 +53,26 @@ class HandsontableJs {
   
   /**
    * @param {string} hookName 
+   * @param {IHookProxy} hookProxy
+   */
+  addHook(hookProxy) {
+    var hookCallback = async (...callbackArgs) => {
+      hookProxy.objectReference.invokeMethodAsync("HookCallback", callbackArgs)
+    }
+    this._hot.addHook(hookProxy.hookName, hookCallback);
+    this._hookCallbackDict.set(hookProxy.Id, hookCallback);
+  }
+
+  /**
    * @param {DotNetObjectReference<*HookProxy>} hookProxy
    */
-  addHook(hookName, hookProxy) {
-    this._hot.addHook(
-      hookName, async (...callbackArgs) => hookProxy.invokeMethodAsync("HookCallback", callbackArgs));
+  removeHook(hookProxy) {
+    var hookCallback = this._hookCallbackDict.get(hookProxy.Id);
+
+    // Remove hook from Handsontable.
+    this._hot.removeHook(hookProxy.hookName, hookCallback);
+
+    delete this._hookCallbackDict[hookProxy.Id];
   }
 }
 

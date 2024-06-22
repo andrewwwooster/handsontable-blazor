@@ -95,9 +95,6 @@ else if (_actionMethod == "SetCellMeta")
     private string _actionValue = "";
     private HandsontableJsInterop.AlterActionEnum _alterAction = HandsontableJsInterop.AlterActionEnum.insert_row_above;
 
-    private bool _onAfterSelectionToggle = true;
-    private bool _onAfterSelectionEndToggle = true;
-
     private string _eventLog = "";
    
     protected override void OnInitialized ()
@@ -134,20 +131,17 @@ else if (_actionMethod == "SetCellMeta")
         };
     }
 
-    private void AppendToEventLog(string name, object properties)
+    private void AppendToEventLog(string label, object properties)
     {
         var propertiesJson = JsonSerializer.Serialize(properties);
-        _eventLog = name + ": " + propertiesJson + "\n"
-            + _eventLog;
+        var newLine = label + ": " + propertiesJson;
+        _eventLog = newLine + "\n" + _eventLog;
         StateHasChanged();              // Required because event was initiated by JS.
     }
     
     private async Task OnHookCallback(Hooks.BaseHookArgs args)
     {
-        var json = JsonSerializer.Serialize((object) args);
-        _eventLog = $"{json}\n"
-            + _eventLog;
-        StateHasChanged(); 
+        AppendToEventLog("OnHookCallback", args);
         await Task.CompletedTask;
     }
 
@@ -155,14 +149,5 @@ else if (_actionMethod == "SetCellMeta")
     {
         await args.Td.Attr("style", "background-color: yellow; color: #000000;");
         await args.Td.Text(args.Value.ToString() ?? "");
-    }
-
-    private async Task OnToggleHook<HookArgsT>(string hookName, ChangeEventArgs args)
-        where HookArgsT : Hooks.BaseHookArgs
-    {
-        if ((bool) args.Value!)
-        {
-            await Handsontable.HandsontableJsInterop!.AddHook<HookArgsT>(hookName, OnHookCallback);
-        }
     }
 }

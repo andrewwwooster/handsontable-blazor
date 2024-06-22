@@ -42,7 +42,7 @@
         }
         else if (HookCallback != null)
         {
-            // await Handsontable.HandsontableJsInterop!.RemoveHook(HookName, HookCallback);
+            await Parent.Handsontable.HandsontableJsInterop!.RemoveHook(HookName, HookCallback);
         }
     }
 }

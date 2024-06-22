@@ -3,9 +3,13 @@ using System.Text.Json.Serialization;
 
 namespace HandsontableBlazor;
 
-public class Hooks {
+public class Hooks 
+{
+    public interface IHookArgs {}
 
-    public class BaseHookArgs {
+
+    public class BaseHookArgs : IHookArgs
+    {
         [JsonPropertyOrder(-1)]
         public required string HookName { get; set; }
     };

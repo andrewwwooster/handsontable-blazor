@@ -1,6 +1,3 @@
-using System.Reflection;
-using System.Text.Json;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using static HandsontableBlazor.Hooks;
 using static HandsontableBlazor.Renderer;
@@ -14,6 +11,7 @@ namespace HandsontableBlazor.Interop;
 // This class can be registered as scoped DI service and then injected into Blazor
 // components for use.
 
+
 public class HandsontableJsInterop : IAsyncDisposable
 {
     private readonly IJSRuntime _jsRuntime;
@@ -21,6 +19,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     private IJSObjectReference _handsontableJsReference = null!;
 
     static IDictionary<string,Func<RendererArgs, Task>>     _rendererDict = new Dictionary<string,Func<RendererArgs, Task>>();
+    private IDictionary<Tuple<string,Delegate>, IHookProxy>  _hookProxyDict = new Dictionary<Tuple<string,Delegate>, IHookProxy>();
 
 
     public HandsontableJsInterop(IJSRuntime jsRuntime)
@@ -265,10 +264,20 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
+        where HookArgsT : IHookArgs
+    {
+        var hookProxy = new HookProxy<HookArgsT>(hookName, hook);
+        _hookProxyDict[hookProxy.GetKey()] = hookProxy;
+        await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
+    }
+
+    public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
         where HookArgsT : BaseHookArgs
     {
-        var proxyObjectRef = DotNetObjectReference.Create(new HookProxy<HookArgsT>(hookName, hook));
-        await _handsontableJsReference.InvokeVoidAsync("addHook", hookName, proxyObjectRef);
+        var hookKey = IHookProxy.CreateKey(hookName, hook);
+        var hookProxy = _hookProxyDict[hookKey]; 
+        await _handsontableJsReference.InvokeVoidAsync("removeHook", hookProxy);
+        _hookProxyDict.Remove(hookKey);
     }
 
     [JSInvokable]
@@ -293,32 +302,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         await renderer(args);
     }
 
-
-    public class HookProxy<HookArgsT> 
-        where HookArgsT : BaseHookArgs
-    {
-        public string HookName {get; private set;}
-        private readonly Type _argType;
-        private readonly Func<HookArgsT, Task> _hook;
-
-        public HookProxy (string hookName, Func<HookArgsT, Task> hook)
-        {
-            _argType = typeof(HookArgsT);
-            HookName = hookName;
-            _hook = hook;
-        }
-
-        [JSInvokable]
-        public async Task HookCallback(JsonDocument jdoc)
-        {
-            var args = (BaseHookArgs) Activator.CreateInstance(_argType, [HookName, jdoc])!;
-            var task = _hook.DynamicInvoke(args) as Task;
-            task!.GetAwaiter().GetResult();
-            await Task.CompletedTask;
-        }
-    }
-
-    
 
     /// <summary>
     /// @ToDo Move to top level namespace?
