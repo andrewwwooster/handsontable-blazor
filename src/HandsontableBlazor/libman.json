@@ -1,0 +1,23 @@
+﻿{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "handsontable@14.3.0",
+      "files": [
+        "handsontable.full.js",
+        "handsontable.full.css"
+      ],
+      "destination": "wwwroot/lib/handsontable/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.7.1",
+      "files": [
+        "jquery.js"
+      ],
+      "destination": "wwwroot/lib/jquery/"
+    }
+  ]
+}
