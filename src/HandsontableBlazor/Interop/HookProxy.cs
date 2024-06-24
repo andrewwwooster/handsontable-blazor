@@ -40,7 +40,7 @@ public class HookProxy<HookArgsT> : IHookProxy
 
     public Tuple<string,Delegate> GetKey()
     {
-        return Tuple.Create(HookName, (Delegate) _hook);
+        return IHookProxy.CreateKey(HookName, (Delegate) _hook);
     }
 
     [JSInvokable]
