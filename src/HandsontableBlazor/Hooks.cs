@@ -43,6 +43,34 @@ public class Hooks
     }
 
 
+    public class AfterCreateColArgs : BaseHookArgs
+    {
+        public AfterCreateColArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Index = jdoc.RootElement[0].Deserialize<int>();
+            Amount = jdoc.RootElement[1].Deserialize<int>();
+            Source = jdoc.RootElement[2].Deserialize<string>();
+        }
+
+        public int Index { get; set; }
+        public int Amount { get; set; }
+        public string? Source { get; set; }        
+    }
+
+    public class AfterCreateRowArgs : BaseHookArgs
+    {
+        public AfterCreateRowArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Index = jdoc.RootElement[0].Deserialize<int>();
+            Amount = jdoc.RootElement[1].Deserialize<int>();
+            Source = jdoc.RootElement[2].Deserialize<string>();
+        }
+
+        public int Index { get; set; }
+        public int Amount { get; set; }
+        public string? Source { get; set; }        
+    }
+
     public class AfterSelectionArgs : BaseHookArgs
     {
         public AfterSelectionArgs(string hookName, JsonDocument jdoc) {
