@@ -253,11 +253,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         await AddHook("afterChange", hook);
     }
 
-    public async Task AddHookAfterCreateCol(Func<AfterCreateColArgs, Task> hook)
-    {
-        await AddHook("afterCreateCol", hook);
-    }
-
     public async Task AddHookAfterCreateRow(Func<AfterCreateRowArgs, Task> hook)
     {
         await AddHook("afterCreateRow", hook);
@@ -266,6 +261,15 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task AddHookAfterSelection(Func<AfterSelectionArgs, Task> hook)
     {
         await AddHook("afterSelection", hook);
+    }
+
+    public async Task AddHookAfterRemoveCol(Func<AfterRemoveColArgs, Task> hook)
+    {
+        await AddHook("afterRemoveCol", hook);
+    }
+    public async Task AddHookAfterRemoveRow(Func<AfterRemoveRowArgs, Task> hook)
+    {
+        await AddHook("afterRemoveRow", hook);
     }
 
     public async Task AddHookAfterSelectionEnd(Func<AfterSelectionEndArgs, Task> hook)

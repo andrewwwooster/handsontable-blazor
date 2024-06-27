@@ -71,6 +71,38 @@ public class Hooks
         public string? Source { get; set; }        
     }
 
+    public class AfterRemoveColArgs : BaseHookArgs
+    {
+        public AfterRemoveColArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Index = jdoc.RootElement[0].Deserialize<int>();
+            Amount = jdoc.RootElement[1].Deserialize<int>();
+            PhysicalColumns = jdoc.RootElement[2].Deserialize<List<int>>()!;
+            Source = jdoc.RootElement[3].Deserialize<string>();
+        }
+
+        public int Index { get; set; }
+        public int Amount { get; set; }
+        public IList<int> PhysicalColumns { get; set; }
+        public string? Source { get; set; }        
+    }
+
+    public class AfterRemoveRowArgs : BaseHookArgs
+    {
+        public AfterRemoveRowArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Index = jdoc.RootElement[0].Deserialize<int>();
+            Amount = jdoc.RootElement[1].Deserialize<int>();
+            PhysicalRows = jdoc.RootElement[2].Deserialize<List<int>>()!;
+            Source = jdoc.RootElement[3].Deserialize<string>();
+        }
+
+        public int Index { get; set; }
+        public int Amount { get; set; }
+        public IList<int> PhysicalRows { get; set; }
+        public string? Source { get; set; }        
+    }
+
     public class AfterSelectionArgs : BaseHookArgs
     {
         public AfterSelectionArgs(string hookName, JsonDocument jdoc) {
