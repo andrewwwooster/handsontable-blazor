@@ -20,20 +20,20 @@
     [Parameter]
     public Func<Hooks.AfterSelectionEndArgs,Task>? OnAfterSelectionEnd { get; set; }
 
-    public HandsontableJsInterop? HandsontableJsInterop { get; private set; }
+    public HandsontableJsInterop Core { get; private set; } = null!;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender && HandsontableJsInterop == null && ConfigurationOptions != null)
+        if (firstRender && Core == null && ConfigurationOptions != null)
         {
-            HandsontableJsInterop = new HandsontableJsInterop(JSRuntime);
-            await HandsontableJsInterop.RegisterRenderer("customRenderer", RendererCallback);
-            await HandsontableJsInterop.NewHandsontable(
+            Core = new HandsontableJsInterop(JSRuntime);
+            await Core.RegisterRenderer("customRenderer", RendererCallback);
+            await Core.NewHandsontable(
                 Id!, ConfigurationOptions
             );
-            if (OnAfterChange != null) await HandsontableJsInterop.AddHookAfterChange(OnAfterChange);
-            if (OnAfterSelection != null) await HandsontableJsInterop.AddHookAfterSelection(OnAfterSelection);
-            if (OnAfterSelectionEnd != null) await HandsontableJsInterop.AddHookAfterSelectionEnd(OnAfterSelectionEnd);
+            if (OnAfterChange != null) await Core.AddHookAfterChange(OnAfterChange);
+            if (OnAfterSelection != null) await Core.AddHookAfterSelection(OnAfterSelection);
+            if (OnAfterSelectionEnd != null) await Core.AddHookAfterSelectionEnd(OnAfterSelectionEnd);
         }
     }
 

@@ -29,7 +29,7 @@
         Amount: <InputNumber @bind-Value="_actionColumn"/>
 
         <button 
-            @onclick='() => Handsontable.HandsontableJsInterop!.Alter(_alterAction, _actionRow, _actionColumn)'>
+            @onclick='() => Handsontable.Core.Alter(_alterAction, _actionRow, _actionColumn)'>
             Apply
         </button>
     </div>
@@ -41,7 +41,7 @@ else if (_actionMethod == "GetCellMeta")
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick="@(async () => {
-                var data = await Handsontable.HandsontableJsInterop!.GetCellMeta(_actionRow, _actionColumn);
+                var data = await Handsontable.Core.GetCellMeta(_actionRow, _actionColumn);
                 AppendToEventLog("GetCellMeta", data);
             })">
             Apply
@@ -54,7 +54,7 @@ else if (_actionMethod == "SetCellData")
         Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         Value: <InputText @bind-Value="_actionValue"/>
-        <button @onclick="() => Handsontable.HandsontableJsInterop!.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
+        <button @onclick="() => Handsontable.Core.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
     </div>
 }
 else if (_actionMethod == "SetCellMeta")
@@ -64,7 +64,7 @@ else if (_actionMethod == "SetCellMeta")
         Col: <InputNumber @bind-Value="_actionColumn"/>
         Key: <InputText @bind-Value="_actionKey"/>
         Value: <InputText @bind-Value="_actionValue"/>
-        <button @onclick="() => Handsontable.HandsontableJsInterop!.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
+        <button @onclick="() => Handsontable.Core.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
     </div>
 }
 

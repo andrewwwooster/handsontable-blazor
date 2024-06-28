@@ -5,7 +5,7 @@ using static HandsontableBlazor.Hooks;
 
 namespace HandsontableBlazor.Interop;
 
-public interface IHookProxy : IDisposable
+internal interface IHookProxy : IDisposable
 {
     string Id {get;}
     string HookName {get;}
@@ -17,7 +17,7 @@ public interface IHookProxy : IDisposable
     }        
 }
 
-public class HookProxy<HookArgsT> : IHookProxy
+internal class HookProxy<HookArgsT> : IHookProxy
     where HookArgsT : IHookArgs
 {
     public string Id {get; private set;} = Guid.NewGuid().ToString();

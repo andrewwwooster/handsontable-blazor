@@ -38,11 +38,11 @@
     {
         if (Value)
         {
-            await Parent.Handsontable.HandsontableJsInterop!.AddHook(HookName, HookCallback);
+            await Parent.Handsontable.Core!.AddHook(HookName, HookCallback);
         }
         else if (HookCallback != null)
         {
-            await Parent.Handsontable.HandsontableJsInterop!.RemoveHook(HookName, HookCallback);
+            await Parent.Handsontable.Core!.RemoveHook(HookName, HookCallback);
         }
     }
 }
