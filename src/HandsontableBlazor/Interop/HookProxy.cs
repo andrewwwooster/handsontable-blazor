@@ -9,7 +9,7 @@ public interface IHookProxy : IDisposable
 {
     string Id {get;}
     string HookName {get;}
-    Task HookCallback(JsonDocument jdoc);
+    Task<bool> HookCallback(JsonDocument jdoc);
 
     public static Tuple<string,Delegate> CreateKey(string hookName, Delegate hook)
     {
@@ -44,12 +44,19 @@ public class HookProxy<HookArgsT> : IHookProxy
     }
 
     [JSInvokable]
-    public async Task HookCallback(JsonDocument jdoc)
+    public async Task<bool> HookCallback(JsonDocument jdoc)
     {
-        var args = Activator.CreateInstance(_argType, [HookName, jdoc])!;
-        var task = _hook.DynamicInvoke(args) as Task;
-        task!.GetAwaiter().GetResult();
-        await Task.CompletedTask;
+        var args = (HookArgsT) Activator.CreateInstance(_argType, [HookName, jdoc])!;
+        if (_hook is Func<HookArgsT, Task<bool>> hook)
+        {
+            var result = await hook.Invoke(args);
+            return result;
+        }
+        else
+        {
+            await _hook.Invoke(args);
+            return true;
+        }
     }
 
     public void Dispose()

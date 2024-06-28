@@ -38,7 +38,7 @@
     {
         if (Value)
         {
-            await Parent.Handsontable.HandsontableJsInterop!.AddHook<HookArgsT>(HookName, HookCallback);
+            await Parent.Handsontable.HandsontableJsInterop!.AddHook(HookName, HookCallback);
         }
         else if (HookCallback != null)
         {

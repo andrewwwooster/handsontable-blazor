@@ -24,7 +24,7 @@ export function registerRenderer(rendererName, dotNetHelper) {
   let rendererCallback = renderer.rendererCallback.bind(renderer);
   
   Handsontable.renderers.registerRenderer(
-    rendererName, async (...callbackArgs) => rendererCallback(...callbackArgs));
+    rendererName, async (...callbackArgs) => await rendererCallback(...callbackArgs));
 }
 
 
@@ -57,7 +57,7 @@ class HandsontableJs {
    */
   addHook(hookProxy) {
     var hookCallback = async (...callbackArgs) => {
-      hookProxy.objectReference.invokeMethodAsync("HookCallback", callbackArgs)
+      await hookProxy.objectReference.invokeMethodAsync("HookCallback", callbackArgs);
     }
     this._hot.addHook(hookProxy.hookName, hookCallback);
     this._hookCallbackDict.set(hookProxy.Id, hookCallback);

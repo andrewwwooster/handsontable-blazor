@@ -253,6 +253,11 @@ public class HandsontableJsInterop : IAsyncDisposable
         await AddHook("afterChange", hook);
     }
 
+    public async Task AddHookAfterCreateCol(Func<AfterCreateColArgs, Task> hook)
+    {
+        await AddHook("afterCreateCol", hook);
+    }
+
     public async Task AddHookAfterCreateRow(Func<AfterCreateRowArgs, Task> hook)
     {
         await AddHook("afterCreateRow", hook);
@@ -277,16 +282,39 @@ public class HandsontableJsInterop : IAsyncDisposable
         await AddHook("afterSelectionEnd", hook);
     }
 
-    public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
+    public async Task AddHookBeforeCreateCol(Func<BeforeCreateColArgs, Task<bool>> hook)
+    {
+        await AddHook("beforeCreateCol", hook);
+    }
+
+    public async Task AddHookBeforeCreateRow(Func<BeforeCreateRowArgs, Task<bool>> hook)
+    {
+        await AddHook("beforeCreateRow", hook);
+    }
+
+    public async Task AddHookBeforeRemoveCol(Func<BeforeRemoveColArgs, Task<bool>> hook)
+    {
+        await AddHook("beforeRemoveCol", hook);
+    }
+
+    public async Task AddHookBeforeRemoveRow(Func<BeforeRemoveRowArgs, Task<bool>> hook)
+    {
+        await AddHook("beforeRemoveRow", hook);
+    }
+
+    public async Task AddHook<HookArgsT, HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
         where HookArgsT : IHookArgs
+        where HookResultT : Task
     {
         var hookProxy = new HookProxy<HookArgsT>(hookName, hook);
         _hookProxyDict[hookProxy.GetKey()] = hookProxy;
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
+    
 
-    public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
+    public async Task RemoveHook<HookArgsT, HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
         where HookArgsT : BaseHookArgs
+        where HookResultT : Task
     {
         var hookKey = IHookProxy.CreateKey(hookName, hook);
         var hookProxy = _hookProxyDict[hookKey]; 

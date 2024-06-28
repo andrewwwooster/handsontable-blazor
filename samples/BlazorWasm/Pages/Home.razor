@@ -75,6 +75,10 @@ else if (_actionMethod == "SetCellMeta")
 <HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterSelection" HookName="afterSelection" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateRow" HookName="beforerCreateRow" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
 
 
 <div style="border: 1px solid black;">
@@ -149,9 +153,16 @@ else if (_actionMethod == "SetCellMeta")
         await Task.CompletedTask;
     }
 
+    private async Task OnHookCallbackBool(Hooks.BaseHookArgs args)
+    {
+        AppendToEventLog("OnHookCallbackBool", args);
+        await Task.CompletedTask;
+    }
+
     private async Task OnRenderCallback(Renderer.RendererArgs args)
     {
         await args.Td.Attr("style", "background-color: yellow; color: #000000;");
-        await args.Td.Text(args.Value.ToString() ?? "");
+        var value = args.Value?.ToString();
+        await args.Td.Text(value ?? "");
     }
 }

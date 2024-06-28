@@ -14,6 +14,36 @@ public class Hooks
         public required string HookName { get; set; }
     };
 
+    public abstract class BaseCreateIndexArgs : BaseHookArgs
+    {
+        public BaseCreateIndexArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Index = jdoc.RootElement[0].Deserialize<int>();
+            Amount = jdoc.RootElement[1].Deserialize<int>();
+            Source = jdoc.RootElement[2].Deserialize<string>();
+        }
+
+        public int Index { get; set; }
+        public int Amount { get; set; }
+        public string? Source { get; set; }        
+    }
+
+    public abstract class BaseRemoveIndexArgs : BaseHookArgs
+    {
+        public BaseRemoveIndexArgs(string hookName, JsonDocument jdoc) {
+            HookName = hookName;
+            Index = jdoc.RootElement[0].Deserialize<int>();
+            Amount = jdoc.RootElement[1].Deserialize<int>();
+            PhysicalColumns = jdoc.RootElement[2].Deserialize<List<int>>()!;
+            Source = jdoc.RootElement[3].Deserialize<string>();
+        }
+
+        public int Index { get; set; }
+        public int Amount { get; set; }
+        public IList<int> PhysicalColumns { get; set; }
+        public string? Source { get; set; }        
+    }
+
     public class AfterChangeArgs : BaseHookArgs
     {
         public required object[][] Data { get; set; }
@@ -42,66 +72,21 @@ public class Hooks
         }
     }
 
+    public class AfterCreateColArgs(string hookName, JsonDocument jdoc) 
+        : BaseCreateIndexArgs(hookName, jdoc)
+    { }
 
-    public class AfterCreateColArgs : BaseHookArgs
-    {
-        public AfterCreateColArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
-            Index = jdoc.RootElement[0].Deserialize<int>();
-            Amount = jdoc.RootElement[1].Deserialize<int>();
-            Source = jdoc.RootElement[2].Deserialize<string>();
-        }
+    public class AfterCreateRowArgs(string hookName, JsonDocument jdoc) 
+        : BaseCreateIndexArgs(hookName, jdoc)
+    { }
 
-        public int Index { get; set; }
-        public int Amount { get; set; }
-        public string? Source { get; set; }        
-    }
+    public class AfterRemoveColArgs(string hookName, JsonDocument jdoc) 
+        : BaseRemoveIndexArgs(hookName, jdoc)
+    { }
 
-    public class AfterCreateRowArgs : BaseHookArgs
-    {
-        public AfterCreateRowArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
-            Index = jdoc.RootElement[0].Deserialize<int>();
-            Amount = jdoc.RootElement[1].Deserialize<int>();
-            Source = jdoc.RootElement[2].Deserialize<string>();
-        }
-
-        public int Index { get; set; }
-        public int Amount { get; set; }
-        public string? Source { get; set; }        
-    }
-
-    public class AfterRemoveColArgs : BaseHookArgs
-    {
-        public AfterRemoveColArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
-            Index = jdoc.RootElement[0].Deserialize<int>();
-            Amount = jdoc.RootElement[1].Deserialize<int>();
-            PhysicalColumns = jdoc.RootElement[2].Deserialize<List<int>>()!;
-            Source = jdoc.RootElement[3].Deserialize<string>();
-        }
-
-        public int Index { get; set; }
-        public int Amount { get; set; }
-        public IList<int> PhysicalColumns { get; set; }
-        public string? Source { get; set; }        
-    }
-
-    public class AfterRemoveRowArgs : BaseHookArgs
-    {
-        public AfterRemoveRowArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
-            Index = jdoc.RootElement[0].Deserialize<int>();
-            Amount = jdoc.RootElement[1].Deserialize<int>();
-            PhysicalRows = jdoc.RootElement[2].Deserialize<List<int>>()!;
-            Source = jdoc.RootElement[3].Deserialize<string>();
-        }
-
-        public int Index { get; set; }
-        public int Amount { get; set; }
-        public IList<int> PhysicalRows { get; set; }
-        public string? Source { get; set; }        
-    }
+    public class AfterRemoveRowArgs(string hookName, JsonDocument jdoc) 
+        : BaseRemoveIndexArgs(hookName, jdoc)
+    { }
 
     public class AfterSelectionArgs : BaseHookArgs
     {
@@ -141,4 +126,20 @@ public class Hooks
         public int Column2 { get; set; }
         public int SelectionLayerLevel { get; set; }        
     }
+
+    public class BeforeCreateColArgs(string hookName, JsonDocument jdoc) 
+        : BaseCreateIndexArgs(hookName, jdoc)
+    { }
+
+    public class BeforeCreateRowArgs(string hookName, JsonDocument jdoc) 
+        : BaseCreateIndexArgs(hookName, jdoc)
+    { }
+
+    public class BeforeRemoveColArgs(string hookName, JsonDocument jdoc) 
+        : BaseRemoveIndexArgs(hookName, jdoc)
+    { }
+
+    public class BeforeRemoveRowArgs(string hookName, JsonDocument jdoc) 
+        : BaseRemoveIndexArgs(hookName, jdoc)
+    { }
 }
