@@ -52,27 +52,34 @@ class HandsontableJs {
   }
   
   /**
-   * @param {string} hookName 
    * @param {IHookProxy} hookProxy
    */
   addHook(hookProxy) {
-    var hookCallback = async (...callbackArgs) => {
-      await hookProxy.objectReference.invokeMethodAsync("HookCallback", callbackArgs);
+    let hookCallback;
+    if (hookProxy.isAsync) {
+      hookCallback = async (...callbackArgs) => {
+        await hookProxy.objectReference.invokeMethodAsync("HookCallback", callbackArgs);
+      }
+    }
+    else {
+      hookCallback = (...callbackArgs) => {
+        return hookProxy.objectReference.invokeMethod("HookCallback", callbackArgs);
+      }
     }
     this._hot.addHook(hookProxy.hookName, hookCallback);
-    this._hookCallbackDict.set(hookProxy.Id, hookCallback);
+    this._hookCallbackDict.set(hookProxy.id, hookCallback);
   }
 
   /**
-   * @param {DotNetObjectReference<*HookProxy>} hookProxy
+   * @param {IHookProxy} hookProxy
    */
   removeHook(hookProxy) {
-    var hookCallback = this._hookCallbackDict.get(hookProxy.Id);
+    var hookCallback = this._hookCallbackDict.get(hookProxy.id);
 
     // Remove hook from Handsontable.
     this._hot.removeHook(hookProxy.hookName, hookCallback);
 
-    delete this._hookCallbackDict[hookProxy.Id];
+    delete this._hookCallbackDict[hookProxy.id];
   }
 }
 

@@ -68,17 +68,17 @@ else if (_actionMethod == "SetCellMeta")
     </div>
 }
 
-<HookCheckbox Label="OnAfterChange" HookName="afterChange" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterRemoveCol" HookName="afterRemoveCol" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveColArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" HookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateRow" HookName="beforerCreateRow" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" HookCallback="OnHookCallbackBool" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterRemoveCol" HookName="afterRemoveCol" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateRow" HookName="beforerCreateRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
 
 
 <div style="border: 1px solid black;">
@@ -153,10 +153,10 @@ else if (_actionMethod == "SetCellMeta")
         await Task.CompletedTask;
     }
 
-    private async Task OnHookCallbackBool(Hooks.BaseHookArgs args)
+    private object OnHookCallbackSync(Hooks.BaseHookArgs args)
     {
         AppendToEventLog("OnHookCallbackBool", args);
-        await Task.CompletedTask;
+        return false;
     }
 
     private async Task OnRenderCallback(Renderer.RendererArgs args)

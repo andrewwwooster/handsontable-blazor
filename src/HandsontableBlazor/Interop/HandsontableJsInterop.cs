@@ -282,39 +282,45 @@ public class HandsontableJsInterop : IAsyncDisposable
         await AddHook("afterSelectionEnd", hook);
     }
 
-    public async Task AddHookBeforeCreateCol(Func<BeforeCreateColArgs, Task<bool>> hook)
+    public async Task AddHookBeforeCreateCol(Func<BeforeCreateColArgs, bool> hook)
     {
-        await AddHook("beforeCreateCol", hook);
+        await AddSyncHook("beforeCreateCol", hook);
     }
 
-    public async Task AddHookBeforeCreateRow(Func<BeforeCreateRowArgs, Task<bool>> hook)
+    public async Task AddHookBeforeCreateRow(Func<BeforeCreateRowArgs, bool> hook)
     {
-        await AddHook("beforeCreateRow", hook);
+        await AddSyncHook("beforeCreateRow", hook);
     }
 
-    public async Task AddHookBeforeRemoveCol(Func<BeforeRemoveColArgs, Task<bool>> hook)
+    public async Task AddHookBeforeRemoveCol(Func<BeforeRemoveColArgs, bool> hook)
     {
-        await AddHook("beforeRemoveCol", hook);
+        await AddSyncHook("beforeRemoveCol", hook);
     }
 
-    public async Task AddHookBeforeRemoveRow(Func<BeforeRemoveRowArgs, Task<bool>> hook)
+    public async Task AddHookBeforeRemoveRow(Func<BeforeRemoveRowArgs, bool> hook)
     {
-        await AddHook("beforeRemoveRow", hook);
+        await AddSyncHook("beforeRemoveRow", hook);
     }
 
-    public async Task AddHook<HookArgsT, HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
+    public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
         where HookArgsT : IHookArgs
-        where HookResultT : Task
     {
         var hookProxy = new AsyncHookProxy<HookArgsT>(hookName, hook);
         _hookProxyDict[hookProxy.GetKey()] = hookProxy;
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
     
+    public async Task AddSyncHook<HookArgsT,HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
+        where HookArgsT : IHookArgs
+    {
+        var hookProxy = new SyncHookProxy<HookArgsT,HookResultT>(hookName, hook);
+        _hookProxyDict[hookProxy.GetKey()] = hookProxy;
+        await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
+    }
+    
 
-    public async Task RemoveHook<HookArgsT, HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
+    public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, object> hook)
         where HookArgsT : BaseHookArgs
-        where HookResultT : Task
     {
         var hookKey = IHookProxy.CreateKey(hookName, hook);
         var hookProxy = _hookProxyDict[hookKey]; 
