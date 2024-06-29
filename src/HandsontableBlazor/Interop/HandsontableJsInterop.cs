@@ -306,7 +306,7 @@ public class HandsontableJsInterop : IAsyncDisposable
         where HookArgsT : IHookArgs
         where HookResultT : Task
     {
-        var hookProxy = new HookProxy<HookArgsT>(hookName, hook);
+        var hookProxy = new AsyncHookProxy<HookArgsT>(hookName, hook);
         _hookProxyDict[hookProxy.GetKey()] = hookProxy;
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
