@@ -148,5 +148,7 @@ public class ConfigurationOptions
 
     public IList<MergeCell>? MergeCells { get; set; }
     public IList<string>? ColHeaderLabels { get; set; }
+
+    public bool Undo { get; set; } = true;
 }
 

@@ -8,6 +8,21 @@
 
 <InputSelect @bind-Value="_actionMethod">
     <option>Alter</option>
+    <option>Clear</option>
+    <option>ClearUndo</option>
+    <option>ColToProp</option>
+    <option>CountColHeaders</option>
+    <option>CountCols</option>
+    <option>CountEmptyCols</option>
+    <option>CountEmptyRows</option>
+    <option>CountRenderedCols</option>
+    <option>CountRenderedRows</option>
+    <option>CountRows</option>
+    <option>CountRowHeaders</option>
+    <option>CountSourceCols</option>
+    <option>CountSourceRows</option>
+    <option>CountVisibleCols</option>
+    <option>CountVisibleRows</option>
     <option>GetCellMeta</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
@@ -34,6 +49,143 @@
         </button>
     </div>
 }
+else if (_actionMethod == "Clear")
+{
+    <div>
+        <button 
+            @onclick='() => Handsontable.Core.Clear()'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ClearUndo")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("ClearUndo", await Handsontable.Core.ClearUndo())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ColToProp")
+{
+    <div>
+        Visual Index: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='async () => AppendToEventLog("ColToProp", await Handsontable.Core.ColToPropString(_actionColumn))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountColHeaders")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountColHeaders", await Handsontable.Core.CountColHeaders())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountCols")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountCols", await Handsontable.Core.CountCols())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountEmptyCols")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountEmptyCols", await Handsontable.Core.CountEmptyCols())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountEmptyRows")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountEmptyRows", await Handsontable.Core.CountEmptyRows())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountRenderedCols")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountRenderedCols", await Handsontable.Core.CountRenderedCols())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountRenderedRows")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountRenderedRows", await Handsontable.Core.CountRenderedRows())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountSourceCols")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountSourceCols", await Handsontable.Core.CountSourceCols())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountSourceRows")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountSourceRows", await Handsontable.Core.CountSourceRows())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountVisibleCols")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountVisibleCols", await Handsontable.Core.CountVisibleCols())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountVisibleRows")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountVisibleRows", await Handsontable.Core.CountVisibleRows())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountRowHeaders")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountRowHeaders", await Handsontable.Core.CountRowHeaders())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "CountRows")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("CountRows", await Handsontable.Core.CountRows())'>
+            Apply
+        </button>
+    </div>
+}
+
 else if (_actionMethod == "GetCellMeta")
 {
     <div>

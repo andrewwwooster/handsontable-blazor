@@ -79,6 +79,89 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "alter", 
             alterActionStr, visualIndex, amount, source, keepEmptyRows);
     }
+    
+    public async Task Clear()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "clear");
+    }
+
+    public async Task<bool?> ClearUndo()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool?>("invokeMethod", "clearUndo");
+    }
+
+    public async Task<object> ColToProp(int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "colToProp", visualColumn);
+    }
+
+    public async Task<string> ColToPropString(int visualColumn)
+    {
+        var result = await ColToProp(visualColumn);
+        return result.ToString()!;
+    }
+
+    public async Task<int> CountColHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countColHeaders");
+    }
+
+    public async Task<int> CountCols()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countCols");
+    }
+
+    public async Task<int> CountEmptyCols()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countEmptyCols");
+    }
+
+    public async Task<int> CountEmptyRows()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countEmptyRows");
+    }
+
+    public async Task<int> CountRenderedCols()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRenderedCols");
+    }
+
+    public async Task<int> CountRenderedRows()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRenderedRows");
+    }
+
+    public async Task<int> CountSourceCols()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countSourceCols");
+    }
+
+    public async Task<int> CountSourceRows()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countSourceRows");
+    }
+
+
+    public async Task<int> CountVisibleCols()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countVisibleCols");
+    }
+
+    public async Task<int> CountVisibleRows()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countVisibleRows");
+    }
+
+
+    public async Task<int> CountRowHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRowHeaders");
+    }
+
+    public async Task<int> CountRows()
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRows");
+    }
 
     public async Task<JQueryJsInterop> GetCell (int visualRow, int visualColumn, bool topmost = false)
     {
@@ -157,26 +240,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         if (selected == null) return null;
         var cellRange = new CellRange(selected[0], selected[1], selected[2], selected[3]);
         return cellRange;
-    }
-
-    public async Task<int> CountCols()
-    {
-        return await _handsontableJsReference.InvokeAsync<int>("countCols");
-    }
-
-    public async Task<int> CountColHeaders()
-    {
-        return await _handsontableJsReference.InvokeAsync<int>("countColHeaders");
-    }
-
-    public async Task<int> CountRows()
-    {
-        return await _handsontableJsReference.InvokeAsync<int>("countRows");
-    }
-
-    public async Task<int> CountRowHeaders()
-    {
-        return await _handsontableJsReference.InvokeAsync<int>("countRowHeaders");
     }
 
     public async Task<int> GetRowHeight(int visualRow)
