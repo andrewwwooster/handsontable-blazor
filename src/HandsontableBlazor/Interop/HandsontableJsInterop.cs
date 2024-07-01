@@ -85,9 +85,9 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "clear");
     }
 
-    public async Task<bool?> ClearUndo()
+    public async Task ClearUndo()
     {
-        return await _handsontableJsReference.InvokeAsync<bool?>("invokeMethod", "clearUndo");
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "clearUndo");
     }
 
     public async Task<object> ColToProp(int visualColumn)
@@ -168,6 +168,44 @@ public class HandsontableJsInterop : IAsyncDisposable
         var htmlTableCellElement = await _handsontableJsReference.InvokeAsync<IJSObjectReference>(
             "invokeMethod", "getCell", visualRow, visualColumn, topmost);
         return new JQueryJsInterop(htmlTableCellElement);
+    }
+
+    public async Task<IDictionary<string,object>> GetCellMeta (int visualRow, int visualColumn)
+    {
+        var cellProperties = await _handsontableJsReference.InvokeAsync<Dictionary<string,object>>(
+            "invokeMethod", "getCellMeta", visualRow, visualColumn);
+        return cellProperties;
+    }
+
+    public async Task<int> GetColWidth(int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("getColWidth", visualColumn);
+    }
+
+    public async Task<int> GetRowHeight(int visualRow)
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("getRowHeight", visualRow);
+    }
+
+    public async Task<IList<CellRange>?> GetSelectedRange()
+    {
+        var selecteds =  await _handsontableJsReference.InvokeAsync<IList<IList<int>>>("invokeMethod", "getSelected");
+        if (selecteds == null) return null;
+
+        var cellRanges = new List<CellRange>();
+        foreach (var selected in selecteds)
+        {
+            cellRanges.Add(new CellRange(selected[0], selected[1], selected[2], selected[3]));
+        }
+        return cellRanges;
+    }
+
+    public async Task<CellRange?> GetSelectedRangeLast()
+    {
+        var selected =  await _handsontableJsReference.InvokeAsync<IList<int>>("invokeMethod", "getSelectedLast");
+        if (selected == null) return null;
+        var cellRange = new CellRange(selected[0], selected[1], selected[2], selected[3]);
+        return cellRange;
     }
 
     public async Task<bool> HasColHeaders()
@@ -281,46 +319,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync(
             "invokeMethod", "setDataAtRowProp", changes, null, null, source);
     }
-
-    public async Task<IDictionary<string,object>> GetCellMeta (int visualRow, int visualColumn)
-    {
-        var cellProperties = await _handsontableJsReference.InvokeAsync<Dictionary<string,object>>(
-            "invokeMethod", "getCellMeta", visualRow, visualColumn);
-        return cellProperties;
-    }
-
-    public async Task<IList<CellRange>?> GetSelectedRange()
-    {
-        var selecteds =  await _handsontableJsReference.InvokeAsync<IList<IList<int>>>("invokeMethod", "getSelected");
-        if (selecteds == null) return null;
-
-        var cellRanges = new List<CellRange>();
-        foreach (var selected in selecteds)
-        {
-            cellRanges.Add(new CellRange(selected[0], selected[1], selected[2], selected[3]));
-        }
-        return cellRanges;
-    }
-
-
-    public async Task<CellRange?> GetSelectedRangeLast()
-    {
-        var selected =  await _handsontableJsReference.InvokeAsync<IList<int>>("invokeMethod", "getSelectedLast");
-        if (selected == null) return null;
-        var cellRange = new CellRange(selected[0], selected[1], selected[2], selected[3]);
-        return cellRange;
-    }
-
-    public async Task<int> GetRowHeight(int visualRow)
-    {
-        return await _handsontableJsReference.InvokeAsync<int>("getRowHeight", visualRow);
-    }
-
-    public async Task<int> GetColWidth(int visualColumn)
-    {
-        return await _handsontableJsReference.InvokeAsync<int>("getColWidth", visualColumn);
-    }
-
     /**
     * Property to column.
     * @returns Visual column index.
@@ -329,6 +327,12 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "propToCol", prop);
     }
+
+    public async Task Redo ()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "redo");
+    }
+
 
     public async Task<int> ToPhysicalColumn (int visualColumn)
     {
@@ -348,6 +352,11 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task<int> ToVisualRow (int physicalRow)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toVisualRow", physicalRow);
+    }
+
+    public async Task Undo ()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "undo");
     }
 
     public async Task RegisterRenderer(string rendererName, Func<RendererArgs, Task> rendererCallback)

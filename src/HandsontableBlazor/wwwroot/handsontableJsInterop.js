@@ -48,7 +48,8 @@ class HandsontableJs {
   }
 
   invokeMethod(method, ...args) {
-    return this._hot[method](...args);
+    let result = this._hot[method](...args);
+    return result;
   }
   
   /**

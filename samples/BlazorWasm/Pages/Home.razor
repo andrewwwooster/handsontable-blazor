@@ -34,8 +34,10 @@
     <option>IsListening</option>
     <option>IsLtr</option>
     <option>IsRedoAvailable</option>
+    <option>Redo</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
+    <option>Undo</option>
 </InputSelect>
 
 @if (_actionMethod == "Alter")
@@ -72,7 +74,7 @@ else if (_actionMethod == "ClearUndo")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("ClearUndo", await Handsontable.Core.ClearUndo())'>
+            @onclick='async () => await Handsontable.Core.ClearUndo()'>
             Apply
         </button>
     </div>
@@ -303,6 +305,15 @@ else if (_actionMethod == "IsRedoAvailable")
         </button>
     </div>
 }
+else if (_actionMethod == "Redo")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.Redo()'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "SetCellData")
 {
     <div>
@@ -320,6 +331,15 @@ else if (_actionMethod == "SetCellMeta")
         Key: <InputText @bind-Value="_actionKey"/>
         Value: <InputText @bind-Value="_actionValue"/>
         <button @onclick="() => Handsontable.Core.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
+    </div>
+}
+else if (_actionMethod == "Undo")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.Undo()'>
+            Apply
+        </button>
     </div>
 }
 
