@@ -24,6 +24,16 @@
     <option>CountVisibleCols</option>
     <option>CountVisibleRows</option>
     <option>GetCellMeta</option>
+    <option>HasColHeaders</option>
+    <option>HasHook</option>
+    <option>HasRowHeaders</option>
+    <option>IsColumnModificationAllowed</option>
+    <option>IsEmptyCol</option>
+    <option>IsEmptyRow</option>
+    <option>IsExecutionSuspended</option>
+    <option>IsListening</option>
+    <option>IsLtr</option>
+    <option>IsRedoAvailable</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
 </InputSelect>
@@ -196,6 +206,99 @@ else if (_actionMethod == "GetCellMeta")
                 var data = await Handsontable.Core.GetCellMeta(_actionRow, _actionColumn);
                 AppendToEventLog("GetCellMeta", data);
             })">
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "HasColHeaders")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("HasColHeaders", await Handsontable.Core.HasColHeaders())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "HasHook")
+{
+    <div>
+        Hook Name: <InputText @bind-Value="_actionKey"/>
+        <button 
+            @onclick='async () => AppendToEventLog("HasHook", await Handsontable.Core.HasHook(_actionKey))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "HasRowHeaders")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("HasRowHeaders", await Handsontable.Core.HasRowHeaders())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsColumnModificationAllowed")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("IsColumnModificationAllowed", await Handsontable.Core.IsColumnModificationAllowed())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsEmptyCol")
+{
+    <div>
+        Column: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='async () => AppendToEventLog("IsEmptyCol", await Handsontable.Core.IsEmptyCol(_actionColumn))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsEmptyRow")
+{
+    <div>
+        Column: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='async () => AppendToEventLog("IsEmptyRow", await Handsontable.Core.IsEmptyRow(_actionRow))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsExecutionSuspended")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("IsExecutionSuspended", await Handsontable.Core.IsExecutionSuspended())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsListening")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("IsListening", await Handsontable.Core.IsListening())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsLtr")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("IsLtr", await Handsontable.Core.IsLtr())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "IsRedoAvailable")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("IsRedoAvailable", await Handsontable.Core.IsRedoAvailable())'>
             Apply
         </button>
     </div>

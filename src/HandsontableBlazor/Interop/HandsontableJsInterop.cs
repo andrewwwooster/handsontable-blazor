@@ -170,6 +170,75 @@ public class HandsontableJsInterop : IAsyncDisposable
         return new JQueryJsInterop(htmlTableCellElement);
     }
 
+    public async Task<bool> HasColHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "hasColHeaders");
+    }
+
+    /**
+    * Check if hook with a given name was registered.
+    * @param {String} hookName Hook name should be name without "on" prefix.  Hook name
+    *                   always starts with a lowcase character.
+    */
+    public async Task<bool> HasHook(string hookName)
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "hasHook", hookName);
+    }
+    
+    public async Task<bool> HasRowHeaders()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "hasRowHeaders");
+    }
+
+    public async Task<bool> IsColumnModificationAllowed()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isColumnModificationAllowed");
+    }
+
+    public async Task<bool> IsEmptyCol(int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isEmptyCol", visualColumn);
+    }
+
+    public async Task<bool> IsEmptyRow(int visualRow)
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isEmptyRow", visualRow);
+    }
+
+    public async Task<bool> IsExecutionSuspended()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isExecutionSuspended");
+    }
+
+    public async Task<bool> IsListening()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isListening");
+    }
+
+    public async Task<bool> IsLtr()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isLtr");
+    }
+    public async Task<bool> IsRedoAvailable()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isRedoAvailable");
+    }
+
+    public async Task<bool> IsRenderSuspended()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isRenderSuspended");
+    }
+
+    public async Task<bool> IsRtl()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isRtl");
+    }
+
+    public async Task<bool> IsUndoAvailable()
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isUndoAvailable");
+    }
+
     public async Task SetCellMeta (int visualRow, int visualColumn, string key, object? value)
     {
         await _handsontableJsReference.InvokeVoidAsync(
@@ -250,16 +319,6 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task<int> GetColWidth(int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("getColWidth", visualColumn);
-    }
-
-    public async Task<bool> HasRowHeaders()
-    {
-        return await _handsontableJsReference.InvokeAsync<bool>("hasRowHeaders");
-    }
-
-    public async Task<bool> HasColHeaders()
-    {
-        return await _handsontableJsReference.InvokeAsync<bool>("hasColHeaders");
     }
 
     /**
