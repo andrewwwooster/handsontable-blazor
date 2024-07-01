@@ -333,7 +333,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "redo");
     }
 
-
     public async Task<int> ToPhysicalColumn (int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);

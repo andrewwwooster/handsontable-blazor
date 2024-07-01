@@ -431,7 +431,7 @@ else if (_actionMethod == "Undo")
     private object OnHookCallbackSync(Hooks.BaseHookArgs args)
     {
         AppendToEventLog("OnHookCallbackBool", args);
-        return false;
+        return true;
     }
 
     private async Task OnRenderCallback(Renderer.RendererArgs args)
