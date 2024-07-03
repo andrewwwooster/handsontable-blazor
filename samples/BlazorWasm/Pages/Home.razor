@@ -46,7 +46,7 @@
     <option>ToVisualRow</option>
     <option>ToHtml</option>
     <option>Undo</option>
-    <option>Update</option>
+    <option>UpdateSettings</option>
 </InputSelect>
 
 @if (_actionMethod == "Alter")
@@ -427,7 +427,7 @@ else if (_actionMethod == "Undo")
         </button>
     </div>
 }
-else if (_actionMethod == "Update")
+else if (_actionMethod == "UpdateSettings")
 {
     <div>
         <InputSelect @bind-Value="_updateOptionName">
@@ -436,7 +436,7 @@ else if (_actionMethod == "Update")
         </InputSelect>
         Visual Index: <InputNumber @bind-Value="_actionRow"/>
         <button 
-            @onclick='async () => await Handsontable.Core.Update(new Dictionary<string, object>{ {_updateOptionName, _actionRow } })'>
+            @onclick='async () => await Handsontable.Core.UpdateSettings(new Dictionary<string, object>{ {_updateOptionName, _actionRow } })'>
             Apply
         </button>
     </div>

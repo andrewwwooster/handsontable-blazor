@@ -378,7 +378,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     *   Only provide the settings that are changed.  
     *   
     */
-    public async Task Update (IDictionary<string, object> settings)
+    public async Task UpdateSettings (IDictionary<string, object> settings)
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", settings);
     }
