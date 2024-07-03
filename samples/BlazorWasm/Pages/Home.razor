@@ -46,6 +46,7 @@
     <option>ToVisualRow</option>
     <option>ToHtml</option>
     <option>Undo</option>
+    <option>Update</option>
 </InputSelect>
 
 @if (_actionMethod == "Alter")
@@ -426,6 +427,20 @@ else if (_actionMethod == "Undo")
         </button>
     </div>
 }
+else if (_actionMethod == "Update")
+{
+    <div>
+        <InputSelect @bind-Value="_updateOptionName">
+            <option>width</option>
+            <option>height</option>
+        </InputSelect>
+        Visual Index: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='async () => await Handsontable.Core.Update(new Dictionary<string, object>{ {_updateOptionName, _actionRow } })'>
+            Apply
+        </button>
+    </div>
+}
 
 <HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
@@ -460,6 +475,7 @@ else if (_actionMethod == "Undo")
     private int _actionColumn = 0;
     private string _actionKey = "";
     private string _actionValue = "";
+    private string _updateOptionName = "width";
     private HandsontableJsInterop.AlterActionEnum _alterAction = HandsontableJsInterop.AlterActionEnum.insert_row_above;
 
     private string _eventLog = "";

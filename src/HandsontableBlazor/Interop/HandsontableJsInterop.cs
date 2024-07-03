@@ -371,6 +371,19 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "undo");
     }
 
+    /**
+    * Update configuration option settings.
+    * @param {IDictionary<string name, object vale>} settings A settings object 
+        (see ConfigurationOptions).  Name should be camelCase.
+    *   Only provide the settings that are changed.  
+    *   
+    */
+    public async Task Update (IDictionary<string, object> settings)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", settings);
+    }
+
+
     public async Task RegisterRenderer(string rendererName, Func<RendererArgs, Task> rendererCallback)
     {
         var module = await _handsontableModuleTask.Value;
