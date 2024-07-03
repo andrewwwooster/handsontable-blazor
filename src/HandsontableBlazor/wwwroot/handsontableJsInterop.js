@@ -51,6 +51,12 @@ class HandsontableJs {
     let result = this._hot[method](...args);
     return result;
   }
+
+  invokeMethodReturnsJQuery(method, ...args) {
+    let result = this._hot[method](...args);
+    let jQueryResult = jQuery(result);
+    return jQueryResult;
+  }
   
   /**
    * @param {IHookProxy} hookProxy

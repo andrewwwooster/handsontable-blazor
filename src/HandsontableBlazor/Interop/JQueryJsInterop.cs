@@ -41,6 +41,10 @@ public class JQueryJsInterop
         await _jqueryObjectReference.InvokeVoidAsync("css", property, value);
     }
 
+    public async Task Height()
+    {
+        await _jqueryObjectReference.InvokeAsync<int>("height");
+    }
 
     public async Task<string> Html()
     {
@@ -52,7 +56,6 @@ public class JQueryJsInterop
         await _jqueryObjectReference.InvokeVoidAsync("html", value);
     }
 
-
     public async Task<string> Text()
     {
         return await _jqueryObjectReference.InvokeAsync<string>("text");
@@ -61,5 +64,10 @@ public class JQueryJsInterop
     public async Task Text(string value)
     {
         await _jqueryObjectReference.InvokeVoidAsync("text", value);
+    }
+
+    public async Task Width()
+    {
+        await _jqueryObjectReference.InvokeAsync<int>("width");
     }
 }

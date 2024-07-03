@@ -23,6 +23,7 @@
     <option>CountSourceRows</option>
     <option>CountVisibleCols</option>
     <option>CountVisibleRows</option>
+    <option>GetCell</option>
     <option>GetCellMeta</option>
     <option>HasColHeaders</option>
     <option>HasHook</option>
@@ -37,6 +38,13 @@
     <option>Redo</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
+    <option>ToHtml</option>
+    <option>ToPhysicalColumn</option>
+    <option>ToPhysicalRow</option>
+    <option>ToTableElement</option>
+    <option>ToVisualColumn</option>
+    <option>ToVisualRow</option>
+    <option>ToHtml</option>
     <option>Undo</option>
 </InputSelect>
 
@@ -197,7 +205,6 @@ else if (_actionMethod == "CountRows")
         </button>
     </div>
 }
-
 else if (_actionMethod == "GetCellMeta")
 {
     <div>
@@ -212,7 +219,21 @@ else if (_actionMethod == "GetCellMeta")
         </button>
     </div>
 }
-else if (_actionMethod == "HasColHeaders")
+else if (_actionMethod == "GetCell")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick="@(async () => {
+                var jq = await Handsontable.Core.GetCell(_actionRow, _actionColumn);
+                var html = await jq.Html();
+                AppendToEventLog("GetCell", html);
+            })">
+            Apply
+        </button>
+    </div>
+}else if (_actionMethod == "HasColHeaders")
 {
     <div>
         <button 
@@ -333,6 +354,69 @@ else if (_actionMethod == "SetCellMeta")
         <button @onclick="() => Handsontable.Core.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
     </div>
 }
+else if (_actionMethod == "ToHtml")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog("ToHtml", await Handsontable.Core.ToHtml())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ToPhysicalColumn")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='async () => AppendToEventLog("ToPhysicalColumn", await Handsontable.Core.ToPhysicalColumn(_actionColumn))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ToPhysicalRow")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='async () => AppendToEventLog("ToPhysicalRow", await Handsontable.Core.ToPhysicalRow(_actionRow))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ToTableElement")
+{
+    <div>
+        <button 
+            @onclick='async () => {
+                var jq = await Handsontable.Core.ToTableElement();
+                var html = await jq.Html();
+                AppendToEventLog("ToTableElement", html);
+            }'
+        >
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ToVisualColumn")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='async () => AppendToEventLog("ToVisualColumn", await Handsontable.Core.ToVisualColumn(_actionColumn))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "ToVisualRow")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='async () => AppendToEventLog("ToVisualRow", await Handsontable.Core.ToVisualRow(_actionRow))'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "Undo")
 {
     <div>
@@ -351,7 +435,7 @@ else if (_actionMethod == "Undo")
 <HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
 <HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateRow" HookName="beforerCreateRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateRow" HookName="beforeCreateRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
 <HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
 <HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
 

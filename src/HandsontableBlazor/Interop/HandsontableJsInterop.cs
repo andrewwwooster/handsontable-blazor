@@ -1,4 +1,5 @@
 using Microsoft.JSInterop;
+using Microsoft.JSInterop.Implementation;
 using static HandsontableBlazor.Hooks;
 using static HandsontableBlazor.Renderer;
 
@@ -35,7 +36,7 @@ public class HandsontableJsInterop : IAsyncDisposable
         {
             var module = await _handsontableModuleTask.Value;
             var thisObjectReference = DotNetObjectReference.Create(this);
-            _handsontableJsReference = await module.InvokeAsync<IJSObjectReference>(
+            _handsontableJsReference = await module.InvokeAsync<IJSInProcessObjectReference>(
                 "newHandsontable", elemId, configurationOptions, thisObjectReference);
         }
         catch (JSException ex)
@@ -51,7 +52,7 @@ public class HandsontableJsInterop : IAsyncDisposable
         try
         {
             var module = await _handsontableModuleTask.Value;
-            _handsontableJsReference = await module.InvokeAsync<IJSObjectReference>(
+            _handsontableJsReference = await module.InvokeAsync<IJSInProcessObjectReference>(
                 "newHandsontable", elemId, configurationOptions, DotNetObjectReference.Create(this));
         }
         catch (JSException ex)
@@ -165,8 +166,8 @@ public class HandsontableJsInterop : IAsyncDisposable
 
     public async Task<JQueryJsInterop> GetCell (int visualRow, int visualColumn, bool topmost = false)
     {
-        var htmlTableCellElement = await _handsontableJsReference.InvokeAsync<IJSObjectReference>(
-            "invokeMethod", "getCell", visualRow, visualColumn, topmost);
+        var htmlTableCellElement = await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>(
+            "invokeMethodReturnsJQuery", "getCell", visualRow, visualColumn, topmost);
         return new JQueryJsInterop(htmlTableCellElement);
     }
 
@@ -337,10 +338,22 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);
     }
+
+    public async Task<string> ToHtml ()
+    {
+        return await _handsontableJsReference.InvokeAsync<string>("invokeMethod", "toHTML");
+    }
     
     public async Task<int> ToPhysicalRow (int visualRow)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalRow", visualRow);
+    }
+    
+    public async Task<JQueryJsInterop> ToTableElement ()
+    {
+        var domTableJsObjectReference = await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>("invokeMethodReturnsJQuery", "toTableElement");
+        var domTableJQuery = new JQueryJsInterop(domTableJsObjectReference);
+        return domTableJQuery;
     }
 
     public async Task<int> ToVisualColumn (int physicalColumn)
@@ -370,8 +383,6 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         if (_handsontableModuleTask.IsValueCreated)
         {
-            // @TODO Displose of _handsontableJsReference IJSObjectReference?
-
             var module = await _handsontableModuleTask.Value;
             await module.DisposeAsync();
         }
