@@ -181,12 +181,17 @@ public class HandsontableJsInterop : IAsyncDisposable
 
     public async Task<int> GetColWidth(int visualColumn)
     {
-        return await _handsontableJsReference.InvokeAsync<int>("getColWidth", visualColumn);
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "getColWidth", visualColumn);
     }
 
-    public async Task<int> GetRowHeight(int visualRow)
+    public async Task<IList<IList<object>>> GetData(int? visualRow, int? visualColumn, int? visualRow2, int? visualColumn2)
     {
-        return await _handsontableJsReference.InvokeAsync<int>("getRowHeight", visualRow);
+        return await _handsontableJsReference.InvokeAsync<IList<IList<object>>>("invokeMethod", "getData", visualRow, visualColumn, visualRow2, visualColumn2);
+    }
+
+    public async Task<int?> GetRowHeight(int visualRow)
+    {
+        return await _handsontableJsReference.InvokeAsync<int?>("invokeMethod", "getRowHeight", visualRow);
     }
 
     public async Task<IList<CellRange>?> GetSelectedRange()

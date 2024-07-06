@@ -25,6 +25,9 @@
     <option>CountVisibleRows</option>
     <option>GetCell</option>
     <option>GetCellMeta</option>
+    <option>GetColWidth</option>
+    <option>GetData</option>
+    <option>GetRowHeight</option>
     <option>HasColHeaders</option>
     <option>HasHook</option>
     <option>HasRowHeaders</option>
@@ -237,7 +240,39 @@ else if (_actionMethod == "GetCell")
             Apply
         </button>
     </div>
-}else if (_actionMethod == "HasColHeaders")
+}
+else if (_actionMethod == "GetColWidth")
+{
+    <div>
+        Column: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog("GetColWidth", await Handsontable.Core.GetColWidth(_actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetData")
+{
+    <div>
+        Row2: <InputNumber @bind-Value="_actionRow"/>
+        Column2: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog("GetData", await Handsontable.Core.GetData(_actionRow, _actionColumn, null, null)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetRowHeight")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog("GetRowHeight", await Handsontable.Core.GetRowHeight(_actionRow)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "HasColHeaders")
 {
     <div>
         <button 
@@ -552,7 +587,7 @@ else if (_actionMethod == "ValidateCells")
         };
     }
 
-    private void AppendToEventLog(string label, object properties)
+    private void AppendToEventLog(string label, object? properties)
     {
         var propertiesJson = JsonSerializer.Serialize(properties);
         var newLine = label + ": " + propertiesJson;
