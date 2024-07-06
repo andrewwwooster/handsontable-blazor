@@ -1,9 +1,18 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace HandsontableBlazor;
 
 public class Callbacks 
 {
     public interface ICallbackArgs {}
+
+    public class ValidateArgs : ICallbackArgs
+    {
+        public ValidateArgs(JsonDocument jdoc)
+        {
+            IsValid = jdoc.RootElement[0].Deserialize<bool>();
+        }
+
+        public bool IsValid { get; set; }
+    }
 }

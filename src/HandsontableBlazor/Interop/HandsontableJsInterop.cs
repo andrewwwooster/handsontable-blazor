@@ -384,16 +384,39 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", settings);
     }
 
-    public async Task ValidateRows (IList<int> rows, Func<JsonDocument,Task>? callback)
+    public async Task ValidateCell (object value, IDictionary<string,object> meta, Func<ValidateArgs,Task> callback, string source)
     {
-        VoidAsyncCallbackProxy<JsonDocument> callbackProxy = null!;
-        if (callback != null)
-        {
-            callbackProxy = new VoidAsyncCallbackProxy<JsonDocument>(callback);
-        }
-        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateRows", rows, callbackProxy);
+        var callbackProxy = ToVoidAsyncCallbackProxy(callback);
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateCell", value, meta, callbackProxy, source);
     }
 
+    public async Task ValidateCells (Func<ValidateArgs,Task>? callback)
+    {
+        var callbackProxy = ToVoidAsyncCallbackProxy(callback);
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateCells", callbackProxy);
+    }
+
+    public async Task ValidateColumns (IList<int> visualColumns, Func<ValidateArgs,Task>? callback)
+    {
+        var callbackProxy = ToVoidAsyncCallbackProxy(callback);
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateColumns", visualColumns, callbackProxy);
+    }
+
+    public async Task ValidateRows (IList<int> visualRows, Func<ValidateArgs,Task>? callback)
+    {
+        var callbackProxy = ToVoidAsyncCallbackProxy(callback);
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateRows", visualRows, callbackProxy);
+    }
+
+    VoidAsyncCallbackProxy<CallbackArgsT>? ToVoidAsyncCallbackProxy<CallbackArgsT> (Func<CallbackArgsT,Task>? callback)
+    {
+        if (callback != null)
+        {
+            var callbackProxy = new VoidAsyncCallbackProxy<CallbackArgsT>(callback);
+            return callbackProxy;
+        }
+        return null;
+    }
     
     public async Task RegisterRenderer(string rendererName, Func<RendererArgs, Task> rendererCallback)
     {

@@ -47,6 +47,8 @@
     <option>ToHtml</option>
     <option>Undo</option>
     <option>UpdateSettings</option>
+    <option>ValidateCells</option>
+    <option>ValidateColumns</option>
     <option>ValidateRows</option>
 </InputSelect>
 
@@ -442,7 +444,28 @@ else if (_actionMethod == "UpdateSettings")
         </button>
     </div>
 }
-else if (_actionMethod == "ValidateRows")
+else if (_actionMethod == "ValidateCells")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.ValidateCells(OnCallbackAsync)'>
+            Apply
+        </button>
+    </div>
+}else if (_actionMethod == "ValidateColumns")
+{
+    <div>
+        Start Column: <InputNumber @bind-Value="_actionRow"/>
+        End Column: <InputNumber @bind-Value="_actionColumn"/>
+        @{
+            var columns = Enumerable.Range(_actionRow, 1+_actionColumn-_actionRow).ToArray();
+            <button 
+                @onclick='async () => await Handsontable.Core.ValidateColumns(columns, OnCallbackAsync)'>
+                Apply
+            </button>
+        }
+    </div>
+}else if (_actionMethod == "ValidateRows")
 {
     <div>
         Start Row: <InputNumber @bind-Value="_actionRow"/>
@@ -536,12 +559,13 @@ else if (_actionMethod == "ValidateRows")
         _eventLog = newLine + "\n" + _eventLog;
         StateHasChanged();              // Required because event was initiated by JS.
     }
-    
-    private async Task OnCallbackAsync(Callbacks.ICallbackArgs callbackArgs)
+
+    private async Task OnCallbackAsync<CallbackArgsT>(CallbackArgsT callbackArgs)
+        where CallbackArgsT : Callbacks.ICallbackArgs
     {
         AppendToEventLog("OnCallbackAsync", callbackArgs);
         await Task.CompletedTask;
-    }
+    }    
 
     private async Task OnCallbackAsync(JsonDocument jdoc)
     {
