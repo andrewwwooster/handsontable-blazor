@@ -91,24 +91,24 @@ class HandsontableJs {
   }
   
   /**
-   * @param {IHookProxy} hookProxy
+   * @param {ICallbackProxy} callbackProxy
    */
-  addHook(hookProxy) {
-    let hookCallback = this.#wrapCallbackProxy(hookProxy);
-    this._hot.addHook(hookProxy.callbackName, hookCallback);
-    this._hookCallbackDict.set(hookProxy.id, hookCallback);
+  addHook(callbackProxy) {
+    let callback = this.#wrapCallbackProxy(callbackProxy);
+    this._hot.addHook(callbackProxy.callbackName, callback);
+    this._hookCallbackDict.set(callbackProxy.id, callback);
   }
 
   /**
-   * @param {IHookProxy} hookProxy
+   * @param {ICallbackProxy} callbackProxy
    */
-  removeHook(hookProxy) {
-    var hookCallback = this._hookCallbackDict.get(hookProxy.id);
+  removeHook(callbackProxy) {
+    var callback = this._hookCallbackDict.get(callbackProxy.id);
 
     // Remove hook from Handsontable.
-    this._hot.removeHook(hookProxy.callbackName, hookCallback);
+    this._hot.removeHook(callbackProxy.callbackName, callback);
 
-    delete this._hookCallbackDict[hookProxy.id];
+    delete this._hookCallbackDict[callbackProxy.id];
   }
 }
 
