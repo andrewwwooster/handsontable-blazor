@@ -5,10 +5,7 @@ namespace HandsontableBlazor;
 
 public class Hooks 
 {
-    public interface IHookArgs {}
-
-
-    public class BaseHookArgs : IHookArgs
+    public abstract class BaseHookArgs : Callbacks.ICallbackArgs
     {
         [JsonPropertyOrder(-1)]
         public required string HookName { get; set; }

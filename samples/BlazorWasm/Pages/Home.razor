@@ -47,6 +47,7 @@
     <option>ToHtml</option>
     <option>Undo</option>
     <option>UpdateSettings</option>
+    <option>ValidateRows</option>
 </InputSelect>
 
 @if (_actionMethod == "Alter")
@@ -441,18 +442,32 @@ else if (_actionMethod == "UpdateSettings")
         </button>
     </div>
 }
+else if (_actionMethod == "ValidateRows")
+{
+    <div>
+        Start Row: <InputNumber @bind-Value="_actionRow"/>
+        End Row: <InputNumber @bind-Value="_actionColumn"/>
+        @{
+            var rows = Enumerable.Range(_actionRow, 1+_actionColumn-_actionRow).ToArray();
+            <button 
+                @onclick='async () => await Handsontable.Core.ValidateRows(rows, OnCallbackAsync)'>
+                Apply
+            </button>
+        }
+    </div>
+}
 
-<HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterRemoveCol" HookName="afterRemoveCol" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveColArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnHookCallback" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateRow" HookName="beforeCreateRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" SyncHookCallback="OnHookCallbackSync" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterRemoveCol" HookName="afterRemoveCol" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateRow" HookName="beforeCreateRow" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
 
 
 <div style="border: 1px solid black;">
@@ -522,15 +537,21 @@ else if (_actionMethod == "UpdateSettings")
         StateHasChanged();              // Required because event was initiated by JS.
     }
     
-    private async Task OnHookCallback(Hooks.BaseHookArgs args)
+    private async Task OnCallbackAsync(Callbacks.ICallbackArgs callbackArgs)
     {
-        AppendToEventLog("OnHookCallback", args);
+        AppendToEventLog("OnCallbackAsync", callbackArgs);
         await Task.CompletedTask;
     }
 
-    private object OnHookCallbackSync(Hooks.BaseHookArgs args)
+    private async Task OnCallbackAsync(JsonDocument jdoc)
     {
-        AppendToEventLog("OnHookCallbackBool", args);
+        AppendToEventLog("OnCallbackAsync", jdoc);
+        await Task.CompletedTask;
+    }
+
+    private object OnCallbackSync(Callbacks.ICallbackArgs callbackArgs)
+    {
+        AppendToEventLog("OnCallbackSync", callbackArgs);
         return true;
     }
 

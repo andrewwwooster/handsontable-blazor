@@ -1,6 +1,7 @@
+using System.Text.Json;
 using Microsoft.JSInterop;
-using Microsoft.JSInterop.Implementation;
 using static HandsontableBlazor.Hooks;
+using static HandsontableBlazor.Callbacks;
 using static HandsontableBlazor.Renderer;
 
 namespace HandsontableBlazor.Interop;
@@ -20,7 +21,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     private IJSObjectReference _handsontableJsReference = null!;
 
     static IDictionary<string,Func<RendererArgs, Task>>     _rendererDict = new Dictionary<string,Func<RendererArgs, Task>>();
-    private IDictionary<Tuple<string,Delegate>, IHookProxy>  _hookProxyDict = new Dictionary<Tuple<string,Delegate>, IHookProxy>();
+    private IDictionary<Tuple<string?,Delegate>, ICallbackProxy>  _hookProxyDict = new Dictionary<Tuple<string?,Delegate>, ICallbackProxy>();
 
 
     public HandsontableJsInterop(IJSRuntime jsRuntime)
@@ -383,7 +384,17 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", settings);
     }
 
+    public async Task ValidateRows (IList<int> rows, Func<JsonDocument,Task>? callback)
+    {
+        VoidAsyncCallbackProxy<JsonDocument> callbackProxy = null!;
+        if (callback != null)
+        {
+            callbackProxy = new VoidAsyncCallbackProxy<JsonDocument>(callback);
+        }
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateRows", rows, callbackProxy);
+    }
 
+    
     public async Task RegisterRenderer(string rendererName, Func<RendererArgs, Task> rendererCallback)
     {
         var module = await _handsontableModuleTask.Value;
@@ -457,17 +468,17 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
-        where HookArgsT : IHookArgs
+        where HookArgsT : ICallbackArgs
     {
-        var hookProxy = new AsyncHookProxy<HookArgsT>(hookName, hook);
+        var hookProxy = new VoidAsyncCallbackProxy<HookArgsT>(hook, hookName);
         _hookProxyDict[hookProxy.GetKey()] = hookProxy;
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
     
     public async Task AddSyncHook<HookArgsT,HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
-        where HookArgsT : IHookArgs
+        where HookArgsT : ICallbackArgs
     {
-        var hookProxy = new SyncHookProxy<HookArgsT,HookResultT>(hookName, hook);
+        var hookProxy = new SyncCallbackProxy<HookArgsT,HookResultT>(hook, hookName);
         _hookProxyDict[hookProxy.GetKey()] = hookProxy;
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
@@ -476,7 +487,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, object> hook)
         where HookArgsT : BaseHookArgs
     {
-        var hookKey = IHookProxy.CreateKey(hookName, hook);
+        var hookKey = ICallbackProxy.CreateKey(hookName, hook);
         var hookProxy = _hookProxyDict[hookKey]; 
         await _handsontableJsReference.InvokeVoidAsync("removeHook", hookProxy);
         _hookProxyDict.Remove(hookKey);

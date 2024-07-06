@@ -52,6 +52,38 @@ class HandsontableJs {
     return result;
   }
 
+  invokeMethodWithCallback(method, ...args) {
+    args = this.#wrapArgs(args);
+    let result = this._hot[method](...args);
+    return result;
+  }
+
+  #wrapArgs(args) {
+    let result = new Array();
+    for (let i = 0; i < args.length; i++) {
+      result[i] = args[i];
+      if (args[i].typeName && args[i].typeName.includes("CallbackProxy")) {
+        result[i] = this.#wrapCallbackProxy(args[i]);
+      }
+    }
+    return result;
+  }
+
+  #wrapCallbackProxy(dotNetCallbackProxy) {
+    let jsCallback = null;
+    if (dotNetCallbackProxy.isAsync) {
+      jsCallback = async (...callbackArgs) => {
+        return await dotNetCallbackProxy.objectReference.invokeMethodAsync("Callback", callbackArgs);
+      }
+    }
+    else {
+      jsCallback = (...callbackArgs) => {
+        return dotNetCallbackProxy.objectReference.invokeMethod("Callback", callbackArgs);
+      }
+    }
+    return jsCallback;
+  }
+
   invokeMethodReturnsJQuery(method, ...args) {
     let result = this._hot[method](...args);
     let jQueryResult = jQuery(result);
@@ -62,18 +94,8 @@ class HandsontableJs {
    * @param {IHookProxy} hookProxy
    */
   addHook(hookProxy) {
-    let hookCallback;
-    if (hookProxy.isAsync) {
-      hookCallback = async (...callbackArgs) => {
-        await hookProxy.objectReference.invokeMethodAsync("HookCallback", callbackArgs);
-      }
-    }
-    else {
-      hookCallback = (...callbackArgs) => {
-        return hookProxy.objectReference.invokeMethod("HookCallback", callbackArgs);
-      }
-    }
-    this._hot.addHook(hookProxy.hookName, hookCallback);
+    let hookCallback = this.#wrapCallbackProxy(hookProxy);
+    this._hot.addHook(hookProxy.callbackName, hookCallback);
     this._hookCallbackDict.set(hookProxy.id, hookCallback);
   }
 
@@ -84,7 +106,7 @@ class HandsontableJs {
     var hookCallback = this._hookCallbackDict.get(hookProxy.id);
 
     // Remove hook from Handsontable.
-    this._hot.removeHook(hookProxy.hookName, hookCallback);
+    this._hot.removeHook(hookProxy.callbackName, hookCallback);
 
     delete this._hookCallbackDict[hookProxy.id];
   }
