@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D5C797D4-EE9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandsontableBlazor", "src\HandsontableBlazor\HandsontableBlazor.csproj", "{C8944BB8-2733-4028-822A-4D476FF1DD65}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{566A1AB9-40E1-45AA-90EE-FD8F8C1AEE07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandsontableBlazor.PlayrightTests", "tests\HandsontableBlazor.PlayrightTests\HandsontableBlazor.PlayrightTests.csproj", "{4CC3EC22-CF75-4BD1-95EA-AA02D27B4F1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,10 @@ Global
 		{C8944BB8-2733-4028-822A-4D476FF1DD65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8944BB8-2733-4028-822A-4D476FF1DD65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8944BB8-2733-4028-822A-4D476FF1DD65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CC3EC22-CF75-4BD1-95EA-AA02D27B4F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CC3EC22-CF75-4BD1-95EA-AA02D27B4F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CC3EC22-CF75-4BD1-95EA-AA02D27B4F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CC3EC22-CF75-4BD1-95EA-AA02D27B4F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +40,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{127E48B2-86E8-490A-8497-A1DABD05CB7B} = {937EC97F-1CE8-4C33-8C48-6CAFA306EFAF}
 		{C8944BB8-2733-4028-822A-4D476FF1DD65} = {D5C797D4-EE99-429E-AF10-87A9D21C5C21}
+		{4CC3EC22-CF75-4BD1-95EA-AA02D27B4F1C} = {566A1AB9-40E1-45AA-90EE-FD8F8C1AEE07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AAE588A5-3CBD-4B29-B008-0BD537D5F768}
