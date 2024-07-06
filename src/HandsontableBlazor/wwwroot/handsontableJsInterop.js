@@ -52,33 +52,51 @@ class HandsontableJs {
     return result;
   }
 
+  /**
+   * Invoke a Handsontable method that has a callback parameter.
+   * @param {string} method the name of the method to invoke on the Handsontable instance.
+   * @param  {...any} args 
+   * @returns result of the Handsontable method invocation.
+   */
   invokeMethodWithCallback(method, ...args) {
-    args = this.#wrapArgs(args);
+    args = this.#processCallabackArgs(args);
     let result = this._hot[method](...args);
     return result;
   }
 
-  #wrapArgs(args) {
+  /**
+   * Convert any CallbackProxy objects in the args array to JavaScript callbacks.
+   * @param {*} args 
+   * @returns the args array with any CallbackProxy objects replaced with JavaScript callbacks.
+   */
+  #processCallabackArgs(args) {
     let result = new Array();
     for (let i = 0; i < args.length; i++) {
       result[i] = args[i];
       if (args[i].typeName && args[i].typeName.includes("CallbackProxy")) {
-        result[i] = this.#wrapCallbackProxy(args[i]);
+        result[i] = this.#createJsCallback(args[i]);
       }
     }
     return result;
   }
 
-  #wrapCallbackProxy(dotNetCallbackProxy) {
+  /**
+   * Create a JavaScript callback function that wraps a call to the .NET callbackProxy.
+   * It will be used to call the Callback method on the .NET object reference in the
+   * callbackProxy.
+   * @param {ICallbackProxy} callbackProxy 
+   * @returns JavaScript callback function that wraps a call to the .NET callbackProxy.
+   */
+  #createJsCallback(callbackProxy) {
     let jsCallback = null;
-    if (dotNetCallbackProxy.isAsync) {
+    if (callbackProxy.isAsync) {
       jsCallback = async (...callbackArgs) => {
-        return await dotNetCallbackProxy.objectReference.invokeMethodAsync("Callback", callbackArgs);
+        return await callbackProxy.objectReference.invokeMethodAsync("Callback", callbackArgs);
       }
     }
     else {
       jsCallback = (...callbackArgs) => {
-        return dotNetCallbackProxy.objectReference.invokeMethod("Callback", callbackArgs);
+        return callbackProxy.objectReference.invokeMethod("Callback", callbackArgs);
       }
     }
     return jsCallback;
@@ -91,15 +109,18 @@ class HandsontableJs {
   }
   
   /**
+   * Add a hook to Handsontable.
    * @param {ICallbackProxy} callbackProxy
    */
   addHook(callbackProxy) {
-    let callback = this.#wrapCallbackProxy(callbackProxy);
+    let callback = this.#createJsCallback(callbackProxy);
     this._hot.addHook(callbackProxy.callbackName, callback);
     this._hookCallbackDict.set(callbackProxy.id, callback);
   }
 
   /**
+   * Remove a hook from Handsontable.
+   * Uses the callbackProxy.id to find the callback in to remove.
    * @param {ICallbackProxy} callbackProxy
    */
   removeHook(callbackProxy) {
