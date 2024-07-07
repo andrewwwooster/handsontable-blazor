@@ -340,6 +340,38 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "redo");
     }
 
+    public class SelectAllOptions
+    {
+        public object FocusPosition { get => FocusPositionCellCoords ?? (object) false;} 
+
+        public CellCoords? FocusPositionCellCoords { get; set; }
+
+        public bool DisableHeadersHighlight { get; set; } = true;
+    }
+
+    /**
+    * Select all cells in the table excluding headers and corner elements.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#selectall
+    */
+    public async Task SelectAll ( 
+        bool includeRowHeaders = false, bool includeColumnHeaders = false, SelectAllOptions? options = null)
+    {
+        if (options == null)
+        {
+            await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "selectAll", 
+                includeRowHeaders, includeColumnHeaders);
+        }
+        else
+        {
+            await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "selectAll", 
+                includeRowHeaders, includeColumnHeaders, options);
+        }
+    }
+
+    /**
+    * Select a single cell, or a single range of adjacent cells.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#selectcell
+    */
     public async Task<bool> SelectCell (
         int visualRow, int visualColumn, 
         int? visualRowEnd = null, int? visualColumnEnd = null, 
@@ -352,17 +384,42 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
-    * Select columns.
+    * Select multiple cells or ranges of cells, adjacent or non-adjacent.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#selectcells
+    */
+    public async Task<bool> SelectCells (
+        IList<IList<int>> coords, bool scrollToCell = true, bool changeListener = true)
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "selectCells", 
+            coords, scrollToCell, changeListener);
+    }
+
+    /**
+    * Select column specified by visualColumnStart visual index, column property or a range of columns finishing at visualColumnEnd.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#selectcolumns
+    */
+    public async Task<bool> SelectColumns (
+        int visualColumnStart, 
+        int? visualColumnEnd = null, 
+        int focusPosition = 0)
+    {
+        visualColumnEnd ??= visualColumnStart;
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "selectColumns", 
+            visualColumnStart, visualColumnEnd, focusPosition);
+    }
+
+    /**
+    * Select row specified by visualRowStart visual index or a range of rows finishing at visualRowEnd.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#selectrows
     */
     public async Task<bool> SelectRows (
-        int visualRow, 
+        int visualRowStart, 
         int? visualRowEnd = null, 
         int focusPosition = 0)
     {
-        visualRowEnd ??= visualRow;
+        visualRowEnd ??= visualRowStart;
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "selectRows", 
-            visualRow, visualRowEnd, focusPosition);
+            visualRowStart, visualRowEnd, focusPosition);
     }
 
     public async Task<int> ToPhysicalColumn (int visualColumn)

@@ -39,7 +39,10 @@
     <option>IsLtr</option>
     <option>IsRedoAvailable</option>
     <option>Redo</option>
+    <option>SelectAll</option>
     <option>SelectCell</option>
+    <option>SelectCells</option>
+    <option>SelectColumns</option>
     <option>SelectRows</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
@@ -376,25 +379,46 @@ else if (_actionMethod == "Redo")
         </button>
     </div>
 }
+else if (_actionMethod == "SelectAll")
+{
+    <div>
+        <button @onclick='async () => await Handsontable.Core.SelectAll()'>Apply</button>
+    </div>
+}
 else if (_actionMethod == "SelectCell")
 {
     <div>
-        Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
+        Row: <InputNumber @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button @onclick='async () => AppendToEventLog("SelectCell", await Handsontable.Core.SelectCell(_actionRow, _actionColumn))'>Apply</button>
+    </div>
+}
+else if (_actionMethod == "SelectCells")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button @onclick='async () => AppendToEventLog("SelectCells", await Handsontable.Core.SelectCells([[_actionRow, _actionColumn]]))'>Apply</button>
+    </div>
+}
+else if (_actionMethod == "SelectColumns")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button @onclick='async () => AppendToEventLog("SelectColumns", await Handsontable.Core.SelectColumns(_actionColumn))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SelectRows")
 {
     <div>
-        Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
+        Row: <InputNumber  @bind-Value="_actionRow"/>
         <button @onclick='async () => AppendToEventLog("SelectRows", await Handsontable.Core.SelectRows(_actionRow))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SetCellData")
 {
     <div>
-        Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
+        Row: <InputNumber @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         Value: <InputText @bind-Value="_actionValue"/>
         <button @onclick="() => Handsontable.Core.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
