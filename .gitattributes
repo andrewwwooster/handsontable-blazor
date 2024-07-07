@@ -4,4 +4,4 @@
 * text=auto
 
 * linguist-vendored
-*.js linguist-vendored=false
+wwwroot/lib/** linguist-vendored=false
