@@ -1,6 +1,6 @@
 # handsontable-blazor
 
-handsontable-blazor a Blazor Library that wraps the [Handsontable](https://handsontable.com) JavaScript grid library as a Blazor component.  Handsontable is a very rich Excel-like spreadhseet UI.
+handsontable-blazor a Blazor Library that wraps the [Handsontable](https://handsontable.com) JavaScript grid library as a Blazor component.  Handsontable is a very rich Excel-like spreadhseet UI that runs entirely in the browser.
 
 This project is Blazor / JavaScript interoperability library that maps Handonstable [core API](https://handsontable.com/docs/javascript-data-grid/api/core/), [hooks](https://handsontable.com/docs/javascript-data-grid/api/hooks/), and [configuration options](https://handsontable.com/docs/javascript-data-grid/api/options/) to C#.
 
