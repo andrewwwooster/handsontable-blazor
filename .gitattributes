@@ -3,5 +3,4 @@
 ###############################################################################
 * text=auto
 
-* linguist-vendored
 wwwroot/lib/** linguist-vendored=false
