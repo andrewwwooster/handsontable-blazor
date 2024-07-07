@@ -284,48 +284,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isUndoAvailable");
     }
 
-    public async Task SetCellMeta (int visualRow, int visualColumn, string key, object? value)
-    {
-        await _handsontableJsReference.InvokeVoidAsync(
-            "invokeMethod", "setCellMeta", visualRow, visualColumn, key, value);
-    }
-
-    public async Task SetCellMetaObject (int visualRow, int visualColumn, IDictionary<string,object?> prop)
-    {
-        await _handsontableJsReference.InvokeVoidAsync(
-            "invokeMethod", "setCellMetaObject", visualRow, visualColumn, prop);
-    }
-
-    public async Task SetDataAtCell (int visualRow, int visualColumn, string? value, string? source = null)
-    {
-        await _handsontableJsReference.InvokeVoidAsync(
-            "invokeMethod", "setDataAtCell", visualRow, visualColumn, value, source);
-    }
-
-
-    /**
-    * Set data at cell.
-    * @param {Array} changes An array of arrays in form of [row, col, value]. 
-    *                Where row is visual row index {int}, col {int} is the visual column index, 
-    *                and value {string} is a new value.
-    */
-    public async Task SetDataAtCell (IList<IList<object?>> changes, string? source = null)
-    {
-        await _handsontableJsReference.InvokeVoidAsync(
-            "invokeMethod", "setDataAtCell", changes, null, null, source);
-    }
-
-    /**
-    * Set data at cell.
-    * @param {Array} changes An array of arrays in form of [row, col, value]. 
-    *                Where row is visual row index {int}, prop {string} is the column property, 
-    *                and value {string} is a new value.
-    */
-    public async Task SetDataAtRowProp (IList<IList<object?>> changes, string? source = null)
-    {
-        await _handsontableJsReference.InvokeVoidAsync(
-            "invokeMethod", "setDataAtRowProp", changes, null, null, source);
-    }
     /**
     * Property to column.
     * @returns Visual column index.
@@ -420,6 +378,53 @@ public class HandsontableJsInterop : IAsyncDisposable
         visualRowEnd ??= visualRowStart;
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "selectRows", 
             visualRowStart, visualRowEnd, focusPosition);
+    }
+
+    /**
+    * Sets a property defined by the key property to the meta object of a cell corresponding to 
+    * visualRow and visualColumn.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#setcellmeta 
+    */
+    public async Task SetCellMeta (int visualRow, int visualColumn, string key, object? value)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setCellMeta", visualRow, visualColumn, key, value);
+    }
+
+    public async Task SetCellMetaObject (int visualRow, int visualColumn, IDictionary<string,object?> prop)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setCellMetaObject", visualRow, visualColumn, prop);
+    }
+
+    public async Task SetDataAtCell (int visualRow, int visualColumn, string? value, string? source = null)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setDataAtCell", visualRow, visualColumn, value, source);
+    }
+
+    /**
+    * Set data at cell.
+    * @param {Array} changes An array of arrays in form of [row, col, value]. 
+    *                Where row is visual row index {int}, col {int} is the visual column index, 
+    *                and value {string} is a new value.
+    */
+    public async Task SetDataAtCell (IList<IList<object?>> changes, string? source = null)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setDataAtCell", changes, null, null, source);
+    }
+
+    /**
+    * Set data at cell.
+    * @param {Array} changes An array of arrays in form of [row, col, value]. 
+    *                Where row is visual row index {int}, prop {string} is the column property, 
+    *                and value {string} is a new value.
+    */
+    public async Task SetDataAtRowProp (IList<IList<object?>> changes, string? source = null)
+    {
+        await _handsontableJsReference.InvokeVoidAsync(
+            "invokeMethod", "setDataAtRowProp", changes, null, null, source);
     }
 
     public async Task<int> ToPhysicalColumn (int visualColumn)

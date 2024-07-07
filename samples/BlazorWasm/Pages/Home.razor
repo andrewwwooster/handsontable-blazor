@@ -44,8 +44,8 @@
     <option>SelectCells</option>
     <option>SelectColumns</option>
     <option>SelectRows</option>
-    <option>SetCellData</option>
     <option>SetCellMeta</option>
+    <option>SetDataAtCell</option>
     <option>ToHtml</option>
     <option>ToPhysicalColumn</option>
     <option>ToPhysicalRow</option>
@@ -415,15 +415,6 @@ else if (_actionMethod == "SelectRows")
         <button @onclick='async () => AppendToEventLog("SelectRows", await Handsontable.Core.SelectRows(_actionRow))'>Apply</button>
     </div>
 }
-else if (_actionMethod == "SetCellData")
-{
-    <div>
-        Row: <InputNumber @bind-Value="_actionRow"/>
-        Col: <InputNumber @bind-Value="_actionColumn"/>
-        Value: <InputText @bind-Value="_actionValue"/>
-        <button @onclick="() => Handsontable.Core.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
-    </div>
-}
 else if (_actionMethod == "SetCellMeta")
 {
     <div>
@@ -432,6 +423,15 @@ else if (_actionMethod == "SetCellMeta")
         Key: <InputText @bind-Value="_actionKey"/>
         Value: <InputText @bind-Value="_actionValue"/>
         <button @onclick="() => Handsontable.Core.SetCellMeta(_actionRow, _actionColumn, _actionKey, _actionValue)">Apply</button>
+    </div>
+}
+else if (_actionMethod == "SetDataAtCell")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        Value: <InputText @bind-Value="_actionValue"/>
+        <button @onclick="() => Handsontable.Core.SetDataAtCell(_actionRow, _actionColumn, _actionValue)">Apply</button>
     </div>
 }
 else if (_actionMethod == "ToHtml")
@@ -584,7 +584,7 @@ else if (_actionMethod == "ValidateCells")
 
     private HandsontableBlazor.ConfigurationOptions? _configurationOptions = null;
 
-    private string _actionMethod = "SetCellData";
+    private string _actionMethod = "SetDataAtCell";
     private int _actionRow = 0;
     private int _actionColumn = 0;
     private string _actionKey = "";
