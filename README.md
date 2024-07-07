@@ -9,10 +9,18 @@ This solution is composed of the following projects:
 * ```samples/BlazorWasm``` A sample Blazor WASM project that demonstrates the HandsontableBlazor capabilities.
 * ```tests/BlazorWasm.Playwright``` A [Playwright](https://playwright.dev/dotnet/) UI test project that tests the HandsontableBlazor component using the samples/BlazorWasm project.
 
-## How to get started
-1. Install [dotnet sdk](https://dotnet.microsoft.com/en-us/download)
+## Prerequisites
+* .NET 8.0 or above, C# 12 or above.
+* Handsontable 14.3 or above
+
+## Getting Started
+
+### Build the project from command line
+1. Install [.NET sdk](https://dotnet.microsoft.com/en-us/download)
 2. Clone this project
 3. ```dotnet build```
+
+### Run the sample project
 4. ```cd samples/BlazorWasm```
 5. ```dotnet run```
 
