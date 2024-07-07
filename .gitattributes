@@ -3,4 +3,4 @@
 ###############################################################################
 * text=auto
 
-src/HandsontableBlazor/wwwroot/lib/** linguist-vendored=false
+src/HandsontableBlazor/wwwroot/lib/** linguist-detectable=false
