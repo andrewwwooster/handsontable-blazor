@@ -351,6 +351,20 @@ public class HandsontableJsInterop : IAsyncDisposable
             visualRow, visualColumn, visualRowEnd, visualColumnEnd, scrollToCell, changeListener);
     }
 
+    /**
+    * Select columns.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#selectrows
+    */
+    public async Task<bool> SelectRows (
+        int visualRow, 
+        int? visualRowEnd = null, 
+        int focusPosition = 0)
+    {
+        visualRowEnd ??= visualRow;
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "selectRows", 
+            visualRow, visualRowEnd, focusPosition);
+    }
+
     public async Task<int> ToPhysicalColumn (int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);

@@ -40,6 +40,7 @@
     <option>IsRedoAvailable</option>
     <option>Redo</option>
     <option>SelectCell</option>
+    <option>SelectRows</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
     <option>ToHtml</option>
@@ -381,6 +382,13 @@ else if (_actionMethod == "SelectCell")
         Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button @onclick='async () => AppendToEventLog("SelectCell", await Handsontable.Core.SelectCell(_actionRow, _actionColumn))'>Apply</button>
+    </div>
+}
+else if (_actionMethod == "SelectRows")
+{
+    <div>
+        Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
+        <button @onclick='async () => AppendToEventLog("SelectRows", await Handsontable.Core.SelectRows(_actionRow))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SetCellData")
