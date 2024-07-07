@@ -39,6 +39,7 @@
     <option>IsLtr</option>
     <option>IsRedoAvailable</option>
     <option>Redo</option>
+    <option>SelectCell</option>
     <option>SetCellData</option>
     <option>SetCellMeta</option>
     <option>ToHtml</option>
@@ -244,7 +245,7 @@ else if (_actionMethod == "GetCell")
 else if (_actionMethod == "GetColWidth")
 {
     <div>
-        Column: <InputNumber @bind-Value="_actionColumn"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog("GetColWidth", await Handsontable.Core.GetColWidth(_actionColumn)))'>
             Apply
@@ -312,7 +313,7 @@ else if (_actionMethod == "IsColumnModificationAllowed")
 else if (_actionMethod == "IsEmptyCol")
 {
     <div>
-        Column: <InputNumber @bind-Value="_actionColumn"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='async () => AppendToEventLog("IsEmptyCol", await Handsontable.Core.IsEmptyCol(_actionColumn))'>
             Apply
@@ -322,7 +323,7 @@ else if (_actionMethod == "IsEmptyCol")
 else if (_actionMethod == "IsEmptyRow")
 {
     <div>
-        Column: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionRow"/>
         <button 
             @onclick='async () => AppendToEventLog("IsEmptyRow", await Handsontable.Core.IsEmptyRow(_actionRow))'>
             Apply
@@ -372,6 +373,14 @@ else if (_actionMethod == "Redo")
             @onclick='async () => await Handsontable.Core.Redo()'>
             Apply
         </button>
+    </div>
+}
+else if (_actionMethod == "SelectCell")
+{
+    <div>
+        Row: <InputNumber CssStyle="width: 4em" @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button @onclick='async () => AppendToEventLog("SelectCell", await Handsontable.Core.SelectCell(_actionRow, _actionColumn))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SetCellData")
@@ -490,8 +499,8 @@ else if (_actionMethod == "ValidateCells")
 }else if (_actionMethod == "ValidateColumns")
 {
     <div>
-        Start Column: <InputNumber @bind-Value="_actionRow"/>
-        End Column: <InputNumber @bind-Value="_actionColumn"/>
+        Start Col: <InputNumber @bind-Value="_actionRow"/>
+        End Col: <InputNumber @bind-Value="_actionColumn"/>
         @{
             var columns = Enumerable.Range(_actionRow, 1+_actionColumn-_actionRow).ToArray();
             <button 

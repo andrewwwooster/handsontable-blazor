@@ -340,6 +340,17 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "redo");
     }
 
+    public async Task<bool> SelectCell (
+        int visualRow, int visualColumn, 
+        int? visualRowEnd = null, int? visualColumnEnd = null, 
+        bool scrollToCell = true, bool changeListener = true)
+    {
+        visualRowEnd ??= visualRow;
+        visualColumnEnd ??= visualColumn;
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "selectCell", 
+            visualRow, visualColumn, visualRowEnd, visualColumnEnd, scrollToCell, changeListener);
+    }
+
     public async Task<int> ToPhysicalColumn (int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);
