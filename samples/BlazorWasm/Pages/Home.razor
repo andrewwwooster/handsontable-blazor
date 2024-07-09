@@ -110,7 +110,7 @@ else if (_actionMethod == "ColToProp")
     <div>
         Visual Index: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='async () => AppendToEventLog("ColToProp", await Handsontable.Core.ColToPropString(_actionColumn))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.ColToPropString(_actionColumn))'>
             Apply
         </button>
     </div>
@@ -119,7 +119,7 @@ else if (_actionMethod == "CountColHeaders")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountColHeaders", await Handsontable.Core.CountColHeaders())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountColHeaders())'>
             Apply
         </button>
     </div>
@@ -128,7 +128,7 @@ else if (_actionMethod == "CountCols")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountCols", await Handsontable.Core.CountCols())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountCols())'>
             Apply
         </button>
     </div>
@@ -137,7 +137,7 @@ else if (_actionMethod == "CountEmptyCols")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountEmptyCols", await Handsontable.Core.CountEmptyCols())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountEmptyCols())'>
             Apply
         </button>
     </div>
@@ -146,7 +146,7 @@ else if (_actionMethod == "CountEmptyRows")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountEmptyRows", await Handsontable.Core.CountEmptyRows())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountEmptyRows())'>
             Apply
         </button>
     </div>
@@ -155,7 +155,7 @@ else if (_actionMethod == "CountRenderedCols")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountRenderedCols", await Handsontable.Core.CountRenderedCols())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountRenderedCols())'>
             Apply
         </button>
     </div>
@@ -164,7 +164,7 @@ else if (_actionMethod == "CountRenderedRows")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountRenderedRows", await Handsontable.Core.CountRenderedRows())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountRenderedRows())'>
             Apply
         </button>
     </div>
@@ -173,7 +173,7 @@ else if (_actionMethod == "CountSourceCols")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountSourceCols", await Handsontable.Core.CountSourceCols())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountSourceCols())'>
             Apply
         </button>
     </div>
@@ -182,7 +182,7 @@ else if (_actionMethod == "CountSourceRows")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountSourceRows", await Handsontable.Core.CountSourceRows())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountSourceRows())'>
             Apply
         </button>
     </div>
@@ -191,7 +191,7 @@ else if (_actionMethod == "CountVisibleCols")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountVisibleCols", await Handsontable.Core.CountVisibleCols())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountVisibleCols())'>
             Apply
         </button>
     </div>
@@ -200,7 +200,7 @@ else if (_actionMethod == "CountVisibleRows")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountVisibleRows", await Handsontable.Core.CountVisibleRows())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountVisibleRows())'>
             Apply
         </button>
     </div>
@@ -209,7 +209,7 @@ else if (_actionMethod == "CountRowHeaders")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountRowHeaders", await Handsontable.Core.CountRowHeaders())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountRowHeaders())'>
             Apply
         </button>
     </div>
@@ -218,7 +218,7 @@ else if (_actionMethod == "CountRows")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("CountRows", await Handsontable.Core.CountRows())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.CountRows())'>
             Apply
         </button>
     </div>
@@ -291,7 +291,7 @@ else if (_actionMethod == "GetColWidth")
     <div>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='@(async () => AppendToEventLog("GetColWidth", await Handsontable.Core.GetColWidth(_actionColumn)))'>
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetColWidth(_actionColumn)))'>
             Apply
         </button>
     </div>
@@ -302,7 +302,7 @@ else if (_actionMethod == "GetData")
         Row2: <InputNumber @bind-Value="_actionRow"/>
         Column2: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='@(async () => AppendToEventLog("GetData", await Handsontable.Core.GetData(_actionRow, _actionColumn, null, null)))'>
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetData(_actionRow, _actionColumn, null, null)))'>
             Apply
         </button>
     </div>
@@ -313,7 +313,7 @@ else if (_actionMethod == "GetDataType")
         Row To: <InputNumber @bind-Value="_actionRow"/>
         Column Ro: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='@(async () => AppendToEventLog("GetDataType", await Handsontable.Core.GetDataType(0, 0, _actionRow, _actionColumn)))'>
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataType(0, 0, _actionRow, _actionColumn)))'>
             Apply
         </button>
     </div>
@@ -323,7 +323,7 @@ else if (_actionMethod == "GetRowHeight")
     <div>
         Row: <InputNumber @bind-Value="_actionRow"/>
         <button 
-            @onclick='@(async () => AppendToEventLog("GetRowHeight", await Handsontable.Core.GetRowHeight(_actionRow)))'>
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetRowHeight(_actionRow)))'>
             Apply
         </button>
     </div>
@@ -332,7 +332,7 @@ else if (_actionMethod == "HasColHeaders")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("HasColHeaders", await Handsontable.Core.HasColHeaders())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.HasColHeaders())'>
             Apply
         </button>
     </div>
@@ -342,7 +342,7 @@ else if (_actionMethod == "HasHook")
     <div>
         Hook Name: <InputText @bind-Value="_actionKey"/>
         <button 
-            @onclick='async () => AppendToEventLog("HasHook", await Handsontable.Core.HasHook(_actionKey))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.HasHook(_actionKey))'>
             Apply
         </button>
     </div>
@@ -351,7 +351,7 @@ else if (_actionMethod == "HasRowHeaders")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("HasRowHeaders", await Handsontable.Core.HasRowHeaders())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.HasRowHeaders())'>
             Apply
         </button>
     </div>
@@ -360,7 +360,7 @@ else if (_actionMethod == "IsColumnModificationAllowed")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("IsColumnModificationAllowed", await Handsontable.Core.IsColumnModificationAllowed())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsColumnModificationAllowed())'>
             Apply
         </button>
     </div>
@@ -370,7 +370,7 @@ else if (_actionMethod == "IsEmptyCol")
     <div>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='async () => AppendToEventLog("IsEmptyCol", await Handsontable.Core.IsEmptyCol(_actionColumn))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsEmptyCol(_actionColumn))'>
             Apply
         </button>
     </div>
@@ -380,7 +380,7 @@ else if (_actionMethod == "IsEmptyRow")
     <div>
         Col: <InputNumber @bind-Value="_actionRow"/>
         <button 
-            @onclick='async () => AppendToEventLog("IsEmptyRow", await Handsontable.Core.IsEmptyRow(_actionRow))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsEmptyRow(_actionRow))'>
             Apply
         </button>
     </div>
@@ -389,7 +389,7 @@ else if (_actionMethod == "IsExecutionSuspended")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("IsExecutionSuspended", await Handsontable.Core.IsExecutionSuspended())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsExecutionSuspended())'>
             Apply
         </button>
     </div>
@@ -398,7 +398,7 @@ else if (_actionMethod == "IsListening")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("IsListening", await Handsontable.Core.IsListening())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsListening())'>
             Apply
         </button>
     </div>
@@ -407,7 +407,7 @@ else if (_actionMethod == "IsLtr")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("IsLtr", await Handsontable.Core.IsLtr())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsLtr())'>
             Apply
         </button>
     </div>
@@ -416,7 +416,7 @@ else if (_actionMethod == "IsRedoAvailable")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("IsRedoAvailable", await Handsontable.Core.IsRedoAvailable())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.IsRedoAvailable())'>
             Apply
         </button>
     </div>
@@ -450,7 +450,7 @@ else if (_actionMethod == "SelectCell")
     <div>
         Row: <InputNumber @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
-        <button @onclick='async () => AppendToEventLog("SelectCell", await Handsontable.Core.SelectCell(_actionRow, _actionColumn))'>Apply</button>
+        <button @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.SelectCell(_actionRow, _actionColumn))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SelectCells")
@@ -458,21 +458,21 @@ else if (_actionMethod == "SelectCells")
     <div>
         Row: <InputNumber @bind-Value="_actionRow"/>
         Col: <InputNumber @bind-Value="_actionColumn"/>
-        <button @onclick='async () => AppendToEventLog("SelectCells", await Handsontable.Core.SelectCells([[_actionRow, _actionColumn]]))'>Apply</button>
+        <button @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.SelectCells([[_actionRow, _actionColumn]]))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SelectColumns")
 {
     <div>
         Col: <InputNumber @bind-Value="_actionColumn"/>
-        <button @onclick='async () => AppendToEventLog("SelectColumns", await Handsontable.Core.SelectColumns(_actionColumn))'>Apply</button>
+        <button @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.SelectColumns(_actionColumn))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SelectRows")
 {
     <div>
         Row: <InputNumber  @bind-Value="_actionRow"/>
-        <button @onclick='async () => AppendToEventLog("SelectRows", await Handsontable.Core.SelectRows(_actionRow))'>Apply</button>
+        <button @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.SelectRows(_actionRow))'>Apply</button>
     </div>
 }
 else if (_actionMethod == "SetCellMeta")
@@ -498,7 +498,7 @@ else if (_actionMethod == "ToHtml")
 {
     <div>
         <button 
-            @onclick='async () => AppendToEventLog("ToHtml", await Handsontable.Core.ToHtml())'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.ToHtml())'>
             Apply
         </button>
     </div>
@@ -508,7 +508,7 @@ else if (_actionMethod == "ToPhysicalColumn")
     <div>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='async () => AppendToEventLog("ToPhysicalColumn", await Handsontable.Core.ToPhysicalColumn(_actionColumn))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.ToPhysicalColumn(_actionColumn))'>
             Apply
         </button>
     </div>
@@ -518,7 +518,7 @@ else if (_actionMethod == "ToPhysicalRow")
     <div>
         Col: <InputNumber @bind-Value="_actionRow"/>
         <button 
-            @onclick='async () => AppendToEventLog("ToPhysicalRow", await Handsontable.Core.ToPhysicalRow(_actionRow))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.ToPhysicalRow(_actionRow))'>
             Apply
         </button>
     </div>
@@ -542,7 +542,7 @@ else if (_actionMethod == "ToVisualColumn")
     <div>
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
-            @onclick='async () => AppendToEventLog("ToVisualColumn", await Handsontable.Core.ToVisualColumn(_actionColumn))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.ToVisualColumn(_actionColumn))'>
             Apply
         </button>
     </div>
@@ -552,7 +552,7 @@ else if (_actionMethod == "ToVisualRow")
     <div>
         Col: <InputNumber @bind-Value="_actionRow"/>
         <button 
-            @onclick='async () => AppendToEventLog("ToVisualRow", await Handsontable.Core.ToVisualRow(_actionRow))'>
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.ToVisualRow(_actionRow))'>
             Apply
         </button>
     </div>
