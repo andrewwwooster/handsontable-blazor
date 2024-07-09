@@ -25,8 +25,11 @@
     <option>CountVisibleRows</option>
     <option>GetCell</option>
     <option>GetCellMeta</option>
+    <option>GetCellsMeta</option>
+    <option>GetCellMetaAtRow</option>
     <option>GetColWidth</option>
     <option>GetData</option>
+    <option>GetDataType</option>
     <option>GetRowHeight</option>
     <option>HasColHeaders</option>
     <option>HasHook</option>
@@ -38,6 +41,7 @@
     <option>IsListening</option>
     <option>IsLtr</option>
     <option>IsRedoAvailable</option>
+    <option>Listen</option>
     <option>Redo</option>
     <option>SelectAll</option>
     <option>SelectCell</option>
@@ -54,6 +58,7 @@
     <option>ToVisualRow</option>
     <option>ToHtml</option>
     <option>Undo</option>
+    <option>Unlisten</option>
     <option>UpdateSettings</option>
     <option>ValidateCells</option>
     <option>ValidateColumns</option>
@@ -231,6 +236,31 @@ else if (_actionMethod == "GetCellMeta")
         </button>
     </div>
 }
+else if (_actionMethod == "GetCellMetaAtRow")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick="@(async () => {
+                var data = await Handsontable.Core.GetCellMetaAtRow(_actionRow);
+                AppendToEventLog("GetCellMetaAtRow", data);
+            })">
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetCellsMeta")
+{
+    <div>
+        <button 
+            @onclick="@(async () => {
+                var data = await Handsontable.Core.GetCellsMeta();
+                AppendToEventLog("GetCellsMeta", data);
+            })">
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "GetCell")
 {
     <div>
@@ -263,6 +293,17 @@ else if (_actionMethod == "GetData")
         Column2: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog("GetData", await Handsontable.Core.GetData(_actionRow, _actionColumn, null, null)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetDataType")
+{
+    <div>
+        Row To: <InputNumber @bind-Value="_actionRow"/>
+        Column Ro: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog("GetDataType", await Handsontable.Core.GetDataType(0, 0, _actionRow, _actionColumn)))'>
             Apply
         </button>
     </div>
@@ -366,6 +407,15 @@ else if (_actionMethod == "IsRedoAvailable")
     <div>
         <button 
             @onclick='async () => AppendToEventLog("IsRedoAvailable", await Handsontable.Core.IsRedoAvailable())'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "Listen")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.Listen()'>
             Apply
         </button>
     </div>
@@ -502,6 +552,15 @@ else if (_actionMethod == "Undo")
     <div>
         <button 
             @onclick='async () => await Handsontable.Core.Undo()'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "Unlisten")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.Unlisten()'>
             Apply
         </button>
     </div>

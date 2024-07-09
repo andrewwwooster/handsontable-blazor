@@ -172,11 +172,37 @@ public class HandsontableJsInterop : IAsyncDisposable
         return new JQueryJsInterop(htmlTableCellElement);
     }
 
+    /**
+    * Get all the cells meta settings at least once generated in the table (in order of cell initialization).
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellsmeta
+    */
     public async Task<IDictionary<string,object>> GetCellMeta (int visualRow, int visualColumn)
     {
         var cellProperties = await _handsontableJsReference.InvokeAsync<Dictionary<string,object>>(
             "invokeMethod", "getCellMeta", visualRow, visualColumn);
         return cellProperties;
+    }
+
+    /**
+    * Returns an array of cell meta objects for specified physical row index.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellmetaatrow
+    */
+    public async Task<IList<IDictionary<string,object>>> GetCellMetaAtRow (int physicalRow)
+    {
+        var cellMetaList = await _handsontableJsReference.InvokeAsync<List<IDictionary<string,object>>>(
+            "invokeMethod", "getCellMetaAtRow", physicalRow);
+        return cellMetaList;
+    }
+
+    /**
+    * Get all the cells meta settings at least once generated in the table (in order of cell initialization).
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellsmeta
+    */
+    public async Task<IList<IDictionary<string,object>>> GetCellsMeta ()
+    {
+        var cellMetaList = await _handsontableJsReference.InvokeAsync<List<IDictionary<string,object>>>(
+            "invokeMethod", "getCellsMeta");
+        return cellMetaList;
     }
 
     public async Task<int> GetColWidth(int visualColumn)
@@ -187,6 +213,15 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task<IList<IList<object>>> GetData(int? visualRow, int? visualColumn, int? visualRow2, int? visualColumn2)
     {
         return await _handsontableJsReference.InvokeAsync<IList<IList<object>>>("invokeMethod", "getData", visualRow, visualColumn, visualRow2, visualColumn2);
+    }
+
+    /**
+    * Returns a data type defined in the Handsontable settings under the type key (Options#type). If there are cells with different types in the selected range, it returns 'mixed'.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdatatype
+    */
+    public async Task<string> GetDataType(int visualRowFrom, int visualColumnFrom, int visualRowTo, int visualColumnTo)
+    {
+        return await _handsontableJsReference.InvokeAsync<string>("invokeMethod", "getDataType", visualRowFrom, visualColumnFrom, visualRowTo, visualColumnTo);
     }
 
     public async Task<int?> GetRowHeight(int visualRow)
@@ -282,6 +317,16 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task<bool> IsUndoAvailable()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isUndoAvailable");
+    }
+
+    /**
+    * Listen to the keyboard input on document body. This allows Handsontable to 
+    * capture keyboard events and respond in the right way.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#listen
+    */
+    public async Task Listen()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "listen");
     }
 
     /**
@@ -462,6 +507,16 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task Undo ()
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "undo");
+    }
+
+    /**
+    * Stop listening to keyboard input on the document body. Calling this method 
+    * makes the Handsontable inactive for any keyboard events.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#unlisten
+    */
+    public async Task Unlisten()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "unlisten");
     }
 
     /**
