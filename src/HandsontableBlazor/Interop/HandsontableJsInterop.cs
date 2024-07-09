@@ -165,6 +165,15 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRows");
     }
 
+    /**
+    * Removes the table from the DOM and destroys the instance of the Handsontable.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#destroy
+    */
+    public async Task Destroy()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "destroy");
+    }
+
     public async Task<JQueryJsInterop> GetCell (int visualRow, int visualColumn, bool topmost = false)
     {
         var htmlTableCellElement = await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>(

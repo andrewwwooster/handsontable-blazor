@@ -23,6 +23,7 @@
     <option>CountSourceRows</option>
     <option>CountVisibleCols</option>
     <option>CountVisibleRows</option>
+    <option>Destroy</option>
     <option>GetCell</option>
     <option>GetCellMeta</option>
     <option>GetCellsMeta</option>
@@ -222,6 +223,15 @@ else if (_actionMethod == "CountRows")
         </button>
     </div>
 }
+else if (_actionMethod == "Destroy")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.Destroy()'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "GetCellMeta")
 {
     <div>
@@ -230,7 +240,7 @@ else if (_actionMethod == "GetCellMeta")
         <button 
             @onclick="@(async () => {
                 var data = await Handsontable.Core.GetCellMeta(_actionRow, _actionColumn);
-                AppendToEventLog("GetCellMeta", data);
+                AppendToEventLog(_actionMethod, data);
             })">
             Apply
         </button>
@@ -243,7 +253,7 @@ else if (_actionMethod == "GetCellMetaAtRow")
         <button 
             @onclick="@(async () => {
                 var data = await Handsontable.Core.GetCellMetaAtRow(_actionRow);
-                AppendToEventLog("GetCellMetaAtRow", data);
+                AppendToEventLog(_actionMethod, data);
             })">
             Apply
         </button>
@@ -255,7 +265,7 @@ else if (_actionMethod == "GetCellsMeta")
         <button 
             @onclick="@(async () => {
                 var data = await Handsontable.Core.GetCellsMeta();
-                AppendToEventLog("GetCellsMeta", data);
+                AppendToEventLog(_actionMethod, data);
             })">
             Apply
         </button>
