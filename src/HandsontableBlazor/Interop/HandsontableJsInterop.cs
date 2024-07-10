@@ -224,11 +224,22 @@ public class HandsontableJsInterop : IAsyncDisposable
         return cellMetaList;
     }
 
+    /**
+    * Returns the width of the requested column.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcolwidth
+    */
     public async Task<int> GetColWidth(int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "getColWidth", visualColumn);
     }
 
+    /**
+    * Returns the current data object the same one that was passed by ConfigurationOptions.
+    * or loadData method, unless some modifications have been applied 
+    * (i.e. Sequence of rows/columns was changed, some row/column was skipped). 
+    * If that's the case - use the GetSourceData() method.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdata
+    */
     public async Task<IList<IList<object>>> GetData(int? visualRow, int? visualColumn, int? visualRow2, int? visualColumn2)
     {
         return await _handsontableJsReference.InvokeAsync<IList<IList<object>>>("invokeMethod", "getData", visualRow, visualColumn, visualRow2, visualColumn2);
