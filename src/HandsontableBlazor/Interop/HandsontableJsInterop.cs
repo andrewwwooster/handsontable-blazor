@@ -603,6 +603,19 @@ public class HandsontableJsInterop : IAsyncDisposable
         await module.InvokeVoidAsync("registerRenderer", rendererName, dotNetHelper);
     }
 
+    /**
+    * Removes the hook listener previously registered with AddHook().
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#removehook
+    */
+    public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, object> hook)
+        where HookArgsT : BaseHookArgs
+    {
+        var hookKey = ICallbackProxy.CreateKey(hookName, hook);
+        var hookProxy = _hookProxyDict[hookKey]; 
+        await _handsontableJsReference.InvokeVoidAsync("removeHook", hookProxy);
+        _hookProxyDict.Remove(hookKey);
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_handsontableModuleTask.IsValueCreated)
@@ -683,15 +696,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
     
-
-    public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, object> hook)
-        where HookArgsT : BaseHookArgs
-    {
-        var hookKey = ICallbackProxy.CreateKey(hookName, hook);
-        var hookProxy = _hookProxyDict[hookKey]; 
-        await _handsontableJsReference.InvokeVoidAsync("removeHook", hookProxy);
-        _hookProxyDict.Remove(hookKey);
-    }
 
     [JSInvokable]
     public async Task OnRendererCallback(
