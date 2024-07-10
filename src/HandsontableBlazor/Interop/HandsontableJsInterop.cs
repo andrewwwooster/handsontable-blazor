@@ -352,6 +352,27 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "redo");
     }
 
+    /**
+    * Updates dimensions of the table. The method compares previous dimensions with the current 
+    * ones and updates accordingly.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#refreshdimensions
+    */
+    public async Task RefreshDimensions ()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "refreshDimensions");
+    }
+
+    /**
+    * Remove a property defined by the key argument from the cell meta object for the provided 
+    * visualRow and visualColumn coordinates.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#removecellmeta
+    */
+    public async Task RemoveCellMeta (int visualRow, int visualColumn, string key)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "removeCellMeta", 
+            visualRow, visualColumn, key);
+    }
+
     public class SelectAllOptions
     {
         public object FocusPosition { get => FocusPositionCellCoords ?? (object) false;} 

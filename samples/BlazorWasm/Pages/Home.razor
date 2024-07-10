@@ -44,6 +44,8 @@
     <option>IsRedoAvailable</option>
     <option>Listen</option>
     <option>Redo</option>
+    <option>RefreshDimensions</option>
+    <option>RemoveCellMeta</option>
     <option>SelectAll</option>
     <option>SelectCell</option>
     <option>SelectCells</option>
@@ -439,6 +441,27 @@ else if (_actionMethod == "Redo")
         </button>
     </div>
 }
+else if (_actionMethod == "RefreshDimensions")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.RefreshDimensions()'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "RemoveCellMeta")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        Key: <InputText @bind-Value="_actionKey"/>
+        <button 
+            @onclick='async () => await Handsontable.Core.RemoveCellMeta(_actionRow, _actionColumn, _actionKey)'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "SelectAll")
 {
     <div>
@@ -582,7 +605,7 @@ else if (_actionMethod == "UpdateSettings")
             <option>width</option>
             <option>height</option>
         </InputSelect>
-        Visual Index: <InputNumber @bind-Value="_actionRow"/>
+        Size: <InputNumber @bind-Value="_actionRow"/>
         <button 
             @onclick='async () => await Handsontable.Core.UpdateSettings(new Dictionary<string, object>{ {_updateOptionName, _actionRow } })'>
             Apply
