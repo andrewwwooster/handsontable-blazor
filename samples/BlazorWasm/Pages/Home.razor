@@ -24,6 +24,7 @@
     <option>CountVisibleCols</option>
     <option>CountVisibleRows</option>
     <option>Destroy</option>
+    <option>EmptySelectedCells</option>
     <option>GetCell</option>
     <option>GetCellMeta</option>
     <option>GetCellsMeta</option>
@@ -230,6 +231,15 @@ else if (_actionMethod == "Destroy")
     <div>
         <button 
             @onclick='async () => await Handsontable.Core.Destroy()'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "EmptySelectedCells")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.EmptySelectedCells()'>
             Apply
         </button>
     </div>

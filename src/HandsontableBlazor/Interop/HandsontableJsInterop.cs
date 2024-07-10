@@ -182,6 +182,16 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Erases content from cells that have been selected in the table.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#emptyselectedcells
+    */
+    public async Task EmptySelectedCells (string? source = null)
+    {
+        await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>(
+            "invokeMethodReturnsJQuery", "emptySelectedCells", source);
+    }
+
+    /**
     * Get all the cells meta settings at least once generated in the table (in order of cell initialization).
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellsmeta
     */
