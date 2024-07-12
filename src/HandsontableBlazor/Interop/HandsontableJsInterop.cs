@@ -405,6 +405,34 @@ public class HandsontableJsInterop : IAsyncDisposable
             callbackProxy);
     }    
 
+   public class ScrollViewportToOptions
+    {
+        public int Row { get; set; }
+        public int Col { get; set; }
+
+        /**
+        * Values: "start", "end"
+        */
+        public string? VerticalSnap { get; set; } = null;
+
+        /**
+        * Values: "start", "end"
+        */
+        public string? HorizontalSnap { get; set; } = null;
+
+        public bool ConsiderHiddenIndexes { get; set; } = true;
+    }
+
+    /**
+    * Scroll viewport to coordinates specified by the row and/or col object properties.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#scrollviewportto
+    */
+    public async Task<bool> ScrollViewportTo (ScrollViewportToOptions options)
+    {
+        return await _handsontableJsReference.InvokeAsync<bool>("invokeMethodWithCallback", "scrollViewportTo", 
+            options);
+    }    
+
     public class SelectAllOptions
     {
         public object FocusPosition { get => FocusPositionCellCoords ?? (object) false;} 

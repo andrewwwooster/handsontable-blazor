@@ -48,6 +48,7 @@
     <option>RefreshDimensions</option>
     <option>RemoveCellMeta</option>
     <option>ScrollToFocusedCell</option>
+    <option>ScrollViewportTo</option>
     <option>SelectAll</option>
     <option>SelectCell</option>
     <option>SelectCells</option>
@@ -477,6 +478,22 @@ else if (_actionMethod == "ScrollToFocusedCell")
 {
     <div>
         <button @onmouseenter='async () => await Handsontable.Core.ScrollToFocusedCell(OnCallbackAsync)'>Hover</button>
+    </div>
+}
+else if (_actionMethod == "ScrollViewportTo")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        @{
+            var row = _actionRow;
+            var options = new HandsontableJsInterop.ScrollViewportToOptions 
+            { 
+                Row = _actionRow,
+                Col = _actionColumn
+            };
+            <button @onclick='async () => await Handsontable.Core.ScrollViewportTo(options)'>Apply</button>
+        }
     </div>
 }
 else if (_actionMethod == "SelectAll")
