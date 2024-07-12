@@ -394,6 +394,17 @@ public class HandsontableJsInterop : IAsyncDisposable
             visualRow, visualColumn, key);
     }
 
+    /**
+    * Scrolls the viewport to coordinates specified by the currently focused cell.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#scrolltofocusedcell
+    */
+    public async Task ScrollToFocusedCell (Func<ScrollToFocusedCellArgs,Task> callback)
+    {
+        var callbackProxy = new VoidAsyncCallbackProxy<ScrollToFocusedCellArgs>(callback);
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "scrollToFocusedCell", 
+            callbackProxy);
+    }    
+
     public class SelectAllOptions
     {
         public object FocusPosition { get => FocusPositionCellCoords ?? (object) false;} 

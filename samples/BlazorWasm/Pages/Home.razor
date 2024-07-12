@@ -47,6 +47,7 @@
     <option>Redo</option>
     <option>RefreshDimensions</option>
     <option>RemoveCellMeta</option>
+    <option>ScrollToFocusedCell</option>
     <option>SelectAll</option>
     <option>SelectCell</option>
     <option>SelectCells</option>
@@ -470,6 +471,12 @@ else if (_actionMethod == "RemoveCellMeta")
             @onclick='async () => await Handsontable.Core.RemoveCellMeta(_actionRow, _actionColumn, _actionKey)'>
             Apply
         </button>
+    </div>
+}
+else if (_actionMethod == "ScrollToFocusedCell")
+{
+    <div>
+        <button @onmouseenter='async () => await Handsontable.Core.ScrollToFocusedCell(OnCallbackAsync)'>Hover</button>
     </div>
 }
 else if (_actionMethod == "SelectAll")

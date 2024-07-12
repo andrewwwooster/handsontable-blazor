@@ -5,16 +5,18 @@ namespace HandsontableBlazor;
 
 public class Hooks 
 {
-    public abstract class BaseHookArgs : Callbacks.ICallbackArgs
+    public abstract class BaseHookArgs(string hookName, JsonDocument jdoc) 
+        : Callbacks.BaseCallbackArgs(jdoc)
     {
         [JsonPropertyOrder(-1)]
-        public required string HookName { get; set; }
+        public required string HookName { get; set; } = hookName;
     };
 
     public abstract class BaseCreateIndexArgs : BaseHookArgs
     {
-        public BaseCreateIndexArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
+        public BaseCreateIndexArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
             Index = jdoc.RootElement[0].Deserialize<int>();
             Amount = jdoc.RootElement[1].Deserialize<int>();
             Source = jdoc.RootElement[2].Deserialize<string>();
@@ -27,8 +29,9 @@ public class Hooks
 
     public abstract class BaseRemoveIndexArgs : BaseHookArgs
     {
-        public BaseRemoveIndexArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
+        public BaseRemoveIndexArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
             Index = jdoc.RootElement[0].Deserialize<int>();
             Amount = jdoc.RootElement[1].Deserialize<int>();
             PhysicalColumns = jdoc.RootElement[2].Deserialize<List<int>>()!;
@@ -47,8 +50,8 @@ public class Hooks
         public required string Source { get; set; }
 
         public AfterChangeArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
         {
-            HookName = hookName;
             Data = jdoc.RootElement[0].Deserialize<object[][]>()!;
             Source = jdoc.RootElement[1].Deserialize<string>()!;
         }
@@ -87,8 +90,9 @@ public class Hooks
 
     public class AfterSelectionArgs : BaseHookArgs
     {
-        public AfterSelectionArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
+        public AfterSelectionArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
             Row = jdoc.RootElement[0].Deserialize<int>();
             Column = jdoc.RootElement[1].Deserialize<int>();
             Row2 = jdoc.RootElement[2].Deserialize<int>();
@@ -108,8 +112,9 @@ public class Hooks
 
     public class AfterSelectionEndArgs : BaseHookArgs
     {
-        public AfterSelectionEndArgs(string hookName, JsonDocument jdoc) {
-            HookName = hookName;
+        public AfterSelectionEndArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
             Row = jdoc.RootElement[0].Deserialize<int>();
             Column = jdoc.RootElement[1].Deserialize<int>();
             Row2 = jdoc.RootElement[2].Deserialize<int>();

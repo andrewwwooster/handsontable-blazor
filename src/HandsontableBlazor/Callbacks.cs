@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace HandsontableBlazor;
 
@@ -11,19 +12,44 @@ namespace HandsontableBlazor;
  */
 public class Callbacks 
 {
-    public interface ICallbackArgs {}
+    public interface ICallbackArgs 
+    {
+        /**
+        * The JSON document containing the serialzied callback arguments invoked 
+        * from JavaScript.
+        */
+        JsonDocument JsArgs { get; } 
+    }
+
+    public abstract class BaseCallbackArgs : ICallbackArgs
+    {
+        public JsonDocument JsArgs { get; private set; }
+
+        public BaseCallbackArgs(JsonDocument jdoc)
+        {
+            JsArgs = jdoc;
+        }
+    }
 
     /**
     * Callback argument for all core Validate methods 
     * (ValidateCells(), ValidateColumns(), ValidateRows()).
     */
-    public class ValidateArgs : ICallbackArgs
+    public class ValidateArgs : BaseCallbackArgs
     {
         public ValidateArgs(JsonDocument jdoc)
+            : base(jdoc)
         {
             IsValid = jdoc.RootElement[0].Deserialize<bool>();
         }
 
         public bool IsValid { get; set; }
+    }
+
+    public class ScrollToFocusedCellArgs : BaseCallbackArgs
+    {
+        public ScrollToFocusedCellArgs(JsonDocument jdoc)
+            : base(jdoc)
+        { }
     }
 }
