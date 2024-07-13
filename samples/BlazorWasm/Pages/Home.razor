@@ -724,13 +724,7 @@ else if (_actionMethod == "ValidateCells")
     {
          _configurationOptions = new HandsontableBlazor.ConfigurationOptions 
          {
-            DataArrayOfArrays =  [
-                [ 1, "12!", "13" ],
-                [ 21, "22!", "23" ],
-                [ 31, "32!", "33" ]
-            ],
-            /*
-            DataArrayOfObjects =  {
+            DataArrayOfObjects =  [
                 new Dictionary<string, object> { 
                     { "A", 11 }, { "B", "12!" }, { "b", "13" } 
                 },
@@ -740,8 +734,7 @@ else if (_actionMethod == "ValidateCells")
                 new Dictionary<string, object> { 
                     { "A", 31 }, { "B", "32!" }, { "b", "33" } 
                 }
-            },
-            */
+            ],
             Cell = [
                 new ConfigurationOptions.HtCell(1,2) { ReadOnly = true },
                 new ConfigurationOptions.HtCell(2,2) { ReadOnly = true },

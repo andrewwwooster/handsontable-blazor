@@ -72,6 +72,10 @@ public class HandsontableJsInterop : IAsyncDisposable
         remove_col
     };
 
+    /**
+    * Alter the grid's structure by adding or removing rows and columns at specified positions.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#alter
+    */
     public async Task Alter(
         AlterActionEnum alterAction, 
         int visualIndex, 
@@ -82,84 +86,153 @@ public class HandsontableJsInterop : IAsyncDisposable
             alterActionStr, visualIndex, amount, source, keepEmptyRows);
     }
     
+    /**
+    * Clears the data from the table (the table settings remain intact).
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#clear
+    */
     public async Task Clear()
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "clear");
     }
 
+    /**
+    * Clears the undo buffer.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#clearundo
+    */
     public async Task ClearUndo()
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "clearUndo");
     }
 
+    /**
+    * Returns the property name that corresponds with the given column index. If the data 
+    * source is an array of arrays, it returns the column's index.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#coltoprop
+    */
     public async Task<object> ColToProp(int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "colToProp", visualColumn);
     }
 
+    /**
+    * Same as ColToProp() but returns the column's name.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#coltoprop
+    */
     public async Task<string> ColToPropString(int visualColumn)
     {
         var result = await ColToProp(visualColumn);
         return result.ToString()!;
     }
 
+    /**
+    * Returns the number of rendered column headers.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countcolheaders
+    */
     public async Task<int> CountColHeaders()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countColHeaders");
     }
 
+    /**
+    * Returns the total number of visible columns in the table.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countcols
+    */
     public async Task<int> CountCols()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countCols");
     }
 
+    /**
+    * Returns the number of empty columns. If the optional ending parameter is true, returns 
+    * the number of empty columns at right hand edge of the table.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countemptycols
+    */
     public async Task<int> CountEmptyCols()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countEmptyCols");
     }
 
+    /**
+    * Returns the number of empty rows. If the optional ending parameter is true, returns 
+    * the number of empty rows at the bottom of the table.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countemptyrows
+    */
     public async Task<int> CountEmptyRows()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countEmptyRows");
     }
 
+    /**
+    * Returns the number of rendered rows including columns that are partially or fully 
+    * rendered outside the table viewport.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countrenderedcols
+    */
     public async Task<int> CountRenderedCols()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRenderedCols");
     }
 
+    /**
+    * Returns the number of rendered rows including rows that are partially or fully rendered 
+    * outside the table viewport.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countrenderedrows
+    */
     public async Task<int> CountRenderedRows()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRenderedRows");
     }
 
+    /**
+    * Returns the total number of columns in the data source.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countsourcecols
+    */
     public async Task<int> CountSourceCols()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countSourceCols");
     }
 
+    /**
+    * Returns the total number of rows in the data source.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countsourcerows
+    */
     public async Task<int> CountSourceRows()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countSourceRows");
     }
 
-
+    /**
+    * Returns the number of rendered columns that are only visible in the table viewport. The columns 
+    * that are partially visible are not counted.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countvisiblecols
+    */
     public async Task<int> CountVisibleCols()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countVisibleCols");
     }
 
+    /**
+    * Returns the number of rendered rows that are only visible in the table viewport. The rows that 
+    * are partially visible are not counted.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countvisiblerows
+    */
     public async Task<int> CountVisibleRows()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countVisibleRows");
     }
 
-
+    /**
+    * Returns the number of row headers.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countrowheaders
+    */
     public async Task<int> CountRowHeaders()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRowHeaders");
     }
 
+    /**
+    * Returns the total number of visual rows in the table.  
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#countrows
+    */
     public async Task<int> CountRows()
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "countRows");
@@ -620,6 +693,12 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", settings);
     }
+
+    public async Task UpdateSettings (ConfigurationOptions options)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", options);
+    }
+
 
     public async Task ValidateCell (object value, IDictionary<string,object> meta, Func<ValidateArgs,Task> callback, string source)
     {

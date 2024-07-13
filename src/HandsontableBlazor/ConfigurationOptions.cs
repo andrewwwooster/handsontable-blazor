@@ -113,9 +113,9 @@ public class ConfigurationOptions
     }
 
     [JsonIgnore]
-    public IList<IList<object>> DataArrayOfArrays { get; set; } = new List<IList<object>>()!;
+    public IList<IList<object>> DataArrayOfArrays { get; set; } = null!;
     [JsonIgnore]
-    public IList<IDictionary<string, object>> DataArrayOfObjects { get; set; } = new List<IDictionary<string, object>>();
+    public IList<IDictionary<string, object>> DataArrayOfObjects { get; set; } = null!;
     public IList<double?> RowHeights { get; set; } = new List<double?>();
     public int? Width { get; set; }
     public int? Height { get; set; }
