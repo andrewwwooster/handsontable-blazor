@@ -247,6 +247,13 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "destroy");
     }
 
+    /**
+    * Returns a TD element for the given row and column arguments, if it is rendered on screen. 
+    * Returns null if the TD is not rendered on screen (probably because that part of the table 
+    * is not visible).
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcell
+    * @returns {JQueryJsInterop} Returns a jQuery object wrapping the TD element.
+    */
     public async Task<JQueryJsInterop> GetCell (int visualRow, int visualColumn, bool topmost = false)
     {
         var htmlTableCellElement = await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>(
@@ -332,6 +339,10 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<int?>("invokeMethod", "getRowHeight", visualRow);
     }
 
+    /**
+    * Returns the current selection as an array of CellRange objects.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getselectedrange
+    */
     public async Task<IList<CellRange>?> GetSelectedRange()
     {
         var selecteds =  await _handsontableJsReference.InvokeAsync<IList<IList<int>>>("invokeMethod", "getSelected");
@@ -345,6 +356,10 @@ public class HandsontableJsInterop : IAsyncDisposable
         return cellRanges;
     }
 
+    /**
+    * Returns the last coordinates applied to the table as a CellRange object.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getselectedrangelast
+    */
     public async Task<CellRange?> GetSelectedRangeLast()
     {
         var selected =  await _handsontableJsReference.InvokeAsync<IList<int>>("invokeMethod", "getSelectedLast");
