@@ -1170,6 +1170,14 @@ public class HandsontableJsInterop : IAsyncDisposable
         }
     }
 
+    /**
+    * Fired after the editor is opened and rendered.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterbeginediting
+    */
+    public async Task AddHookAfterBeginEditing(Func<AfterBeginEditingArgs, Task> hook)
+    {
+        await AddHook("afterBeginEditing", hook);
+    }
  
     public async Task AddHookAfterChange(Func<AfterChangeArgs, Task> hook)
     {
@@ -1203,6 +1211,15 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task AddHookAfterSelectionEnd(Func<AfterSelectionEndArgs, Task> hook)
     {
         await AddHook("afterSelectionEnd", hook);
+    }
+
+    /**
+    * Fired before the editor is opened and rendered.
+    * https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforebeginediting
+    */
+    public async Task AddHookBeforeBeginEditing(Func<BeforeBeginEditingArgs, bool> hook)
+    {
+        await AddSyncHook("beforeBeginEditing", hook);
     }
 
     public async Task AddHookBeforeCreateCol(Func<BeforeCreateColArgs, bool> hook)

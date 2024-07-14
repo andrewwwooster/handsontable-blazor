@@ -44,10 +44,45 @@ public class Hooks
         public string? Source { get; set; }        
     }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afteraddchild
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforeaddchild
+    */
+    public class AddChildArgs : BaseHookArgs
+    {
+        public readonly Object Parent;
+        public readonly Object Element;
+        public readonly int? Index;
+
+        public AddChildArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
+            Parent = jdoc.RootElement[0].Deserialize<object>()!;
+            Element = jdoc.RootElement[1].Deserialize<object>()!;
+            Index = jdoc.RootElement[1].Deserialize<int?>()!;
+        }    
+    }
+
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterbeginediting
+    */
+    public class AfterBeginEditingArgs : BaseHookArgs
+    {
+        public readonly int VisualRow;
+        public readonly int VisualColumn;
+
+        public AfterBeginEditingArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
+            VisualRow = jdoc.RootElement[0].Deserialize<int>()!;
+            VisualColumn = jdoc.RootElement[1].Deserialize<int>()!;
+        }    
+    }
+
     public class AfterChangeArgs : BaseHookArgs
     {
-        public required object[][] Data { get; set; }
-        public required string Source { get; set; }
+        public readonly object[][] Data;
+        public readonly string Source;
 
         public AfterChangeArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)
@@ -101,13 +136,12 @@ public class Hooks
             SelectionLayerLevel = jdoc.RootElement[5].Deserialize<int>();
         }
 
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public int Row2 { get; set; }
-        public int Column2 { get; set; }
-        public required IDictionary<string, object> PreventScrolling { get; set; }
-        public int SelectionLayerLevel { get; set; }
-        
+        public readonly int Row;
+        public readonly int Column;
+        public readonly int Row2;
+        public readonly int Column2;
+        public readonly IDictionary<string, object> PreventScrolling;
+        public readonly int SelectionLayerLevel;
     }
 
     public class AfterSelectionEndArgs : BaseHookArgs
@@ -122,11 +156,33 @@ public class Hooks
             SelectionLayerLevel = jdoc.RootElement[4].Deserialize<int>();
         }
 
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public int Row2 { get; set; }
-        public int Column2 { get; set; }
-        public int SelectionLayerLevel { get; set; }        
+        public readonly int Row;
+        public readonly int Column;
+        public readonly int Row2;
+        public readonly int Column2;
+        public readonly int SelectionLayerLevel;
+    }
+
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforebeginediting
+    */
+    public class BeforeBeginEditingArgs : BaseHookArgs
+    {
+        public readonly int VisualRow;
+        public readonly int VisualColumn;
+        public readonly object? InitialValue;
+        public readonly IDictionary<string,object?> Event;
+        public readonly bool FullEditMode;
+
+        public BeforeBeginEditingArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
+            VisualRow = jdoc.RootElement[0].Deserialize<int>();
+            VisualColumn = jdoc.RootElement[1].Deserialize<int>();
+            InitialValue = jdoc.RootElement[2].Deserialize<object?>();
+            Event = jdoc.RootElement[3].Deserialize<IDictionary<string,object?>>()!;
+            FullEditMode = jdoc.RootElement[4].Deserialize<bool>();
+        }    
     }
 
     public class BeforeCreateColArgs(string hookName, JsonDocument jdoc) 

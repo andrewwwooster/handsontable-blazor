@@ -955,6 +955,7 @@ else if (_actionMethod == "ValidateCells")
     </div>
 }
 
+<HookCheckbox Label="OnAfterBeginEditing" HookName="afterBeginEditing" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterBeginEditingArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
@@ -962,6 +963,7 @@ else if (_actionMethod == "ValidateCells")
 <HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
 <HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeBeginEditing" HookName="beforeBeginEditing" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeBeginEditingArgs" Parent="this"/>
 <HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
 <HookCheckbox Label="OnBeforeCreateRow" HookName="beforeCreateRow" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
 <HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
