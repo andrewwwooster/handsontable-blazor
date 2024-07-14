@@ -42,6 +42,8 @@
     <option>GetDataType</option>
     <option>GetRowHeader</option>
     <option>GetRowHeight</option>
+    <option>GetSourceData</option>
+    <option>GetSettings</option>
     <option>GetValue</option>
     <option>HasColHeaders</option>
     <option>HasHook</option>
@@ -451,6 +453,26 @@ else if (_actionMethod == "GetRowHeight")
         Row: <InputNumber @bind-Value="_actionRow"/>
         <button 
             @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetRowHeight(_actionRow)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetSourceData")
+{
+    <div>
+        Row2: <InputNumber @bind-Value="_actionRow"/>
+        Col2: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSourceDataAsArrayOfArrays(0, 0, _actionRow, _actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetSettings")
+{
+    <div>
+        <button 
+            @onclick='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSettings())'>
             Apply
         </button>
     </div>

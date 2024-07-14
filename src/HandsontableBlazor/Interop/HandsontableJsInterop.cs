@@ -462,6 +462,88 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Returns the object settings.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getsettings
+    */
+    public async Task<IDictionary<string,object>> GetSettings()
+    {
+        return await _handsontableJsReference.InvokeAsync<IDictionary<string,object>>("invokeMethod", "getSettings");
+    }
+
+    /**
+    * Returns a clone of the source data object. Optionally you can provide a cell range by 
+    * using the row, column, row2, column2 arguments, to get only a fragment of the table data.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getsourcedata
+    */
+    public async Task<IList<IList<object>>> GetSourceDataAsArrayOfArrays(int? physicalRow = null, int? physicalColumn = null, int? physicalRow2 = null, int? physicalColumn2 = null)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<IList<object>>>("invokeMethod", "getSourceData", physicalRow, physicalColumn, physicalRow2, physicalColumn2);
+    }
+
+    /**
+    * Returns a clone of the source data object. Optionally you can provide a cell range by 
+    * using the row, column, row2, column2 arguments, to get only a fragment of the table data.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getsourcedata
+    */
+    public async Task<IList<IDictionary<string, object>>> GetSourceDataAsArrayOfObjects(int? physicalRow = null, int? physicalColumn = null, int? physicalRow2 = null, int? physicalColumn2 = null)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<IDictionary<string,object>>>("invokeMethod", "getSourceData", physicalRow, physicalColumn, physicalRow2, physicalColumn2);
+    }
+
+    /**
+    * Returns the cell value at visualRow, visualColumn.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatcell
+    */
+    public async Task<object> GetSourceDataAtCell(int visualRow, int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getDataAtCell", visualRow, visualColumn);
+    }
+
+   /**
+    * Returns array of column values from the data source.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatcol
+    */
+    public async Task<IList<object>> GetSourceDataAtCol(int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getSourceDataAtCol", visualColumn);
+    }
+
+   /**
+    * Given the object property name (e.g. 'first.name' or '0'), returns an array of 
+    * column's values from the table data. You can also provide a column index as 
+    * the first argument.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatprop
+    */
+    public async Task<IList<object>> GetSourceDataAtProp(string visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getSourceDataAtProp", visualColumn);
+    }
+
+   /**
+    * Returns a single row of the data.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatrow
+    */
+    public async Task<IList<object>> GetSourceDataAtRow(int visualRow)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getSourceDataAtCol", visualRow);
+    }
+
+   /**
+    * Returns value at visualRow and prop indexes.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatrowprop
+    */
+    public async Task<object> GetSourceDataAtRowProp(int visualRow, string prop)
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getSourceDataAtRowProp", visualRow, prop);
+    }
+
+
+
+
+
+
+
+    /**
     * Gets the value of the currently focused cell.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getvalue
     */
