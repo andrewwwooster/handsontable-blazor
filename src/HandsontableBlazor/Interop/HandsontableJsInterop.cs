@@ -432,6 +432,11 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<int?>("invokeMethod", "getRowHeight", visualRow);
     }
 
+    public async Task<object> GetSchema()
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getSchema");
+    }
+
     /**
     * Returns the current selection as an array of CellRange objects.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getselectedrange
@@ -491,17 +496,17 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
-    * Returns the cell value at visualRow, visualColumn.
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatcell
+    * Returns a single value from the data source.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getsourcedataatcell
     */
-    public async Task<object> GetSourceDataAtCell(int visualRow, int visualColumn)
+    public async Task<object> GetSourceDataAtCell(int physicalRow, int visualColumn)
     {
-        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getDataAtCell", visualRow, visualColumn);
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getSourceDataAtCell", physicalRow, visualColumn);
     }
 
    /**
-    * Returns array of column values from the data source.
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatcol
+    * Returns an array of column values from the data source.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getsourcedataatcol
     */
     public async Task<IList<object>> GetSourceDataAtCol(int visualColumn)
     {
@@ -509,39 +514,13 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
    /**
-    * Given the object property name (e.g. 'first.name' or '0'), returns an array of 
-    * column's values from the table data. You can also provide a column index as 
-    * the first argument.
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatprop
+    * Returns a single row of the data (array or object, depending on what data format you use).
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getsourcedataatrow
     */
-    public async Task<IList<object>> GetSourceDataAtProp(string visualColumn)
+    public async Task<IList<object>> GetSourceDataAtRow(int physicalRow)
     {
-        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getSourceDataAtProp", visualColumn);
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getSourceDataAtRow", physicalRow);
     }
-
-   /**
-    * Returns a single row of the data.
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatrow
-    */
-    public async Task<IList<object>> GetSourceDataAtRow(int visualRow)
-    {
-        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getSourceDataAtCol", visualRow);
-    }
-
-   /**
-    * Returns value at visualRow and prop indexes.
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatrowprop
-    */
-    public async Task<object> GetSourceDataAtRowProp(int visualRow, string prop)
-    {
-        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getSourceDataAtRowProp", visualRow, prop);
-    }
-
-
-
-
-
-
 
     /**
     * Gets the value of the currently focused cell.

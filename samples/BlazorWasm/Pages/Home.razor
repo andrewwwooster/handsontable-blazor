@@ -42,7 +42,11 @@
     <option>GetDataType</option>
     <option>GetRowHeader</option>
     <option>GetRowHeight</option>
+    <option>GetSchema</option>
     <option>GetSourceData</option>
+    <option>GetSourceDataAtCell</option>
+    <option>GetSourceDataAtCol</option>
+    <option>GetSourceDataAtRow</option>
     <option>GetSettings</option>
     <option>GetValue</option>
     <option>HasColHeaders</option>
@@ -457,6 +461,15 @@ else if (_actionMethod == "GetRowHeight")
         </button>
     </div>
 }
+else if (_actionMethod == "GetSchema")
+{
+    <div>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSchema()))'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "GetSourceData")
 {
     <div>
@@ -464,6 +477,37 @@ else if (_actionMethod == "GetSourceData")
         Col2: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSourceDataAsArrayOfArrays(0, 0, _actionRow, _actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetSourceDataAtCell")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSourceDataAtCell(_actionRow, _actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetSourceDataAtCol")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSourceDataAtCol(_actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetSourceDataAtRow")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetSourceDataAtRow(_actionRow)))'>
             Apply
         </button>
     </div>
