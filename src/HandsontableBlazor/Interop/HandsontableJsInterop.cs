@@ -566,6 +566,54 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Rerender the table. Calling this method starts the process of recalculating, 
+    * redrawing and applying the changes to the DOM. While rendering the table all 
+    * cell renderers are recalled.
+    *
+    * Calling this method manually is not recommended. Handsontable tries to render 
+    * itself by choosing the most optimal moments in its lifecycle.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#render
+    */
+    public async Task Render ()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "render");
+    }
+
+    /**
+    * Resumes the execution process. In combination with the SuspendExecution 
+    * method it allows aggregating the table logic changes after which the cache is 
+    * updated. Resuming the state automatically invokes the table cache updating process.
+    *
+    * The method is intended to be used by advanced users. Suspending the execution 
+    * process could cause visual glitches caused by not updated the internal table cache.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#resumeexecution
+    */
+    public async Task ResumeExecution (bool forceFlushChanges = false)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "resumeExecution", forceFlushChanges);
+    }
+
+    /**
+    * Resumes the rendering process. In combination with the SuspendRender
+    * method it allows aggregating the table render cycles triggered by API 
+    * calls or UI actions (or both) and calls the "render" once in the end. 
+    * When the table is in the suspend state, most operations will have no 
+    * visual effect until the rendering state is resumed. Resuming the state 
+    * automatically invokes the table rendering.
+    *
+    * The method is intended to be used by advanced users. Suspending the 
+    * rendering process could cause visual glitches when wrongly implemented.
+    *
+    * The method is intended to be used by advanced users. Suspending the execution 
+    * process could cause visual glitches caused by not updated the internal table cache.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#resumerender
+    */
+    public async Task ResumeRender ()
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "resumeRender");
+    }
+
+    /**
     * Scrolls the viewport to coordinates specified by the currently focused cell.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#scrolltofocusedcell
     */
@@ -733,14 +781,51 @@ public class HandsontableJsInterop : IAsyncDisposable
             "invokeMethod", "setDataAtRowProp", changes, null, null, source);
     }
 
-    public async Task<int> ToPhysicalColumn (int visualColumn)
+    /**
+    * Suspends the execution process. It's helpful to wrap the table logic changes such
+    * as index changes into one call after which the cache is updated. As a result, 
+    * it improves the performance of wrapped operations.
+    *
+    * The method is intended to be used by advanced users. Suspending the execution 
+    * process could cause visual glitches caused by not updated the internal table cache.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#suspendexecution
+    */
+    public async Task SuspendExecution ()
     {
-        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);
+        await _handsontableJsReference.InvokeVoidAsync( "invokeMethod", "suspendExecution" );
+    }
+
+    /**
+    * Suspends the rendering process. It's helpful to wrap the table render cycles triggered 
+    * by API calls or UI actions (or both) and call the "render" once in the end. As a result, 
+    * it improves the performance of wrapped operations. When the table is in the suspend state, 
+    * most operations will have no visual effect until the rendering state is resumed. 
+    * Resuming the state automatically invokes the table rendering. To make sure that after 
+    * executing all operations, the table will be rendered, it's highly recommended to use 
+    * the Core#batchRender method or Core#batch, which additionally aggregates the logic 
+    * execution that happens behind the table.
+    *
+    * The method is intended to be used by advanced users. Suspending the rendering process 
+    * could cause visual glitches when wrongly implemented.
+    *
+    * Every SuspendRender() call needs to correspond with one ResumeRender() call. 
+    * For example, if you call SuspendRender() 5 times, you need to call ResumeRender() 5 
+    * times as well.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#suspendrender
+    */
+    public async Task SuspendRender ()
+    {
+        await _handsontableJsReference.InvokeVoidAsync( "invokeMethod", "suspendRender" );
     }
 
     public async Task<string> ToHtml ()
     {
         return await _handsontableJsReference.InvokeAsync<string>("invokeMethod", "toHTML");
+    }
+
+    public async Task<int> ToPhysicalColumn (int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);
     }
     
     public async Task<int> ToPhysicalRow (int visualRow)
