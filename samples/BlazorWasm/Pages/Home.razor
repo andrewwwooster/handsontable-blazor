@@ -31,6 +31,8 @@
     <option>GetCellsMeta</option>
     <option>GetColHeader</option>
     <option>GetColWidth</option>
+    <option>GetCopyableData</option>
+    <option>GetCopyableText</option>
     <option>GetData</option>
     <option>GetDataType</option>
     <option>GetRowHeader</option>
@@ -327,6 +329,28 @@ else if (_actionMethod == "GetColWidth")
         Col: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetColWidth(_actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetCopyableData")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetCopyableData(_actionRow, _actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetCopyableText")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetCopyableText(_actionRow, _actionColumn, _actionRow+1, _actionColumn+1)))'>
             Apply
         </button>
     </div>

@@ -327,6 +327,27 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Returns the data's copyable value at specified visualRow and 
+    * visual column index.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcopyabledata
+    */
+    public async Task<object> GetCopyableData(int visualRow, int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getCopyableData", visualRow, visualColumn);
+    }
+
+    /**
+    * Returns a string value of the selected range. Each column is separated by tab, 
+    * each row is separated by a new line character.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcopyabletext
+    */
+    public async Task<string> GetCopyableText(int visualRow, int visualColumn, int visualRowEnd, int visualColumnEnd)
+    {
+        return await _handsontableJsReference.InvokeAsync<string>("invokeMethod", "getCopyableText", 
+            visualRow, visualColumn, visualRowEnd, visualColumnEnd);
+    }
+
+    /**
     * Returns the current data object the same one that was passed by ConfigurationOptions.
     * or loadData method, unless some modifications have been applied 
     * (i.e. Sequence of rows/columns was changed, some row/column was skipped). 
