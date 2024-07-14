@@ -383,55 +383,100 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "hasHook", hookName);
     }
     
+    /**
+    * Returns information about if this table is configured to display row headers.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#hasrowheaders
+    */
     public async Task<bool> HasRowHeaders()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "hasRowHeaders");
     }
 
+    /**
+    * Checks if your data format and configuration options allow
+    * for changing the number of columns.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#iscolumnmodificationallowed
+    */
     public async Task<bool> IsColumnModificationAllowed()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isColumnModificationAllowed");
     }
 
+    /**
+    * Check if all cells in the the column declared by the column argument are empty.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isemptycol
+    */
     public async Task<bool> IsEmptyCol(int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isEmptyCol", visualColumn);
     }
 
+    /**
+    * Check if all cells in the row declared by the row argument are empty.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isemptyrow
+    */
     public async Task<bool> IsEmptyRow(int visualRow)
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isEmptyRow", visualRow);
     }
 
+    /**
+    * Checks if the table indexes recalculation process was suspended.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isexecutionsuspended
+    */
     public async Task<bool> IsExecutionSuspended()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isExecutionSuspended");
     }
 
+    /**
+    * Returns true if the current Handsontable instance is listening to keyboard 
+    * input on document body.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#islistening
+    */
     public async Task<bool> IsListening()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isListening");
     }
 
+    /**
+    * Checks if the grid is rendered using the left-to-right layout direction.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isltr
+    */
     public async Task<bool> IsLtr()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isLtr");
     }
+
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isredoavailable
+    */
     public async Task<bool> IsRedoAvailable()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isRedoAvailable");
     }
 
+    /**
+    * Checks if the table rendering process was suspended.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isrendersuspended
+    */
     public async Task<bool> IsRenderSuspended()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isRenderSuspended");
     }
 
+    /**
+    * Checks if the grid is rendered using the right-to-left layout direction.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isrtl
+    */
     public async Task<bool> IsRtl()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isRtl");
     }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isundoavailable
+    */
     public async Task<bool> IsUndoAvailable()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "isUndoAvailable");
@@ -448,6 +493,41 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Replaces Handsontable's data with a new dataset.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isundoavailable
+    */
+    public async Task LoadData (IList<IList<object>> data, string? source = null)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "loadData", data, source);
+    }
+
+    /**
+    * Replaces Handsontable's data with a new dataset.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#isundoavailable
+    */
+    public async Task LoadData (IList<IDictionary<string, object>> data, string? source = null)
+    {
+        await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "loadData", data, source);
+    }
+
+    /**
+    * Populates cells at position with 2D input array (e.g. [[1, 2], [3, 4]]). Use endRow, 
+    * endCol when you want to cut input when a certain row is reached.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#populatefromarray
+    */
+    public async Task<JQueryJsInterop> PopulateFromArray (
+        int visualRow, int visualColumn, 
+        IList<IList<object>> input, 
+        int? visualRowEnd = null, int? visualColumnEnd = null, 
+        string? source = "populateFromArray", string? method = "overwrite")
+    {
+        var tdJsObjectReference = await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>("invokeMethodReturnsJQuery", "populateFromArray", 
+            visualRow, visualColumn, input, visualRowEnd, visualColumnEnd, source, method);
+        var tdJQuery = new JQueryJsInterop(tdJsObjectReference);
+        return tdJQuery;
+    }
+
+    /**
     * Property to column.
     * @returns Visual column index.
     */
@@ -456,6 +536,9 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "propToCol", prop);
     }
 
+    /**
+    * @See https://handsontable.com/docs/javascript-data-grid/api/core/#redo
+    */
     public async Task Redo ()
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "redo");

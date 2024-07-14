@@ -22,15 +22,20 @@
 
     public HandsontableJsInterop Core { get; private set; } = null!;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private bool _initialized;
+
+    protected override void OnInitialized()
     {
-        if (firstRender && Core == null && ConfigurationOptions != null)
+        Core = new HandsontableJsInterop(JSRuntime);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ConfigurationOptions != null && !_initialized)
         {
-            Core = new HandsontableJsInterop(JSRuntime);
             await Core.RegisterRenderer("customRenderer", RendererCallback);
-            await Core.NewHandsontable(
-                Id!, ConfigurationOptions
-            );
+            await Core.NewHandsontable(Id!, ConfigurationOptions);
+            _initialized = true;
             if (OnAfterChange != null) await Core.AddHookAfterChange(OnAfterChange);
             if (OnAfterSelection != null) await Core.AddHookAfterSelection(OnAfterSelection);
             if (OnAfterSelectionEnd != null) await Core.AddHookAfterSelectionEnd(OnAfterSelectionEnd);

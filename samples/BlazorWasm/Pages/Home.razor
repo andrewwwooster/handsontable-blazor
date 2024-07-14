@@ -44,6 +44,9 @@
     <option>IsLtr</option>
     <option>IsRedoAvailable</option>
     <option>Listen</option>
+    <option>LoadDataArrayOfArrays</option>
+    <option>LoadDataArrayOfObjects</option>
+    <option>PopulateFromArray</option>
     <option>Redo</option>
     <option>RefreshDimensions</option>
     <option>RemoveCellMeta</option>
@@ -444,6 +447,35 @@ else if (_actionMethod == "Listen")
         </button>
     </div>
 }
+else if (_actionMethod == "LoadDataArrayOfArrays")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.LoadData([["A1", "B1", "C1"], ["A2", "B2", "C2"]])'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "LoadDataArrayOfObjects")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.LoadData([new Dictionary<string, object>{ {"A", "A1"},  {"B", "B1"}, {"C", "C1"}}])'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "PopulateFromArray")
+{
+    <div>
+        <button 
+            @onclick='async () => await Handsontable.Core.PopulateFromArray(
+                1, 0, 
+                [["A2", "B2", "C2"], ["A3", "B3", "C3"]])'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "Redo")
 {
     <div>
@@ -724,16 +756,10 @@ else if (_actionMethod == "ValidateCells")
     {
          _configurationOptions = new HandsontableBlazor.ConfigurationOptions 
          {
-            DataArrayOfObjects =  [
-                new Dictionary<string, object> { 
-                    { "A", 11 }, { "B", "12!" }, { "b", "13" } 
-                },
-                new Dictionary<string, object> { 
-                    { "A", 21 }, { "B", "22!" }, { "b", "23" } 
-                },
-                new Dictionary<string, object> { 
-                    { "A", 31 }, { "B", "32!" }, { "b", "33" } 
-                }
+            DataArrayOfArrays =  [
+                [ 1, "12!", "13" ],
+                [ 21, "22!", "23" ],
+                [ 31, "32!", "33" ]
             ],
             Cell = [
                 new ConfigurationOptions.HtCell(1,2) { ReadOnly = true },
