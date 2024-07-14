@@ -3,15 +3,28 @@ using System.Text.Json.Serialization;
 
 namespace HandsontableBlazor;
 
+/**
+* Specify all hook arguments.  Handsontable JavaScript hook callbacks contain multiple
+* arguments.  However, for Blazor we pass these arguments in a single *Args class.
+*/
 public class Hooks 
 {
+    /**
+    * Common base class for all hooks.
+    */
     public abstract class BaseHookArgs(string hookName, JsonDocument jdoc) 
         : Callbacks.BaseCallbackArgs(jdoc)
     {
+        /**
+        * JsonPropertyOrder ensures that hook name appears first when serialized.
+        */
         [JsonPropertyOrder(-1)]
         public required string HookName { get; set; } = hookName;
     };
 
+    /**
+    * Common base class for Create Row/Column classes.
+    */
     public abstract class BaseCreateIndexArgs : BaseHookArgs
     {
         public BaseCreateIndexArgs(string hookName, JsonDocument jdoc) 
@@ -27,6 +40,9 @@ public class Hooks
         public string? Source { get; set; }        
     }
 
+    /**
+    * Common base class for Remove Row/Column classes.
+    */
     public abstract class BaseRemoveIndexArgs : BaseHookArgs
     {
         public BaseRemoveIndexArgs(string hookName, JsonDocument jdoc) 
@@ -79,6 +95,9 @@ public class Hooks
         }    
     }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterchange
+    */
     public class AfterChangeArgs : BaseHookArgs
     {
         public readonly object[][] Data;
@@ -107,22 +126,37 @@ public class Hooks
         }
     }
 
-    public class AfterCreateColArgs(string hookName, JsonDocument jdoc) 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#aftercreatecol
+    */
+   public class AfterCreateColArgs(string hookName, JsonDocument jdoc) 
         : BaseCreateIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#aftercreaterow
+    */
     public class AfterCreateRowArgs(string hookName, JsonDocument jdoc) 
         : BaseCreateIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterremovecol
+    */
     public class AfterRemoveColArgs(string hookName, JsonDocument jdoc) 
         : BaseRemoveIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterremoverow
+    */
     public class AfterRemoveRowArgs(string hookName, JsonDocument jdoc) 
         : BaseRemoveIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterselection
+    */
     public class AfterSelectionArgs : BaseHookArgs
     {
         public AfterSelectionArgs(string hookName, JsonDocument jdoc) 
@@ -144,7 +178,10 @@ public class Hooks
         public readonly int SelectionLayerLevel;
     }
 
-    public class AfterSelectionEndArgs : BaseHookArgs
+     /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterselectionend
+    */
+   public class AfterSelectionEndArgs : BaseHookArgs
     {
         public AfterSelectionEndArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)
@@ -185,18 +222,30 @@ public class Hooks
         }    
     }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforecreatecol
+    */
     public class BeforeCreateColArgs(string hookName, JsonDocument jdoc) 
         : BaseCreateIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforecreaterow
+    */
     public class BeforeCreateRowArgs(string hookName, JsonDocument jdoc) 
         : BaseCreateIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforeremovecol
+    */
     public class BeforeRemoveColArgs(string hookName, JsonDocument jdoc) 
         : BaseRemoveIndexArgs(hookName, jdoc)
     { }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforeremoverow
+    */
     public class BeforeRemoveRowArgs(string hookName, JsonDocument jdoc) 
         : BaseRemoveIndexArgs(hookName, jdoc)
     { }

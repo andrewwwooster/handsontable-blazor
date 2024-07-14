@@ -6,14 +6,11 @@ using static HandsontableBlazor.Renderer;
 
 namespace HandsontableBlazor.Interop;
 
-// This class provides an example of how JavaScript functionality can be wrapped
-// in a .NET class for easy consumption. The associated JavaScript module is
-// loaded on demand when first needed.
-//
-// This class can be registered as scoped DI service and then injected into Blazor
-// components for use.
-
-
+/// <summary>
+/// This class provides an example of how JavaScript functionality can be wrapped
+/// in a .NET class for easy consumption. The associated JavaScript module is
+/// loaded on demand when first needed.
+/// </summary>
 public class HandsontableJsInterop : IAsyncDisposable
 {
     private readonly IJSRuntime _jsRuntime;
@@ -1179,35 +1176,66 @@ public class HandsontableJsInterop : IAsyncDisposable
         await AddHook("afterBeginEditing", hook);
     }
  
+    /**
+    * Fired after one or more cells has been changed. The changes are triggered in any 
+    * situation when the value is entered using an editor or changed using API 
+    * (e.q SetDataAtCell() method).
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterchange
+    */
     public async Task AddHookAfterChange(Func<AfterChangeArgs, Task> hook)
     {
         await AddHook("afterChange", hook);
     }
 
+    /**
+    * Fired after creating a new column.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#aftercreatecol
+    */
     public async Task AddHookAfterCreateCol(Func<AfterCreateColArgs, Task> hook)
     {
         await AddHook("afterCreateCol", hook);
     }
 
+    /**
+    * Fired after creating a new row.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#aftercreaterow
+    */
     public async Task AddHookAfterCreateRow(Func<AfterCreateRowArgs, Task> hook)
     {
         await AddHook("afterCreateRow", hook);
     }
 
+    /**
+    * Fired after one or more cells are selected (e.g. during mouse move).
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterselection
+    */
     public async Task AddHookAfterSelection(Func<AfterSelectionArgs, Task> hook)
     {
         await AddHook("afterSelection", hook);
     }
 
+    /**
+    * Fired after one or more columns are removed.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterremovecol
+    */
     public async Task AddHookAfterRemoveCol(Func<AfterRemoveColArgs, Task> hook)
     {
         await AddHook("afterRemoveCol", hook);
     }
+
+    /**
+    * Fired after one or more rows are removed.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterremoverow
+    */
     public async Task AddHookAfterRemoveRow(Func<AfterRemoveRowArgs, Task> hook)
     {
         await AddHook("afterRemoveRow", hook);
     }
 
+    /**
+    * Fired after one or more cells are selected (e.g. on mouse up).
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterselectionend
+    */
     public async Task AddHookAfterSelectionEnd(Func<AfterSelectionEndArgs, Task> hook)
     {
         await AddHook("afterSelectionEnd", hook);
@@ -1222,26 +1250,45 @@ public class HandsontableJsInterop : IAsyncDisposable
         await AddSyncHook("beforeBeginEditing", hook);
     }
 
+    /**
+    * Fired before created a new column.
+    * https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforecreatecol
+    */
     public async Task AddHookBeforeCreateCol(Func<BeforeCreateColArgs, bool> hook)
     {
         await AddSyncHook("beforeCreateCol", hook);
     }
 
+    /**
+    * Fired before created a new row.
+    * https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforecreaterow
+    */
     public async Task AddHookBeforeCreateRow(Func<BeforeCreateRowArgs, bool> hook)
     {
         await AddSyncHook("beforeCreateRow", hook);
     }
 
+    /**
+    * Fired before one or more columns are about to be removed.
+    * https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforeremovecol
+    */
     public async Task AddHookBeforeRemoveCol(Func<BeforeRemoveColArgs, bool> hook)
     {
         await AddSyncHook("beforeRemoveCol", hook);
     }
 
+    /**
+    * Fired when one or more rows are about to be removed.
+    * https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforeremoverow
+    */
     public async Task AddHookBeforeRemoveRow(Func<BeforeRemoveRowArgs, bool> hook)
     {
         await AddSyncHook("beforeRemoveRow", hook);
     }
 
+    /**
+    * Register a hook callback.
+    */
     public async Task AddHook<HookArgsT>(string hookName, Func<HookArgsT, Task> hook)
         where HookArgsT : ICallbackArgs
     {
@@ -1250,6 +1297,11 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync("addHook", hookProxy);
     }
     
+    /**
+    * Add a synchronous hook.  This is used when the caller needs a return value.
+    * The return value is typically a boolean from a Before* callback, which will 
+    * determine whether or not Handsontable will proceed with the action.
+    */
     public async Task AddSyncHook<HookArgsT,HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
         where HookArgsT : ICallbackArgs
     {
