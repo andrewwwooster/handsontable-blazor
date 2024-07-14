@@ -745,12 +745,21 @@ public class HandsontableJsInterop : IAsyncDisposable
             "invokeMethod", "setCellMeta", visualRow, visualColumn, key, value);
     }
 
+    /**
+    * Set cell meta data object defined by prop to the corresponding params visualRow 
+    * and visualColumn.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#setcellmetaobject
+    */
     public async Task SetCellMetaObject (int visualRow, int visualColumn, IDictionary<string,object?> prop)
     {
         await _handsontableJsReference.InvokeVoidAsync(
             "invokeMethod", "setCellMetaObject", visualRow, visualColumn, prop);
     }
 
+    /**
+    * Set new value to a cell. 
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#setdataatcell
+    */
     public async Task SetDataAtCell (int visualRow, int visualColumn, string? value, string? source = null)
     {
         await _handsontableJsReference.InvokeVoidAsync(
@@ -762,6 +771,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     * @param {Array} changes An array of arrays in form of [row, col, value]. 
     *                Where row is visual row index {int}, col {int} is the visual column index, 
     *                and value {string} is a new value.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#setdataatcell
     */
     public async Task SetDataAtCell (IList<IList<object?>> changes, string? source = null)
     {
@@ -818,21 +828,37 @@ public class HandsontableJsInterop : IAsyncDisposable
         await _handsontableJsReference.InvokeVoidAsync( "invokeMethod", "suspendRender" );
     }
 
+    /**
+    * Converts instance into outerHTML of HTMLTableElement.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#tohtml
+    */
     public async Task<string> ToHtml ()
     {
         return await _handsontableJsReference.InvokeAsync<string>("invokeMethod", "toHTML");
     }
 
+    /**
+    * Translate visual column index into physical.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#tophysicalcolumn
+    */
     public async Task<int> ToPhysicalColumn (int visualColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalColumn", visualColumn);
     }
     
+    /**
+    * Translate visual row index into physical.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#tophysicalrow
+    */
     public async Task<int> ToPhysicalRow (int visualRow)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toPhysicalRow", visualRow);
     }
     
+    /**
+    * Converts instance into HTMLTableElement.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#totableelement
+    */
     public async Task<JQueryJsInterop> ToTableElement ()
     {
         var domTableJsObjectReference = await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>("invokeMethodReturnsJQuery", "toTableElement");
@@ -840,16 +866,27 @@ public class HandsontableJsInterop : IAsyncDisposable
         return domTableJQuery;
     }
 
+    /**
+    * Translate physical column index into visual.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#tovisualcolumn
+    */
     public async Task<int> ToVisualColumn (int physicalColumn)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toVisualColumn", physicalColumn);
     }
 
+    /**
+    * Translate physical row index into visual.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#tovisualrow
+    */
     public async Task<int> ToVisualRow (int physicalRow)
     {
         return await _handsontableJsReference.InvokeAsync<int>("invokeMethod", "toVisualRow", physicalRow);
     }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#undo
+    */
     public async Task Undo ()
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "undo");
@@ -870,37 +907,56 @@ public class HandsontableJsInterop : IAsyncDisposable
     * @param {IDictionary<string name, object vale>} settings A settings object 
         (see ConfigurationOptions).  Name should be camelCase.
     *   Only provide the settings that are changed.  
-    *   
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#updatesettings
     */
     public async Task UpdateSettings (IDictionary<string, object> settings)
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", settings);
     }
 
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#updatesettings
+    */
     public async Task UpdateSettings (ConfigurationOptions options)
     {
         await _handsontableJsReference.InvokeVoidAsync("invokeMethod", "updateSettings", options);
     }
 
 
+    /**
+    * Validate a single cell.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#validatecell
+    */
     public async Task ValidateCell (object value, IDictionary<string,object> meta, Func<ValidateArgs,Task> callback, string source)
     {
         var callbackProxy = ToVoidAsyncCallbackProxy(callback);
         await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateCell", value, meta, callbackProxy, source);
     }
 
+    /**
+    * Validates every cell in the data set, using a validator function configured for each cell.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#validatecells
+    */
     public async Task ValidateCells (Func<ValidateArgs,Task>? callback)
     {
         var callbackProxy = ToVoidAsyncCallbackProxy(callback);
         await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateCells", callbackProxy);
     }
 
+    /**
+    * Validates columns using their validator functions and calls callback when finished.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#validatecolumns
+    */
     public async Task ValidateColumns (IList<int> visualColumns, Func<ValidateArgs,Task>? callback)
     {
         var callbackProxy = ToVoidAsyncCallbackProxy(callback);
         await _handsontableJsReference.InvokeVoidAsync("invokeMethodWithCallback", "validateColumns", visualColumns, callbackProxy);
     }
 
+    /**
+    * Validates rows using their validator functions and calls callback when finished.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#validaterows
+    */
     public async Task ValidateRows (IList<int> visualRows, Func<ValidateArgs,Task>? callback)
     {
         var callbackProxy = ToVoidAsyncCallbackProxy(callback);
