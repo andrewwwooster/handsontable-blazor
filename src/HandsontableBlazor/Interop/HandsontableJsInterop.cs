@@ -248,6 +248,16 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Erases content from cells that have been selected in the table.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#emptyselectedcells
+    */
+    public async Task EmptySelectedCells (string? source = null)
+    {
+        await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>(
+            "invokeMethodReturnsJQuery", "emptySelectedCells", source);
+    }
+
+   /**
     * Returns a TD element for the given row and column arguments, if it is rendered on screen. 
     * Returns null if the TD is not rendered on screen (probably because that part of the table 
     * is not visible).
@@ -262,24 +272,15 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
-    * Erases content from cells that have been selected in the table.
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#emptyselectedcells
-    */
-    public async Task EmptySelectedCells (string? source = null)
-    {
-        await _handsontableJsReference.InvokeAsync<IJSInProcessObjectReference>(
-            "invokeMethodReturnsJQuery", "emptySelectedCells", source);
-    }
-
-    /**
-    * Get all the cells meta settings at least once generated in the table (in order of cell initialization).
-    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellsmeta
+    * Returns the cell properties object for the given visualEow and 
+    * visualColumn coordinates.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellmeta
     */
     public async Task<IDictionary<string,object>> GetCellMeta (int visualRow, int visualColumn)
     {
-        var cellProperties = await _handsontableJsReference.InvokeAsync<Dictionary<string,object>>(
+        var result = await _handsontableJsReference.InvokeAsync<IDictionary<string,object>>(
             "invokeMethod", "getCellMeta", visualRow, visualColumn);
-        return cellProperties;
+        return result;
     }
 
     /**
@@ -288,20 +289,21 @@ public class HandsontableJsInterop : IAsyncDisposable
     */
     public async Task<IList<IDictionary<string,object>>> GetCellMetaAtRow (int physicalRow)
     {
-        var cellMetaList = await _handsontableJsReference.InvokeAsync<List<IDictionary<string,object>>>(
+        var result = await _handsontableJsReference.InvokeAsync<IList<IDictionary<string,object>>>(
             "invokeMethod", "getCellMetaAtRow", physicalRow);
-        return cellMetaList;
+        return result;
     }
 
     /**
-    * Get all the cells meta settings at least once generated in the table (in order of cell initialization).
+    * Get all the cells meta settings at least once generated in the table 
+    * (in order of cell initialization).
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcellsmeta
     */
     public async Task<IList<IDictionary<string,object>>> GetCellsMeta ()
     {
-        var cellMetaList = await _handsontableJsReference.InvokeAsync<List<IDictionary<string,object>>>(
+        var result = await _handsontableJsReference.InvokeAsync<IList<IDictionary<string,object>>>(
             "invokeMethod", "getCellsMeta");
-        return cellMetaList;
+        return result;
     }
 
     /**
