@@ -307,6 +307,17 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Gets the values of column headers (if column headers are enabled).
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcolheader
+    */
+    public async Task<object> GetColHeader(int? visualColumn = null, int headerLevel = -1)
+    {
+        var result = await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getColHeader", 
+            visualColumn, headerLevel);
+        return result;
+    }
+
+    /**
     * Returns the width of the requested column.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getcolwidth
     */
@@ -334,6 +345,18 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task<string> GetDataType(int visualRowFrom, int visualColumnFrom, int visualRowTo, int visualColumnTo)
     {
         return await _handsontableJsReference.InvokeAsync<string>("invokeMethod", "getDataType", visualRowFrom, visualColumnFrom, visualRowTo, visualColumnTo);
+    }
+
+    /**
+    * Returns an array of row headers' values (if they are enabled). If param row was given, it returns 
+    * the header of the given row as a string.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getrowheader
+    */
+    public async Task<object> GetRowHeader(int? visualRow = null, int headerLevel = -1)
+    {
+        var result = await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getRowHeader", 
+            visualRow, headerLevel);
+        return result;
     }
 
     public async Task<int?> GetRowHeight(int visualRow)

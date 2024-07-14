@@ -29,9 +29,11 @@
     <option>GetCellMeta</option>
     <option>GetCellMetaAtRow</option>
     <option>GetCellsMeta</option>
+    <option>GetColHeader</option>
     <option>GetColWidth</option>
     <option>GetData</option>
     <option>GetDataType</option>
+    <option>GetRowHeader</option>
     <option>GetRowHeight</option>
     <option>HasColHeaders</option>
     <option>HasHook</option>
@@ -309,6 +311,16 @@ else if (_actionMethod == "GetCell")
         </button>
     </div>
 }
+else if (_actionMethod == "GetColHeader")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetColHeader(_actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
 else if (_actionMethod == "GetColWidth")
 {
     <div>
@@ -337,6 +349,16 @@ else if (_actionMethod == "GetDataType")
         Column Ro: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataType(0, 0, _actionRow, _actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetRowHeader")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetRowHeader(_actionRow)))'>
             Apply
         </button>
     </div>
