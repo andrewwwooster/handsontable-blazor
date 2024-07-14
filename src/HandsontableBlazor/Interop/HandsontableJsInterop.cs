@@ -360,6 +360,54 @@ public class HandsontableJsInterop : IAsyncDisposable
     }
 
     /**
+    * Returns the cell value at visualRow, visualColumn.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatcell
+    */
+    public async Task<object> GetDataAtCell(int visualRow, int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getDataAtCell", visualRow, visualColumn);
+    }
+
+   /**
+    * Returns array of column values from the data source.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatcol
+    */
+    public async Task<IList<object>> GetDataAtCol(int visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getDataAtCol", visualColumn);
+    }
+
+   /**
+    * Given the object property name (e.g. 'first.name' or '0'), returns an array of 
+    * column's values from the table data. You can also provide a column index as 
+    * the first argument.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatprop
+    */
+    public async Task<IList<object>> GetDataAtProp(string visualColumn)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getDataAtProp", visualColumn);
+    }
+
+   /**
+    * Returns a single row of the data.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatrow
+    */
+    public async Task<IList<object>> GetDataAtRow(int visualRow)
+    {
+        return await _handsontableJsReference.InvokeAsync<IList<object>>("invokeMethod", "getDataAtCol", visualRow);
+    }
+
+   /**
+    * Returns value at visualRow and prop indexes.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdataatrowprop
+    */
+    public async Task<object> GetDataAtRowProp(int visualRow, string prop)
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getDataAtRowProp", visualRow, prop);
+    }
+
+
+    /**
     * Returns a data type defined in the Handsontable settings under the type key (Options#type). If there are cells with different types in the selected range, it returns 'mixed'.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdatatype
     */

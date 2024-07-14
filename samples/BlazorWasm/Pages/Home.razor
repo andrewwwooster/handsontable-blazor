@@ -34,6 +34,11 @@
     <option>GetCopyableData</option>
     <option>GetCopyableText</option>
     <option>GetData</option>
+    <option>GetDataAtCell</option>
+    <option>GetDataAtCol</option>
+    <option>GetDataAtProp</option>
+    <option>GetDataAtRow</option>
+    <option>GetDataAtRowProp</option>
     <option>GetDataType</option>
     <option>GetRowHeader</option>
     <option>GetRowHeight</option>
@@ -359,9 +364,61 @@ else if (_actionMethod == "GetData")
 {
     <div>
         Row2: <InputNumber @bind-Value="_actionRow"/>
-        Column2: <InputNumber @bind-Value="_actionColumn"/>
+        Col2: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetData(_actionRow, _actionColumn, null, null)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetDataAtCell")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataAtCell(_actionRow, _actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetDataAtCol")
+{
+    <div>
+        Col: <InputNumber @bind-Value="_actionColumn"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataAtCol(_actionColumn)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetDataAtProp")
+{
+    <div>
+        Prop: <InputText @bind-Value="_actionKey"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataAtProp(_actionKey)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetDataAtRow")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataAtRow(_actionRow)))'>
+            Apply
+        </button>
+    </div>
+}
+else if (_actionMethod == "GetDataAtRowProp")
+{
+    <div>
+        Row: <InputNumber @bind-Value="_actionRow"/>
+        Prop: <InputText @bind-Value="_actionKey"/>
+        <button 
+            @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataAtRowProp(_actionRow, _actionKey)))'>
             Apply
         </button>
     </div>
@@ -370,7 +427,7 @@ else if (_actionMethod == "GetDataType")
 {
     <div>
         Row To: <InputNumber @bind-Value="_actionRow"/>
-        Column Ro: <InputNumber @bind-Value="_actionColumn"/>
+        Col Ro: <InputNumber @bind-Value="_actionColumn"/>
         <button 
             @onclick='@(async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetDataType(0, 0, _actionRow, _actionColumn)))'>
             Apply
