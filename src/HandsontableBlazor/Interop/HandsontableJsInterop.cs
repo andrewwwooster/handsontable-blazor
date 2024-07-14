@@ -461,6 +461,19 @@ public class HandsontableJsInterop : IAsyncDisposable
         return cellRange;
     }
 
+    /**
+    * Gets the value of the currently focused cell.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#getvalue
+    */
+    public async Task<object> GetValue()
+    {
+        return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getValue");
+    }
+
+    /**
+    * Returns information about if this table is configured to display column headers.
+    * See https://handsontable.com/docs/javascript-data-grid/api/core/#hascolheaders
+    */
     public async Task<bool> HasColHeaders()
     {
         return await _handsontableJsReference.InvokeAsync<bool>("invokeMethod", "hasColHeaders");

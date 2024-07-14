@@ -42,6 +42,7 @@
     <option>GetDataType</option>
     <option>GetRowHeader</option>
     <option>GetRowHeight</option>
+    <option>GetValue</option>
     <option>HasColHeaders</option>
     <option>HasHook</option>
     <option>HasRowHeaders</option>
@@ -454,6 +455,15 @@ else if (_actionMethod == "GetRowHeight")
         </button>
     </div>
 }
+else if (_actionMethod == "GetValue")
+{
+    <div>
+        <button 
+            @onmouseenter='async () => AppendToEventLog(_actionMethod, await Handsontable.Core.GetValue())'>
+            Hover
+        </button>
+    </div>
+}
 else if (_actionMethod == "HasColHeaders")
 {
     <div>
@@ -672,7 +682,9 @@ else if (_actionMethod == "SuspendRender")
 else if (_actionMethod == "ScrollToFocusedCell")
 {
     <div>
-        <button @onmouseenter='async () => await Handsontable.Core.ScrollToFocusedCell(OnCallbackAsync)'>Hover</button>
+        <button @onmouseenter='async () => await Handsontable.Core.ScrollToFocusedCell(OnCallbackAsync)'>
+            Hover
+        </button>
     </div>
 }
 else if (_actionMethod == "ScrollViewportTo")
