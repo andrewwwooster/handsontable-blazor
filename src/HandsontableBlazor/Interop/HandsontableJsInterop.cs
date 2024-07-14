@@ -406,7 +406,6 @@ public class HandsontableJsInterop : IAsyncDisposable
         return await _handsontableJsReference.InvokeAsync<object>("invokeMethod", "getDataAtRowProp", visualRow, prop);
     }
 
-
     /**
     * Returns a data type defined in the Handsontable settings under the type key (Options#type). If there are cells with different types in the selected range, it returns 'mixed'.
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#getdatatype
