@@ -1167,6 +1167,27 @@ public class HandsontableJsInterop : IAsyncDisposable
         }
     }
 
+
+    /**
+    * Fired by NestedRows plugin after adding a children to the NestedRows structure. 
+    * This hook is fired when Options#nestedRows option is enabled.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afteraddchild
+    */
+    public async Task AddHookAfterAutofill(Func<AfterAutofillArgs, Task> hook)
+    {
+        await AddHook("afterAutofill", hook);
+    }
+
+    /**
+    * Fired by NestedRows plugin after adding a children to the NestedRows structure. 
+    * This hook is fired when Options#nestedRows option is enabled.
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afteraddchild
+    */
+    public async Task AddHookAfterAddChild(Func<AddChildArgs, Task> hook)
+    {
+        await AddHook("afterAddChild", hook);
+    }
+
     /**
     * Fired after the editor is opened and rendered.
     * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterbeginediting
@@ -1239,6 +1260,15 @@ public class HandsontableJsInterop : IAsyncDisposable
     public async Task AddHookAfterSelectionEnd(Func<AfterSelectionEndArgs, Task> hook)
     {
         await AddHook("afterSelectionEnd", hook);
+    }
+
+    /**
+    * Fired before the editor is opened and rendered.
+    * https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforebeginediting
+    */
+    public async Task AddHookBeforeAutofill(Func<BeforeAutofillArgs, bool> hook)
+    {
+        await AddSyncHook("beforeAutofill", hook);
     }
 
     /**

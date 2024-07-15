@@ -75,8 +75,34 @@ public class Hooks
         {
             Parent = jdoc.RootElement[0].Deserialize<object>()!;
             Element = jdoc.RootElement[1].Deserialize<object>()!;
-            Index = jdoc.RootElement[1].Deserialize<int?>()!;
+            Index = jdoc.RootElement[2].Deserialize<int?>()!;
         }    
+    }
+
+    public abstract class BaseAutofillArgs : BaseHookArgs
+    {
+        public readonly IList<IList<object>> FillData;
+        public readonly CellRange SourceRange;
+        public readonly CellRange TargetRange;
+        public readonly string Direction;
+        public BaseAutofillArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        {
+            FillData = jdoc.RootElement[0].Deserialize<IList<IList<object>>>()!;
+            SourceRange = jdoc.RootElement[1].Deserialize<CellRange>()!;
+            TargetRange = jdoc.RootElement[2].Deserialize<CellRange>()!;
+            Direction = jdoc.RootElement[3].Deserialize<string>()!;
+        }    
+    }
+
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#afterautofill
+    */
+    public class AfterAutofillArgs : BaseAutofillArgs
+    {
+        public AfterAutofillArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        { }
     }
 
     /**
@@ -220,6 +246,16 @@ public class Hooks
             Event = jdoc.RootElement[3].Deserialize<IDictionary<string,object?>>()!;
             FullEditMode = jdoc.RootElement[4].Deserialize<bool>();
         }    
+    }
+
+    /**
+    * See https://handsontable.com/docs/javascript-data-grid/api/hooks/#beforeautofill
+    */
+    public class BeforeAutofillArgs : BaseAutofillArgs
+    {
+        public BeforeAutofillArgs(string hookName, JsonDocument jdoc) 
+            : base(hookName, jdoc)
+        { }
     }
 
     /**
