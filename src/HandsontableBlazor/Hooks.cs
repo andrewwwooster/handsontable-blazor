@@ -19,7 +19,7 @@ public class Hooks
         * JsonPropertyOrder ensures that hook name appears first when serialized.
         */
         [JsonPropertyOrder(-1)]
-        public required string HookName { get; set; } = hookName;
+        public string HookName { get; private set; } = hookName;
     };
 
     /**
@@ -66,9 +66,9 @@ public class Hooks
     */
     public class AddChildArgs : BaseHookArgs
     {
-        public readonly Object Parent;
-        public readonly Object Element;
-        public readonly int? Index;
+        public Object Parent { get; private set; }
+        public Object Element { get; private set; }
+        public  int? Index { get; private set; }
 
         public AddChildArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)
@@ -81,10 +81,10 @@ public class Hooks
 
     public abstract class BaseAutofillArgs : BaseHookArgs
     {
-        public readonly IList<IList<object>> FillData;
-        public readonly CellRange SourceRange;
-        public readonly CellRange TargetRange;
-        public readonly string Direction;
+        public IList<IList<object>> FillData { get; private set; }
+        public CellRange SourceRange { get; private set; }
+        public CellRange TargetRange { get; private set; }
+        public string Direction { get; private set; }
         public BaseAutofillArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)
         {
@@ -110,8 +110,8 @@ public class Hooks
     */
     public class AfterBeginEditingArgs : BaseHookArgs
     {
-        public readonly int VisualRow;
-        public readonly int VisualColumn;
+        public int VisualRow {get; private set;}
+        public int VisualColumn {get; private set;}
 
         public AfterBeginEditingArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)
@@ -126,8 +126,8 @@ public class Hooks
     */
     public class AfterChangeArgs : BaseHookArgs
     {
-        public readonly object[][] Data;
-        public readonly string Source;
+        public object[][] Data {get; private set;}
+        public string Source {get; private set;}
 
         public AfterChangeArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)
@@ -143,7 +143,7 @@ public class Hooks
 
         public class DataChange(IList<object> args)
         {
-            private readonly IList<object> _args = args;
+            private IList<object> _args { get; } = args;
 
             public int Row => (int) _args[0];
             public string Prop => (string) _args[1];
@@ -196,12 +196,12 @@ public class Hooks
             SelectionLayerLevel = jdoc.RootElement[5].Deserialize<int>();
         }
 
-        public readonly int Row;
-        public readonly int Column;
-        public readonly int Row2;
-        public readonly int Column2;
-        public readonly IDictionary<string, object> PreventScrolling;
-        public readonly int SelectionLayerLevel;
+        public int Row { get; private set; }
+        public int Column { get; private set; }
+        public int Row2 { get; private set; }
+        public int Column2 { get; private set; }
+        public IDictionary<string, object> PreventScrolling { get; private set; }
+        public int SelectionLayerLevel { get; private set; }
     }
 
      /**
@@ -219,11 +219,11 @@ public class Hooks
             SelectionLayerLevel = jdoc.RootElement[4].Deserialize<int>();
         }
 
-        public readonly int Row;
-        public readonly int Column;
-        public readonly int Row2;
-        public readonly int Column2;
-        public readonly int SelectionLayerLevel;
+        public int Row { get; private set; }
+        public int Column { get; private set; }
+        public int Row2 { get; private set; }
+        public int Column2 { get; private set; }
+        public int SelectionLayerLevel { get; private set; }
     }
 
     /**
@@ -231,11 +231,11 @@ public class Hooks
     */
     public class BeforeBeginEditingArgs : BaseHookArgs
     {
-        public readonly int VisualRow;
-        public readonly int VisualColumn;
-        public readonly object? InitialValue;
-        public readonly IDictionary<string,object?> Event;
-        public readonly bool FullEditMode;
+        public int VisualRow { get; private set; }
+        public int VisualColumn { get; private set; }
+        public object? InitialValue { get; private set; }
+        public IDictionary<string,object?> Event { get; private set; }
+        public bool FullEditMode { get; private set; }
 
         public BeforeBeginEditingArgs(string hookName, JsonDocument jdoc) 
             : base(hookName, jdoc)

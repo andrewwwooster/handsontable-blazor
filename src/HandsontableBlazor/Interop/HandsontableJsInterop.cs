@@ -1149,7 +1149,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     * Removes the hook listener previously registered with AddHook().
     * See https://handsontable.com/docs/javascript-data-grid/api/core/#removehook
     */
-    public async Task RemoveHook<HookArgsT>(string hookName, Func<HookArgsT, object> hook)
+    public async Task RemoveHook<HookArgsT,HookResultT>(string hookName, Func<HookArgsT, HookResultT> hook)
         where HookArgsT : BaseHookArgs
     {
         var hookKey = ICallbackProxy.CreateKey(hookName, hook);

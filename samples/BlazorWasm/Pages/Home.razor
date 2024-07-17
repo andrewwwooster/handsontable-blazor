@@ -955,21 +955,23 @@ else if (_actionMethod == "ValidateCells")
     </div>
 }
 
-<HookCheckbox Label="OnAfterAutofill" HookName="afterAuthofill" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterAutofillArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterBeginEditing" HookName="afterBeginEditing" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterBeginEditingArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterRemoveCol" HookName="afterRemoveCol" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterRemoveColArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
-<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeAutofill" HookName="beforeAuthofill" AsyncHookCallback="OnCallbackAsync" HookArgsT="Hooks.BeforeAutofillArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeBeginEditing" HookName="beforeBeginEditing" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeBeginEditingArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeCreateRow" HookName="beforeCreateRow" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
-<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" SyncHookCallback="OnCallbackSync" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
+<HookSelector Parent="this" />
+
+<HookCheckbox Label="OnAfterAutofill" HookName="afterAuthofill" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterAutofillArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterBeginEditing" HookName="afterBeginEditing" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterBeginEditingArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterChange" HookName="afterChange" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterChangeArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterCreateCol" HookName="afterCreateCol" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterCreateRow" HookName="afterCreateRow" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterRemoveCol" HookName="afterRemoveCol" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterRemoveRow" HookName="afterRemoveRow" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterRemoveRowArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelection" HookName="afterSelection" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterSelectionArgs" Parent="this"/>
+<HookCheckbox Label="OnAfterSelectionEnd" HookName="afterSelectionEnd" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.AfterSelectionEndArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeAutofill" HookName="beforeAuthofill" AsyncHookCallback="OnHookAsync" HookArgsT="Hooks.BeforeAutofillArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeBeginEditing" HookName="beforeBeginEditing" SyncHookCallback="OnHookSync" HookArgsT="Hooks.BeforeBeginEditingArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateCol" HookName="beforeCreateCol" SyncHookCallback="OnHookSync" HookArgsT="Hooks.BeforeCreateColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeCreateRow" HookName="beforeCreateRow" SyncHookCallback="OnHookSync" HookArgsT="Hooks.BeforeCreateRowArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveCol" HookName="beforeRemoveCol" SyncHookCallback="OnHookSync" HookArgsT="Hooks.BeforeRemoveColArgs" Parent="this"/>
+<HookCheckbox Label="OnBeforeRemoveRow" HookName="beforeRemoveRow" SyncHookCallback="OnHookSync" HookArgsT="Hooks.BeforeRemoveRowArgs" Parent="this"/>
 
 
 <div style="border: 1px solid black;">
@@ -1018,7 +1020,7 @@ else if (_actionMethod == "ValidateCells")
         };
     }
 
-    private void AppendToEventLog(string label, object? properties)
+    internal void AppendToEventLog(string label, object? properties)
     {
         var propertiesJson = JsonSerializer.Serialize(properties);
         var newLine = label + ": " + propertiesJson;
@@ -1026,24 +1028,29 @@ else if (_actionMethod == "ValidateCells")
         StateHasChanged();              // Required because event was initiated by JS.
     }
 
-    private async Task OnCallbackAsync<CallbackArgsT>(CallbackArgsT callbackArgs)
-        where CallbackArgsT : Callbacks.ICallbackArgs
+    private async Task OnHookAsync(Hooks.BaseHookArgs callbackArgs)
     {
-        AppendToEventLog("OnCallbackAsync", callbackArgs);
+        AppendToEventLog("OnHookAsync", callbackArgs);
         await Task.CompletedTask;
     }    
 
-    private async Task OnCallbackAsync(JsonDocument jdoc)
+    private async Task OnHookAsync(JsonDocument jdoc)
     {
-        AppendToEventLog("OnCallbackAsync", jdoc);
+        AppendToEventLog("OnHookAsync", jdoc);
         await Task.CompletedTask;
     }
 
-    private object OnCallbackSync(Callbacks.ICallbackArgs callbackArgs)
+    private object OnHookSync(Hooks.BaseHookArgs callbackArgs)
     {
-        AppendToEventLog("OnCallbackSync", callbackArgs);
+        AppendToEventLog("OnHookSync", callbackArgs);
         return true;
     }
+
+    private async Task OnCallbackAsync(Callbacks.BaseCallbackArgs callbackArgs)
+    {
+        AppendToEventLog("OnCallbaclAsync", callbackArgs);
+        await Task.CompletedTask;
+    }    
 
     private async Task OnRenderCallback(Renderer.RendererArgs args)
     {
