@@ -15,12 +15,7 @@
     [EditorRequired]
     public required Pages.Home Parent { get; set; }
 
-    public required IList<string> Labels { get; set; } =
-        [
-            "afterBeginEditing",
-            "afterChange",
-            "beforeCreateCol",
-        ];
+    public IList<string> Labels { get; private set; } = null!;
 
     public required string[] Selected { get; set; } = [];
 
@@ -35,6 +30,7 @@
                 {"afterChange", new AsyncHookFactory<Hooks.AfterChangeArgs>(Parent)},            
                 {"beforeCreateCol", new SyncHookFactory<Hooks.BeforeCreateColArgs>(Parent)},            
             };
+            Labels  = _dict.Keys.OrderBy(x => x).ToList();
         }
     }
 

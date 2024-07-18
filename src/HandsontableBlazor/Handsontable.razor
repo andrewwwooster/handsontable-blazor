@@ -13,12 +13,6 @@
     public string? Id { get; set; }
     [Parameter]
     public ConfigurationOptions? ConfigurationOptions { get; set; }
-    [Parameter]
-    public Func<Hooks.AfterChangeArgs,Task>? OnAfterChange { get; set; }
-    [Parameter]
-    public Func<Hooks.AfterSelectionArgs,Task>? OnAfterSelection { get; set; }
-    [Parameter]
-    public Func<Hooks.AfterSelectionEndArgs,Task>? OnAfterSelectionEnd { get; set; }
 
     public HandsontableJsInterop Core { get; private set; } = null!;
 
@@ -36,9 +30,6 @@
             await Core.RegisterRenderer("customRenderer", RendererCallback);
             await Core.NewHandsontable(Id!, ConfigurationOptions);
             _initialized = true;
-            if (OnAfterChange != null) await Core.AddHookAfterChange(OnAfterChange);
-            if (OnAfterSelection != null) await Core.AddHookAfterSelection(OnAfterSelection);
-            if (OnAfterSelectionEnd != null) await Core.AddHookAfterSelectionEnd(OnAfterSelectionEnd);
         }
     }
 
