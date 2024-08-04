@@ -31,5 +31,7 @@ jobs:
       run: dotnet pack --configuration Release
 
     - name: Push
-      run: dotnet nuget push "bin/Release/Excielo.Handsontable.Blazor.0.0.1.nupkg" --source "https://nuget.pkg.github.com/Excielo/index.json"  --api-key ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push "bin/Release/Excielo.Handsontable.Blazor.0.0.1.nupkg" --source "https://nuget.pkg.github.com/Excielo/index.json"  --api-key ${GITHUB_TOKEN}
       working-directory: ${{ github.workspace }}/src/HandsontableBlazor
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
