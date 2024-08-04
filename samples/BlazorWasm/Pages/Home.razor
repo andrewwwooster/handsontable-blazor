@@ -955,8 +955,11 @@ else if (_actionMethod == "ValidateCells")
     </div>
 }
 
+<p/>
+
 <HookSelector Parent="this" />
 
+<p/>
 
 <div style="border: 1px solid black;">
     <Handsontable 
@@ -965,7 +968,9 @@ else if (_actionMethod == "ValidateCells")
             @ref="Handsontable"/>
 </div>
 
-<InputTextArea id="event-log" @bind-Value="_eventLog" style="height: 20em; width: 60em; white-space: pre; overflow: auto;" scrollTop="1000em" readonly="true"/>
+<p/>
+
+<InputTextArea id="event-log" @bind-Value="_eventLog" style="height: 15em; width: 60em; white-space: pre; overflow: auto;" scrollTop="1000em" readonly="true"/>
 
 @code
 {
