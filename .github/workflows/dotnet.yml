@@ -29,7 +29,9 @@ jobs:
       run: dotnet pack --configuration Release
 
     - name: Add Nuget Source
-      run: dotnet nuget add source --username "andrew.w.wooster@gmail.com" --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Excielo/index.json"
+      run: 
+        cd ${{ github.workspace }}/HandsontableBlazor
+        dotnet nuget add source --username "andrew.w.wooster@gmail.com" --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Excielo/index.json"
 
     - name: Push
       run: dotnet nuget push "${{ github.workspace }}/HandsontableBlazor/bin/Release/Excielo.Handsontable.Blazor.0.0.1" --source "github"
