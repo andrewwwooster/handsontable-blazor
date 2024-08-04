@@ -26,4 +26,4 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Package
-      run: dotnet pack
+      run: dotnet pack --configuration Release
