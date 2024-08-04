@@ -27,3 +27,6 @@ jobs:
 
     - name: Package
       run: dotnet pack --configuration Release
+
+    - name: Package
+      run: dotnet nuget push "src/HandsontableBlazor/bin/Release/Excielo.Handsontable.Blazor.0.0.1" --source "github"
