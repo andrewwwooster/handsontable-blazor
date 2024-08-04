@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <PackageId>Excielo.Handsontable.Blazor.2024.08.04.1200</PackageId>
+    <PackageId>Excielo.Handsontable.Blazor</PackageId>
     <Version>0.0.1</Version>
     <Authors>Andrew Wooster</Authors>
     <Company>Excielo</Company>
