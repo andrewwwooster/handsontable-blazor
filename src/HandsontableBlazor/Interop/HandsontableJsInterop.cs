@@ -25,7 +25,7 @@ public class HandsontableJsInterop : IAsyncDisposable
     {
         _jsRuntime = jsRuntime;
         _handsontableModuleTask = new (() => _jsRuntime.InvokeAsync<IJSObjectReference>(
-            "import", "./_content/HandsontableBlazor/handsontableJsInterop.js").AsTask());
+            "import", "./_content/Excielo.Handsontable.Blazor/handsontableJsInterop.js").AsTask());
     }
 
     public async Task NewHandsontable (string elemId, ConfigurationOptions? configurationOptions) 
